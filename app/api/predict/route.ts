@@ -29,7 +29,8 @@ export async function POST(request: Request) {
 
     const { percentile, category, branch, exam, budget, location } = parsed.data
 
-    let cutoffs
+    type CutoffWithCollege = Awaited<ReturnType<typeof prisma.cutoff.findMany>>[number]
+    let cutoffs: CutoffWithCollege[] = []
     try {
       cutoffs = await prisma.cutoff.findMany({
         where: {
