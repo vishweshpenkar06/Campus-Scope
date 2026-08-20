@@ -29,8 +29,8 @@ export async function POST(request: Request) {
 
     const { percentile, category, branch, exam, budget, location } = parsed.data
 
-    type CutoffWithCollege = Awaited<ReturnType<typeof prisma.cutoff.findMany>>[number]
-    let cutoffs: CutoffWithCollege[] = []
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let cutoffs: any[] = []
     try {
       cutoffs = await prisma.cutoff.findMany({
         where: {
@@ -56,32 +56,45 @@ export async function POST(request: Request) {
     }
 
     const matchingColleges = cutoffs
-      .filter((c) => {
+      .filter((c: { college: { fees: number; location: string } }) => {
         if (budget && c.college.fees > budget * 100000) return false
         if (location && !c.college.location.toLowerCase().includes(location.toLowerCase()))
           return false
         return true
       })
       .slice(0, 20)
-      .map((c) => ({
-        id: c.college.id,
-        name: c.college.name,
-        location: c.college.location,
-        percentile: c.percentile,
-        branch: c.branch,
-        capRound: c.capRound,
-        classification: classify(percentile, c.percentile),
-      }))
+      .map(
+        (c: {
+          college: { id: number; name: string; location: string }
+          percentile: number
+          branch: string
+          capRound: number
+        }) => ({
+          id: c.college.id,
+          name: c.college.name,
+          location: c.college.location,
+          percentile: c.percentile,
+          branch: c.branch,
+          capRound: c.capRound,
+          classification: classify(percentile, c.percentile),
+        })
+      )
 
-    const safeCount = matchingColleges.filter((c) => c.classification === 'Safe').length
-    const targetCount = matchingColleges.filter((c) => c.classification === 'Target').length
-    const reachCount = matchingColleges.filter((c) => c.classification === 'Reach').length
+    const safeCount = matchingColleges.filter(
+      (c: { classification: string }) => c.classification === 'Safe'
+    ).length
+    const targetCount = matchingColleges.filter(
+      (c: { classification: string }) => c.classification === 'Target'
+    ).length
+    const reachCount = matchingColleges.filter(
+      (c: { classification: string }) => c.classification === 'Reach'
+    ).length
 
     const score = Math.min(
       95,
       Math.round(
-        (safeCount * 3 + targetCount * 2 + reachCount) /
-          Math.max(1, matchingColleges.length) *
+        ((safeCount * 3 + targetCount * 2 + reachCount) /
+          Math.max(1, matchingColleges.length)) *
           50 +
           (budget ? Math.min(20, budget / 5) : 10) +
           (location ? 5 : 0)
