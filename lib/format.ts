@@ -10,3 +10,17 @@ export function formatPackage(value: number) {
 export function formatRating(value: number) {
   return value.toFixed(1)
 }
+
+export function formatROI(avgPackage: number, totalFees: number): string {
+  if (totalFees === 0) return 'N/A'
+  const roi = avgPackage / totalFees
+  return roi.toFixed(1) + 'x'
+}
+
+export function parseFacilities(facilities: string): string[] {
+  try {
+    return JSON.parse(facilities || '[]')
+  } catch {
+    return []
+  }
+}
