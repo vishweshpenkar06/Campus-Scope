@@ -1,15 +1,16 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { MapPin, Star, GitCompareArrows, RotateCcw, Home, TrendingUp } from 'lucide-react'
+import { MapPin, Star, GitCompareArrows, RotateCcw, Home, TrendingUp, ExternalLink, Phone, Building2 } from 'lucide-react'
 import { useCompare } from './compare-context'
 import { formatINR, formatPackage, formatRating, formatROI, parseFacilities } from '@/lib/format'
-import type { CollegeDetail as Detail } from '@/lib/types'
+import type { CollegeDetail as Detail, GooglePlaceData } from '@/lib/types'
 
 export function CollegeDetail({ id }: { id: string }) {
   const [college, setCollege] = useState<Detail | null>(null)
   const [error, setError] = useState(false)
   const [tab, setTab] = useState('overview')
+  const [googleData, setGoogleData] = useState<GooglePlaceData | null>(null)
   const { items, toggle } = useCompare()
 
   const load = () =>
@@ -19,7 +20,15 @@ export function CollegeDetail({ id }: { id: string }) {
         if (!r.ok) throw new Error()
         return r.json()
       })
-      .then(setCollege)
+      .then((data) => {
+        setCollege(data)
+        fetch(`/api/google-places?name=${encodeURIComponent(data.name)}&location=${encodeURIComponent(data.location)}`)
+          .then((r) => r.json())
+          .then((body) => {
+            if (body.data) setGoogleData(body.data)
+          })
+          .catch(() => {})
+      })
       .catch(() => setError(true))
 
   useEffect(() => {
@@ -65,10 +74,21 @@ export function CollegeDetail({ id }: { id: string }) {
     { id: 'placements', label: `Placements (${college.placements.length})` },
     { id: 'cutoffs', label: `Cutoffs (${college.cutoffs.length})` },
     { id: 'reviews', label: `Reviews (${college.reviews.length})` },
+    ...(googleData ? [{ id: 'google', label: `Google (${googleData.totalReviews.toLocaleString()} reviews)` }] : []),
   ]
 
   return (
     <main className="mx-auto max-w-7xl px-5 py-10 pb-28">
+      {googleData?.photos?.[0] && (
+        <div className="mb-8 overflow-hidden rounded-xl">
+          <img
+            src={googleData.photos[0]}
+            alt={college.name}
+            className="h-64 w-full object-cover md:h-80"
+          />
+        </div>
+      )}
+
       <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
         <div>
           <p className="text-sm font-semibold text-primary">College profile</p>
@@ -79,6 +99,34 @@ export function CollegeDetail({ id }: { id: string }) {
             <MapPin className="size-4" />
             {college.location}
           </p>
+          {googleData && (
+            <div className="mt-2 flex flex-wrap items-center gap-4 text-sm">
+              {googleData.rating && (
+                <span className="flex items-center gap-1">
+                  <Star className="size-4 fill-amber-500 text-amber-500" />
+                  {googleData.rating.toFixed(1)} on Google
+                  <span className="text-muted-foreground">({googleData.totalReviews.toLocaleString()} reviews)</span>
+                </span>
+              )}
+              {googleData.phone && (
+                <span className="flex items-center gap-1 text-muted-foreground">
+                  <Phone className="size-3.5" />
+                  {googleData.phone}
+                </span>
+              )}
+              {googleData.website && (
+                <a
+                  href={googleData.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1 text-primary hover:underline"
+                >
+                  <ExternalLink className="size-3.5" />
+                  Website
+                </a>
+              )}
+            </div>
+          )}
         </div>
         <button
           onClick={() =>
@@ -137,12 +185,12 @@ export function CollegeDetail({ id }: { id: string }) {
         </div>
       )}
 
-      <div className="mt-8 flex gap-1 border-b border-border">
+      <div className="mt-8 flex gap-1 overflow-x-auto border-b border-border">
         {tabs.map((t) => (
           <button
             key={t.id}
             onClick={() => setTab(t.id)}
-            className={`border-b-2 px-4 py-3 text-sm font-medium transition ${
+            className={`whitespace-nowrap border-b-2 px-4 py-3 text-sm font-medium transition ${
               tab === t.id
                 ? 'border-primary text-primary'
                 : 'border-transparent text-muted-foreground hover:text-foreground'
@@ -248,8 +296,88 @@ export function CollegeDetail({ id }: { id: string }) {
           ) : (
             <Empty text="No reviews yet" />
           ))}
+
+        {tab === 'google' && googleData && (
+          <GoogleReviewsSection googleData={googleData} />
+        )}
       </div>
     </main>
+  )
+}
+
+function GoogleReviewsSection({ googleData }: { googleData: GooglePlaceData }) {
+  return (
+    <div>
+      {googleData.address && (
+        <div className="mb-6 flex items-start gap-2 rounded-xl border border-border bg-card p-4 text-sm">
+          <MapPin className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
+          <div>
+            <p className="font-medium">Address</p>
+            <p className="text-muted-foreground">{googleData.address}</p>
+          </div>
+        </div>
+      )}
+
+      {googleData.photos.length > 0 && (
+        <div className="mb-8">
+          <h3 className="mb-4 text-lg font-semibold">Campus Photos</h3>
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
+            {googleData.photos.map((photo, i) => (
+              <div key={i} className="aspect-video overflow-hidden rounded-lg bg-muted">
+                <img
+                  src={photo}
+                  alt={`Campus photo ${i + 1}`}
+                  className="h-full w-full object-cover transition hover:scale-105"
+                  loading="lazy"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {googleData.reviews.length > 0 && (
+        <div>
+          <h3 className="mb-4 text-lg font-semibold">Google Reviews</h3>
+          <div className="space-y-4">
+            {googleData.reviews.map((review, i) => (
+              <div key={i} className="rounded-xl border border-border p-5">
+                <div className="flex items-start gap-3">
+                  {review.avatar ? (
+                    <img
+                      src={review.avatar}
+                      alt={review.author}
+                      className="size-10 rounded-full"
+                    />
+                  ) : (
+                    <div className="flex size-10 items-center justify-center rounded-full bg-muted text-sm font-semibold">
+                      {review.author.charAt(0)}
+                    </div>
+                  )}
+                  <div className="flex-1">
+                    <div className="flex items-center justify-between">
+                      <span className="font-medium">{review.author}</span>
+                      <span className="text-xs text-muted-foreground">{review.time}</span>
+                    </div>
+                    <div className="mt-1 flex items-center gap-1">
+                      {Array.from({ length: 5 }).map((_, j) => (
+                        <Star
+                          key={j}
+                          className={`size-3.5 ${j < review.rating ? 'fill-amber-500 text-amber-500' : 'text-muted-foreground/30'}`}
+                        />
+                      ))}
+                    </div>
+                    {review.text && (
+                      <p className="mt-2 text-sm leading-6 text-muted-foreground">{review.text}</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
   )
 }
 
