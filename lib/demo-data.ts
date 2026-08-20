@@ -1,5 +1,114 @@
 export const demoColleges = [
-  { id: 1, name: 'Indian Institute of Technology Bombay', location: 'Mumbai, Maharashtra', fees: 1040000, rating: 4.8, overview: 'A research-led engineering campus with strong computing, entrepreneurship, and placement outcomes.', _count: { courses: 3, reviews: 2 }, courses: [{ id: 11, name: 'B.Tech Computer Science', duration: '4 years', fees: 1040000 }], placements: [{ id: 101, year: 2024, avgPackage: 3600000, highestPackage: 12000000, placementRate: 92 }], reviews: [{ id: 1001, author: 'Aarav Mehta', rating: 5, comment: 'Demanding academics, but an excellent peer group and many ways to build.', createdAt: '2024-08-01' }] },
-  { id: 2, name: 'BITS Pilani', location: 'Pilani, Rajasthan', fees: 1980000, rating: 4.6, overview: 'An independent university known for flexible academics, practical learning, and an active alumni network.', _count: { courses: 3, reviews: 2 }, courses: [{ id: 21, name: 'B.E. Computer Science', duration: '4 years', fees: 1980000 }], placements: [{ id: 201, year: 2024, avgPackage: 1890000, highestPackage: 6000000, placementRate: 88 }], reviews: [{ id: 2001, author: 'Riya Shah', rating: 4.5, comment: 'The flexibility is a real advantage if you are proactive about your path.', createdAt: '2024-07-16' }] },
-  { id: 3, name: 'Vellore Institute of Technology', location: 'Vellore, Tamil Nadu', fees: 780000, rating: 4.2, overview: 'A large, industry-connected campus offering broad engineering programs and active student clubs.', _count: { courses: 3, reviews: 2 }, courses: [{ id: 31, name: 'B.Tech Information Technology', duration: '4 years', fees: 780000 }], placements: [{ id: 301, year: 2024, avgPackage: 890000, highestPackage: 4400000, placementRate: 82 }], reviews: [{ id: 3001, author: 'Dev Nair', rating: 4, comment: 'Lots of opportunities, though you need to be intentional in a large cohort.', createdAt: '2024-06-10' }] },
+  {
+    id: 1,
+    name: 'Indian Institute of Technology Bombay',
+    location: 'Mumbai, Maharashtra',
+    fees: 1040000,
+    rating: 4.8,
+    overview:
+      'A research-led engineering campus with strong computing, entrepreneurship, and placement outcomes.',
+    hostelFees: 85000,
+    hostelAvailable: true,
+    facilities: JSON.stringify(['WiFi', 'Research Labs', 'Library', 'Sports Complex']),
+    _count: { courses: 3, reviews: 2 },
+    courses: [
+      { id: 11, name: 'B.Tech Computer Science', duration: '4 years', fees: 1040000 },
+    ],
+    placements: [
+      {
+        id: 101,
+        year: 2024,
+        avgPackage: 3600000,
+        highestPackage: 12000000,
+        placementRate: 92,
+      },
+    ],
+    reviews: [
+      {
+        id: 1001,
+        author: 'Aarav Mehta',
+        rating: 5,
+        comment: 'Demanding academics, but an excellent peer group and many ways to build.',
+        createdAt: '2024-08-01',
+      },
+    ],
+    cutoffs: [],
+  },
+  {
+    id: 2,
+    name: 'BITS Pilani',
+    location: 'Pilani, Rajasthan',
+    fees: 1980000,
+    rating: 4.6,
+    overview:
+      'An independent university known for flexible academics, practical learning, and an active alumni network.',
+    hostelFees: 120000,
+    hostelAvailable: true,
+    facilities: JSON.stringify(['WiFi', 'Library', 'Auditorium', 'Canteen']),
+    _count: { courses: 3, reviews: 2 },
+    courses: [
+      { id: 21, name: 'B.E. Computer Science', duration: '4 years', fees: 1980000 },
+    ],
+    placements: [
+      {
+        id: 201,
+        year: 2024,
+        avgPackage: 1890000,
+        highestPackage: 6000000,
+        placementRate: 88,
+      },
+    ],
+    reviews: [
+      {
+        id: 2001,
+        author: 'Riya Shah',
+        rating: 4.5,
+        comment:
+          'The flexibility is a real advantage if you are proactive about your path.',
+        createdAt: '2024-07-16',
+      },
+    ],
+    cutoffs: [],
+  },
+  {
+    id: 3,
+    name: 'Vellore Institute of Technology',
+    location: 'Vellore, Tamil Nadu',
+    fees: 780000,
+    rating: 4.2,
+    overview:
+      'A large, industry-connected campus offering broad engineering programs and active student clubs.',
+    hostelFees: 65000,
+    hostelAvailable: true,
+    facilities: JSON.stringify(['WiFi', 'Medical Center', 'Transport', 'Gym']),
+    _count: { courses: 3, reviews: 2 },
+    courses: [
+      {
+        id: 31,
+        name: 'B.Tech Information Technology',
+        duration: '4 years',
+        fees: 780000,
+      },
+    ],
+    placements: [
+      {
+        id: 301,
+        year: 2024,
+        avgPackage: 890000,
+        highestPackage: 4400000,
+        placementRate: 82,
+      },
+    ],
+    reviews: [
+      {
+        id: 3001,
+        author: 'Dev Nair',
+        rating: 4,
+        comment:
+          'Lots of opportunities, though you need to be intentional in a large cohort.',
+        createdAt: '2024-06-10',
+      },
+    ],
+    cutoffs: [],
+  },
 ]
