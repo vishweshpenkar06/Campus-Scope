@@ -78,7 +78,7 @@ export async function getGooglePlaceData(
       .slice(0, 6)
       .map(
         (p) =>
-          `${BASE_URL}/${p.name}/media?maxWidthPx=800&key=${API_KEY}`
+          `https://places.googleapis.com/v1/${p.name}/media?maxHeightPx=800&key=${API_KEY}`
       )
 
     const reviews = (place.reviews || [])
