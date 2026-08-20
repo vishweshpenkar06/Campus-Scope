@@ -47,13 +47,14 @@ export type OnboardingState = {
 export type PredictorResult = {
   score: number
   band: string
-  classification: 'Safe' | 'Target' | 'Reach'
+  summary: { safe: number; target: number; reach: number }
   matchingColleges: Array<{
     id: number
     name: string
     location: string
     percentile: number
     branch: string
+    capRound: number
     classification: 'Safe' | 'Target' | 'Reach'
   }>
   assumptions: string[]
