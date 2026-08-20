@@ -8,6 +8,7 @@ export const collegeQuerySchema = z
   .object({
     q: z.string().trim().max(100).optional(),
     location: z.string().trim().max(80).optional(),
+    branch: z.string().trim().max(100).optional(),
     minFee: nonNegativeInteger.optional(),
     maxFee: nonNegativeInteger.optional(),
     minRating: z.coerce.number().min(0).max(5).optional(),
