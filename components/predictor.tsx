@@ -7,12 +7,125 @@ export function Predictor() {
   const [rank, setRank] = useState('')
   const [budget, setBudget] = useState('')
   const [location, setLocation] = useState('')
-  const [result, setResult] = useState<{ score: number; band: string; assumptions: string[] } | null>(null)
+  const [result, setResult] = useState<{
+    score: number
+    band: string
+    assumptions: string[]
+  } | null>(null)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-  async function submit(event: React.FormEvent) { event.preventDefault(); setLoading(true); setError(''); setResult(null); try { const response = await fetch('/api/predict', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ rank, budget, location }) }); const body = await response.json(); if (!response.ok) setError(body.error); else setResult(body.data) } catch { setError('The predictor is unavailable. Please try again.') } finally { setLoading(false) } }
-  return <div className="grid gap-8 md:grid-cols-[1fr_.8fr]">
-    <form onSubmit={submit} className="grid gap-4 sm:grid-cols-3"><label className="grid gap-2 text-sm font-semibold">Entrance rank<input required value={rank} onChange={(e) => setRank(e.target.value)} type="number" min="1" placeholder="e.g. 2400" className="h-11 border border-primary-foreground/25 bg-primary-foreground/10 px-3 font-normal text-primary-foreground outline-none placeholder:text-primary-foreground/45 focus:border-primary-foreground" /></label><label className="grid gap-2 text-sm font-semibold">Annual budget<input required value={budget} onChange={(e) => setBudget(e.target.value)} type="number" min="1" placeholder="₹ lakhs" className="h-11 border border-primary-foreground/25 bg-primary-foreground/10 px-3 font-normal text-primary-foreground outline-none placeholder:text-primary-foreground/45 focus:border-primary-foreground" /></label><label className="grid gap-2 text-sm font-semibold">Preferred city<input value={location} onChange={(e) => setLocation(e.target.value)} placeholder="Optional" className="h-11 border border-primary-foreground/25 bg-primary-foreground/10 px-3 font-normal text-primary-foreground outline-none placeholder:text-primary-foreground/45 focus:border-primary-foreground" /></label><button disabled={loading} className="inline-flex h-11 items-center justify-center gap-2 bg-primary-foreground px-5 text-sm font-semibold text-primary hover:opacity-90 disabled:opacity-60 sm:col-span-3 sm:w-fit">{loading ? 'Calculating…' : 'See my starting point'}<ArrowRight className="size-4" /></button>{error && <p role="alert" className="text-sm text-red-200 sm:col-span-3">{error}</p>}</form>
-    <div className="border border-primary-foreground/20 bg-primary-foreground/10 p-6"><div className="flex items-center justify-between text-sm font-semibold"><span>Your readout</span><CircleHelp className="size-4 opacity-70" /></div>{result ? <div><p className="mt-7 font-serif text-6xl font-semibold">{result.score}<span className="text-2xl opacity-60">/100</span></p><p className="mt-2 text-lg font-semibold">{result.band}</p><ul className="mt-4 grid gap-2 text-sm leading-6 opacity-75">{result.assumptions.map((item) => <li key={item}>— {item}</li>)}</ul></div> : <div className="flex min-h-36 flex-col justify-center"><p className="text-lg font-semibold">No prediction yet.</p><p className="mt-2 text-sm leading-6 opacity-70">A transparent first pass based on rank, cost, and place.</p></div>}<button type="button" onClick={() => { setRank(''); setBudget(''); setLocation(''); setResult(null); setError('') }} className="mt-5 inline-flex items-center gap-2 text-sm font-semibold underline-offset-4 hover:underline"><RotateCcw className="size-4" /> Reset</button></div>
-  </div>
+
+  async function submit(event: React.FormEvent) {
+    event.preventDefault()
+    setLoading(true)
+    setError('')
+    setResult(null)
+    try {
+      const response = await fetch('/api/predict', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ rank, budget, location }),
+      })
+      const body = await response.json()
+      if (!response.ok) setError(body.error)
+      else setResult(body.data)
+    } catch {
+      setError('The predictor is unavailable. Please try again.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div className="grid gap-8 lg:grid-cols-[1fr_0.8fr]">
+      <form onSubmit={submit} className="grid gap-4 sm:grid-cols-3">
+        <label className="grid gap-2 text-sm font-semibold">
+          Entrance rank
+          <input
+            required
+            value={rank}
+            onChange={(e) => setRank(e.target.value)}
+            type="number"
+            min="1"
+            placeholder="e.g. 2400"
+            className="h-11 border border-primary-foreground/25 bg-primary-foreground/10 px-3 font-normal text-primary-foreground outline-none placeholder:text-primary-foreground/45 focus:border-primary-foreground"
+          />
+        </label>
+        <label className="grid gap-2 text-sm font-semibold">
+          Annual budget
+          <input
+            required
+            value={budget}
+            onChange={(e) => setBudget(e.target.value)}
+            type="number"
+            min="1"
+            placeholder="₹ lakhs"
+            className="h-11 border border-primary-foreground/25 bg-primary-foreground/10 px-3 font-normal text-primary-foreground outline-none placeholder:text-primary-foreground/45 focus:border-primary-foreground"
+          />
+        </label>
+        <label className="grid gap-2 text-sm font-semibold">
+          Preferred city
+          <input
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            placeholder="Optional"
+            className="h-11 border border-primary-foreground/25 bg-primary-foreground/10 px-3 font-normal text-primary-foreground outline-none placeholder:text-primary-foreground/45 focus:border-primary-foreground"
+          />
+        </label>
+        <button
+          disabled={loading}
+          className="inline-flex h-11 items-center justify-center gap-2 bg-primary-foreground px-5 text-sm font-semibold text-primary hover:opacity-90 disabled:opacity-60 sm:col-span-3 sm:w-fit"
+        >
+          {loading ? 'Calculating…' : 'See my starting point'}
+          <ArrowRight className="size-4" />
+        </button>
+        {error && (
+          <p role="alert" className="text-sm text-red-200 sm:col-span-3">
+            {error}
+          </p>
+        )}
+      </form>
+
+      <div className="border border-primary-foreground/20 bg-primary-foreground/10 p-6">
+        <div className="flex items-center justify-between text-sm font-semibold">
+          <span>Your readout</span>
+          <CircleHelp className="size-4 opacity-70" />
+        </div>
+        {result ? (
+          <div>
+            <p className="mt-7 font-serif text-6xl font-semibold">
+              {result.score}
+              <span className="text-2xl opacity-60">/100</span>
+            </p>
+            <p className="mt-2 text-lg font-semibold">{result.band}</p>
+            <ul className="mt-4 grid gap-2 text-sm leading-6 opacity-75">
+              {result.assumptions.map((item) => (
+                <li key={item}>— {item}</li>
+              ))}
+            </ul>
+          </div>
+        ) : (
+          <div className="flex min-h-36 flex-col justify-center">
+            <p className="text-lg font-semibold">No prediction yet.</p>
+            <p className="mt-2 text-sm leading-6 opacity-70">
+              A transparent first pass based on rank, cost, and place.
+            </p>
+          </div>
+        )}
+        <button
+          type="button"
+          onClick={() => {
+            setRank('')
+            setBudget('')
+            setLocation('')
+            setResult(null)
+            setError('')
+          }}
+          className="mt-5 inline-flex items-center gap-2 text-sm font-semibold underline-offset-4 hover:underline"
+        >
+          <RotateCcw className="size-4" /> Reset
+        </button>
+      </div>
+    </div>
+  )
 }
