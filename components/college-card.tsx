@@ -32,6 +32,10 @@ export function CollegeCard({ college }: { college: College }) {
             alt={college.name}
             className="h-full w-full object-cover"
             loading="lazy"
+            onError={(e) => {
+              e.currentTarget.style.display = 'none'
+              e.currentTarget.parentElement?.querySelector('.fallback-icon')?.classList.remove('hidden')
+            }}
           />
         ) : (
           <div className="flex h-full items-center justify-center">
