@@ -1,7 +1,106 @@
 'use client'
+
 import { Suspense, useEffect, useState } from 'react'
 import { AppShell } from '@/components/app-shell'
 import { formatINR, formatPackage } from '@/lib/format'
+import type { CompareResponse } from '@/lib/types'
 import { useSearchParams } from 'next/navigation'
-function CompareContent() { const params = useSearchParams(); const [state, setState] = useState<{ data: any[] } | null>(null); const [error, setError] = useState(''); const ids = params.get('ids') ?? ''; useEffect(() => { if (!ids) return; fetch(`/api/compare?ids=${ids}`).then(async (r) => { const body = await r.json(); if (!r.ok) throw new Error(body.error); setState(body) }).catch((e) => setError(e.message)) }, [ids]); return <AppShell><main className="mx-auto max-w-7xl px-5 py-10 pb-28"><p className="text-sm font-semibold text-primary">Side by side</p><h1 className="mt-2 text-4xl font-bold tracking-tight">Compare colleges</h1>{!ids || ids.split(',').length < 2 ? <div className="mt-10 rounded-xl border border-dashed border-border p-14 text-center"><h2 className="font-semibold">Select at least two colleges</h2><p className="mt-2 text-sm text-muted-foreground">Return to Explore colleges and add options to your compare tray.</p></div> : error ? <div className="mt-10 rounded-xl border border-destructive/20 bg-destructive/5 p-12 text-center text-sm">{error}</div> : !state ? <div className="mt-10 h-64 animate-pulse rounded-xl bg-muted" /> : <div className="mt-10 overflow-x-auto rounded-xl border border-border"><table className="w-full min-w-[720px] text-left"><thead className="bg-muted"><tr><th className="w-44 p-5 text-sm text-muted-foreground">Metric</th>{state.data.map((c) => <th key={c.id} className="p-5"><div className="font-bold">{c.name}</div><div className="mt-1 text-sm font-normal text-muted-foreground">{c.location}</div></th>)}</tr></thead><tbody>{[['Annual fees', (c: any) => formatINR(c.fees)], ['Rating', (c: any) => `${c.rating.toFixed(1)} / 5`], ['Latest average package', (c: any) => c.placements[0] ? formatPackage(c.placements[0].avgPackage) : 'Not listed'], ['Highest package', (c: any) => c.placements[0] ? formatPackage(c.placements[0].highestPackage) : 'Not listed'], ['Placement rate', (c: any) => c.placements[0] ? `${c.placements[0].placementRate}%` : 'Not listed'], ['Courses', (c: any) => `${c.courses.length} listed`], ['Reviews', (c: any) => `${c.reviews.length} reviews`]].map(([label, get]) => <tr key={String(label)} className="border-t border-border"><td className="p-5 text-sm font-semibold text-muted-foreground">{String(label)}</td>{state.data.map((c) => <td key={c.id} className="p-5 text-sm">{(get as (c: any) => string)(c)}</td>)}</tr>)}</tbody></table></div>}</main></AppShell> }
-export default function Page() { return <Suspense fallback={<div className="mx-auto max-w-7xl px-5 py-20"><div className="h-64 animate-pulse rounded-xl bg-muted" /></div>}><CompareContent /></Suspense> }
+
+function CompareContent() {
+  const params = useSearchParams()
+  const [state, setState] = useState<CompareResponse | null>(null)
+  const [error, setError] = useState('')
+  const ids = params.get('ids') ?? ''
+
+  useEffect(() => {
+    if (!ids) return
+    fetch(`/api/compare?ids=${ids}`)
+      .then(async (r) => {
+        const body = await r.json()
+        if (!r.ok) throw new Error(body.error)
+        setState(body)
+      })
+      .catch((e) => setError(e.message))
+  }, [ids])
+
+  return (
+    <AppShell>
+      <main className="mx-auto max-w-7xl px-5 py-10 pb-28">
+        <p className="text-sm font-semibold text-primary">Side by side</p>
+        <h1 className="mt-2 text-4xl font-bold tracking-tight">Compare colleges</h1>
+
+        {!ids || ids.split(',').length < 2 ? (
+          <div className="mt-10 rounded-xl border border-dashed border-border p-14 text-center">
+            <h2 className="font-semibold">Select at least two colleges</h2>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Return to Explore colleges and add options to your compare tray.
+            </p>
+          </div>
+        ) : error ? (
+          <div className="mt-10 rounded-xl border border-destructive/20 bg-destructive/5 p-12 text-center text-sm">
+            {error}
+          </div>
+        ) : !state ? (
+          <div className="mt-10 h-64 animate-pulse rounded-xl bg-muted" />
+        ) : (
+          <div className="mt-10 overflow-x-auto rounded-xl border border-border">
+            <table className="w-full min-w-[720px] text-left">
+              <thead className="bg-muted">
+                <tr>
+                  <th className="w-44 p-5 text-sm text-muted-foreground">Metric</th>
+                  {state.data.map((c) => (
+                    <th key={c.id} className="p-5">
+                      <div className="font-bold">{c.name}</div>
+                      <div className="mt-1 text-sm font-normal text-muted-foreground">{c.location}</div>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['Annual fees', (c: (typeof state.data)[0]) => formatINR(c.fees)],
+                  ['Rating', (c: (typeof state.data)[0]) => `${c.rating.toFixed(1)} / 5`],
+                  ['Latest average package', (c: (typeof state.data)[0]) =>
+                    c.placements[0] ? formatPackage(c.placements[0].avgPackage) : 'Not listed'],
+                  ['Highest package', (c: (typeof state.data)[0]) =>
+                    c.placements[0] ? formatPackage(c.placements[0].highestPackage) : 'Not listed'],
+                  ['Placement rate', (c: (typeof state.data)[0]) =>
+                    c.placements[0] ? `${c.placements[0].placementRate}%` : 'Not listed'],
+                  ['Courses offered', (c: (typeof state.data)[0]) =>
+                    c.courses.length ? c.courses.map((cr) => cr.name).join(', ') : 'Not listed'],
+                  ['Reviews', (c: (typeof state.data)[0]) =>
+                    c.reviews.length
+                      ? `${c.reviews.length} review${c.reviews.length > 1 ? 's' : ''}`
+                      : 'No reviews'],
+                ].map(([label, fn]) => (
+                  <tr key={String(label)} className="border-t border-border">
+                    <td className="p-5 text-sm font-medium text-muted-foreground">{String(label)}</td>
+                    {state.data.map((c) => (
+                      <td key={c.id} className="p-5 text-sm">
+                        {(fn as (c: (typeof state.data)[0]) => string)(c)}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </main>
+    </AppShell>
+  )
+}
+
+export default function Page() {
+  return (
+    <Suspense
+      fallback={
+        <div className="mx-auto max-w-7xl px-5 py-20">
+          <div className="h-64 animate-pulse rounded-xl bg-muted" />
+        </div>
+      }
+    >
+      <CompareContent />
+    </Suspense>
+  )
+}
