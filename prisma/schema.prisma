@@ -14,6 +14,11 @@ model College {
   fees            Int
   rating          Float
   overview        String
+  websiteUrl      String      @default("")
+  admissionUrl    String      @default("")
+  establishedYear Int         @default(0)
+  campusSize      String      @default("")
+  accreditation   String      @default("")
   hostelFees      Int         @default(0)
   hostelAvailable Boolean     @default(false)
   facilities      String      @default("[]")
