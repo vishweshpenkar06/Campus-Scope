@@ -44,6 +44,24 @@ export type OnboardingState = {
   exam: 'JEE' | 'CET' | null
 }
 
+export type GooglePlaceData = {
+  placeId: string
+  name: string
+  rating: number | null
+  totalReviews: number
+  photos: string[]
+  reviews: Array<{
+    author: string
+    avatar: string | null
+    rating: number
+    text: string
+    time: string
+  }>
+  address: string | null
+  website: string | null
+  phone: string | null
+}
+
 export type PredictorResult = {
   score: number
   band: string
