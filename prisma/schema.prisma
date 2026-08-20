@@ -8,16 +8,20 @@ datasource db {
 }
 
 model College {
-  id         Int         @id @default(autoincrement())
-  name       String
-  location   String
-  fees       Int
-  rating     Float
-  overview   String
-  createdAt  DateTime    @default(now())
-  courses    Course[]
-  placements Placement[]
-  reviews    Review[]
+  id              Int         @id @default(autoincrement())
+  name            String
+  location        String
+  fees            Int
+  rating          Float
+  overview        String
+  hostelFees      Int         @default(0)
+  hostelAvailable Boolean     @default(false)
+  facilities      String      @default("[]")
+  createdAt       DateTime    @default(now())
+  courses         Course[]
+  placements      Placement[]
+  reviews         Review[]
+  cutoffs         Cutoff[]
 
   @@index([name])
   @@index([location])
@@ -58,4 +62,20 @@ model Review {
   college   College  @relation(fields: [collegeId], references: [id], onDelete: Cascade)
 
   @@index([collegeId])
+}
+
+model Cutoff {
+  id         Int      @id @default(autoincrement())
+  collegeId  Int
+  exam       String
+  capRound   Int
+  category   String
+  branch     String
+  percentile Float
+  year       Int
+  college    College  @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+
+  @@index([collegeId, exam, year])
+  @@index([exam, category, branch])
+  @@index([percentile])
 }
