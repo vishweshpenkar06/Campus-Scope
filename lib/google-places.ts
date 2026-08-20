@@ -111,5 +111,5 @@ export async function getGooglePlaceData(
 }
 
 export function getPhotoUrl(photoName: string, apiKey: string): string {
-  return `${BASE_URL}/${photoName}/media?maxWidthPx=800&key=${apiKey}`
+  return `https://places.googleapis.com/v1/${photoName}/media?maxHeightPx=800&key=${apiKey}`
 }
