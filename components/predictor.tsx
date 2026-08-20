@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { ArrowRight, CircleHelp, RotateCcw, Shield, Target, TrendingUp } from 'lucide-react'
 import type { PredictorResult } from '@/lib/types'
 
@@ -175,9 +176,10 @@ export function Predictor({ defaultExam }: { defaultExam?: 'JEE' | 'CET' }) {
             {result.matchingColleges.length > 0 && (
               <div className="mt-5 max-h-48 overflow-y-auto">
                 {result.matchingColleges.slice(0, 8).map((c) => (
-                  <div
+                  <Link
                     key={`${c.id}-${c.branch}-${c.capRound}-${c.percentile}`}
-                    className="flex items-center justify-between border-b border-border py-2 text-sm last:border-0"
+                    href={`/college/${c.id}`}
+                    className="flex items-center justify-between border-b border-border py-2 text-sm last:border-0 transition hover:bg-muted/50 -mx-2 px-2 rounded"
                   >
                     <div>
                       <div className="font-medium">{c.name}</div>
@@ -194,7 +196,7 @@ export function Predictor({ defaultExam }: { defaultExam?: 'JEE' | 'CET' }) {
                     >
                       {c.classification}
                     </span>
-                  </div>
+                  </Link>
                 ))}
               </div>
             )}
