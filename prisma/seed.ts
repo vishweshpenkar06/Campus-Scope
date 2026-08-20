@@ -63,7 +63,7 @@ function generateCutoffs(collegeIndex: number, collegeId: number) {
     capRound: number
     category: string
     branch: string
-    percentile: Float
+    percentile: number
     year: number
   }> = []
 
