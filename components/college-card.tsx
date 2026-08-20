@@ -39,6 +39,11 @@ export function CollegeCard({ college }: { college: College }) {
           />
         ) : (
           <div className="flex h-full items-center justify-center">
+            <Building2 className="size-12 text-muted-foreground/30 fallback-icon" />
+          </div>
+        )}
+        {googleData?.photos?.[0] && (
+          <div className="hidden absolute inset-0 flex items-center justify-center bg-muted">
             <Building2 className="size-12 text-muted-foreground/30" />
           </div>
         )}
