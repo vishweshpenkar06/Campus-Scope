@@ -102,8 +102,52 @@ export function CollegeDetail({ id }: { id: string }) {
             <MapPin className="size-4" />
             {college.location}
           </p>
+
+          <div className="mt-4 flex flex-wrap gap-2">
+            {college.establishedYear > 0 && (
+              <span className="inline-flex items-center rounded-full border border-border bg-muted px-3 py-1 text-xs font-medium">
+                Est. {college.establishedYear}
+              </span>
+            )}
+            {college.campusSize && (
+              <span className="inline-flex items-center rounded-full border border-border bg-muted px-3 py-1 text-xs font-medium">
+                {college.campusSize}
+              </span>
+            )}
+            {college.accreditation && (
+              <span className="inline-flex items-center rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+                {college.accreditation}
+              </span>
+            )}
+          </div>
+
+          <div className="mt-4 flex flex-wrap gap-3">
+            {college.websiteUrl && (
+              <a
+                href={college.websiteUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
+              >
+                <ExternalLink className="size-4" />
+                Official Website
+              </a>
+            )}
+            {college.admissionUrl && (
+              <a
+                href={college.admissionUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-2.5 text-sm font-semibold transition hover:border-primary hover:text-primary"
+              >
+                <ExternalLink className="size-4" />
+                Admission Portal
+              </a>
+            )}
+          </div>
+
           {googleData && (
-            <div className="mt-2 flex flex-wrap items-center gap-4 text-sm">
+            <div className="mt-4 flex flex-wrap items-center gap-4 text-sm">
               {googleData.rating && (
                 <span className="flex items-center gap-1">
                   <Star className="size-4 fill-amber-500 text-amber-500" />
@@ -116,17 +160,6 @@ export function CollegeDetail({ id }: { id: string }) {
                   <Phone className="size-3.5" />
                   {googleData.phone}
                 </span>
-              )}
-              {googleData.website && (
-                <a
-                  href={googleData.website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1 text-primary hover:underline"
-                >
-                  <ExternalLink className="size-3.5" />
-                  Website
-                </a>
               )}
             </div>
           )}
