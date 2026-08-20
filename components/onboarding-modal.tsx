@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { GraduationCap, Stethoscope, ArrowRight, X } from 'lucide-react'
+import { GraduationCap, Stethoscope, ArrowRight, ArrowLeft, X, Target, Shield, TrendingUp } from 'lucide-react'
 import type { OnboardingState } from '@/lib/types'
 
 export function getOnboardingState(): OnboardingState | null {
@@ -12,10 +12,16 @@ export function saveOnboardingState(_state: OnboardingState) {
   // No-op: modal shows on every visit
 }
 
+type Step = 'stream' | 'exam' | 'preferences' | 'results'
+
 export function OnboardingModal({ onComplete }: { onComplete: (state: OnboardingState) => void }) {
-  const [step, setStep] = useState<'stream' | 'exam'>('stream')
+  const [step, setStep] = useState<Step>('stream')
   const [stream, setStream] = useState<OnboardingState['stream']>(null)
   const [exam, setExam] = useState<OnboardingState['exam']>(null)
+  const [percentile, setPercentile] = useState('')
+  const [category, setCategory] = useState('OPEN')
+  const [branch, setBranch] = useState('Computer Science & Engineering')
+  const [loading, setLoading] = useState(false)
 
   function selectStream(s: OnboardingState['stream']) {
     setStream(s)
@@ -25,13 +31,47 @@ export function OnboardingModal({ onComplete }: { onComplete: (state: Onboarding
 
   function selectExam(e: OnboardingState['exam']) {
     setExam(e)
-    const state: OnboardingState = { stream: 'engineering', exam: e }
+    setStep('preferences')
+  }
+
+  async function submitPreferences() {
+    setLoading(true)
+    try {
+      const response = await fetch('/api/predict', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          percentile: Number(percentile),
+          category,
+          branch,
+          exam,
+        }),
+      })
+      const body = await response.json()
+      if (response.ok) {
+        setStep('results')
+      }
+    } catch {
+      // Continue anyway
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  function complete() {
+    const state: OnboardingState = {
+      stream: 'engineering',
+      exam,
+      percentile: percentile ? Number(percentile) : null,
+      category,
+      branch,
+    }
     saveOnboardingState(state)
     onComplete(state)
   }
 
   function skip() {
-    const state: OnboardingState = { stream: 'engineering', exam: null }
+    const state: OnboardingState = { stream: 'engineering', exam: null, percentile: null, category: 'OPEN', branch: 'Computer Science & Engineering' }
     saveOnboardingState(state)
     onComplete(state)
   }
@@ -47,7 +87,7 @@ export function OnboardingModal({ onComplete }: { onComplete: (state: Onboarding
           <X className="size-5" />
         </button>
 
-        {step === 'stream' ? (
+        {step === 'stream' && (
           <div>
             <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-primary">
               <GraduationCap className="size-4" />
@@ -105,7 +145,9 @@ export function OnboardingModal({ onComplete }: { onComplete: (state: Onboarding
               Skip for now
             </button>
           </div>
-        ) : (
+        )}
+
+        {step === 'exam' && (
           <div>
             <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-primary">
               <GraduationCap className="size-4" />
@@ -154,9 +196,157 @@ export function OnboardingModal({ onComplete }: { onComplete: (state: Onboarding
 
             <button
               onClick={() => setStep('stream')}
-              className="mt-6 text-sm font-semibold text-muted-foreground underline-offset-4 hover:underline"
+              className="mt-6 flex items-center gap-1 text-sm font-semibold text-muted-foreground underline-offset-4 hover:underline"
             >
-              Back to stream selection
+              <ArrowLeft className="size-4" />
+              Back
+            </button>
+          </div>
+        )}
+
+        {step === 'preferences' && (
+          <div>
+            <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-primary">
+              <GraduationCap className="size-4" />
+              {exam === 'JEE' ? 'JEE Main' : 'MHT-CET'} Track
+            </div>
+            <h2 className="mt-3 font-serif text-3xl font-semibold tracking-tight">
+              Your Preferences
+            </h2>
+            <p className="mt-3 text-sm leading-6 text-muted-foreground">
+              Enter your percentile and preferences to get personalized college recommendations.
+            </p>
+
+            <div className="mt-8 grid gap-4">
+              <label className="grid gap-2 text-sm font-semibold">
+                Your Percentile
+                <input
+                  required
+                  value={percentile}
+                  onChange={(e) => setPercentile(e.target.value)}
+                  type="number"
+                  min="0"
+                  max="100"
+                  step="0.01"
+                  placeholder="e.g. 92.5"
+                  className="h-11 rounded-lg border border-input bg-background px-3 text-sm font-normal text-foreground outline-none placeholder:text-muted-foreground focus:ring-2 focus:ring-ring"
+                />
+              </label>
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <label className="grid gap-2 text-sm font-semibold">
+                  Category
+                  <select
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                    className="h-11 rounded-lg border border-input bg-background px-3 text-sm font-normal text-foreground outline-none focus:ring-2 focus:ring-ring"
+                  >
+                    <option value="OPEN">OPEN</option>
+                    <option value="OBC">OBC</option>
+                    <option value="SC">SC</option>
+                    <option value="ST">ST</option>
+                    <option value="TFWS">TFWS</option>
+                  </select>
+                </label>
+
+                <label className="grid gap-2 text-sm font-semibold">
+                  Target Branch
+                  <select
+                    value={branch}
+                    onChange={(e) => setBranch(e.target.value)}
+                    className="h-11 rounded-lg border border-input bg-background px-3 text-sm font-normal text-foreground outline-none focus:ring-2 focus:ring-ring"
+                  >
+                    <option>Computer Science & Engineering</option>
+                    <option>Electronics & Communication</option>
+                    <option>Mechanical Engineering</option>
+                    <option>Information Technology</option>
+                    <option>Electrical Engineering</option>
+                    <option>Civil Engineering</option>
+                  </select>
+                </label>
+              </div>
+
+              <button
+                onClick={submitPreferences}
+                disabled={loading || !percentile}
+                className="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-primary px-5 text-sm font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-60"
+              >
+                {loading ? 'Finding colleges…' : 'Get Recommendations'}
+                <ArrowRight className="size-4" />
+              </button>
+            </div>
+
+            <button
+              onClick={() => setStep('exam')}
+              className="mt-6 flex items-center gap-1 text-sm font-semibold text-muted-foreground underline-offset-4 hover:underline"
+            >
+              <ArrowLeft className="size-4" />
+              Back
+            </button>
+          </div>
+        )}
+
+        {step === 'results' && (
+          <div>
+            <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-primary">
+              <GraduationCap className="size-4" />
+              Your Recommendations
+            </div>
+            <h2 className="mt-3 font-serif text-3xl font-semibold tracking-tight">
+              Your Shortlist
+            </h2>
+            <p className="mt-3 text-sm leading-6 text-muted-foreground">
+              Based on your {exam} percentile of {percentile} in {category} category for {branch}.
+            </p>
+
+            <div className="mt-6 space-y-4">
+              <div className="rounded-xl border border-green-200 bg-green-50 p-4">
+                <div className="flex items-center gap-2 font-semibold text-green-700">
+                  <Shield className="size-5" />
+                  Safe Match
+                </div>
+                <p className="mt-1 text-sm text-green-600">
+                  Percentile ≥ Cutoff + 2.0% — High chance of admission
+                </p>
+              </div>
+
+              <div className="rounded-xl border border-amber-200 bg-amber-50 p-4">
+                <div className="flex items-center gap-2 font-semibold text-amber-700">
+                  <Target className="size-5" />
+                  Target Match
+                </div>
+                <p className="mt-1 text-sm text-amber-600">
+                  Percentile within Cutoff ± 2.0% — Competitive but achievable
+                </p>
+              </div>
+
+              <div className="rounded-xl border border-red-200 bg-red-50 p-4">
+                <div className="flex items-center gap-2 font-semibold text-red-700">
+                  <TrendingUp className="size-5" />
+                  Reach / Dream
+                </div>
+                <p className="mt-1 text-sm text-red-600">
+                  Percentile between Cutoff - 5.0% and Cutoff - 2.0% — Aspirational
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-6 flex gap-3">
+              <button
+                onClick={complete}
+                className="flex-1 inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-primary px-5 text-sm font-semibold text-primary-foreground hover:opacity-90"
+              >
+                Explore Colleges
+                <ArrowRight className="size-4" />
+              </button>
+            </div>
+
+            <button
+              onClick={() => setStep('preferences')}
+              className="mt-4 flex items-center gap-1 text-sm font-semibold text-muted-foreground underline-offset-4 hover:underline"
+            >
+              <ArrowLeft className="size-4" />
+              Change preferences
             </button>
           </div>
         )}
