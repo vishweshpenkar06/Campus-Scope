@@ -5,6 +5,11 @@ export type CollegeCard = {
   fees: number
   rating: number
   overview: string
+  websiteUrl: string
+  admissionUrl: string
+  establishedYear: number
+  campusSize: string
+  accreditation: string
   hostelFees: number
   hostelAvailable: boolean
   facilities: string
@@ -42,6 +47,9 @@ export type CompareResponse = {
 export type OnboardingState = {
   stream: 'engineering' | 'medical' | null
   exam: 'JEE' | 'CET' | null
+  percentile: number | null
+  category: string
+  branch: string
 }
 
 export type GooglePlaceData = {
