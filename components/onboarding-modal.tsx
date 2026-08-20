@@ -4,20 +4,12 @@ import { useState } from 'react'
 import { GraduationCap, Stethoscope, ArrowRight, X } from 'lucide-react'
 import type { OnboardingState } from '@/lib/types'
 
-const STORAGE_KEY = 'campusscope-onboarding'
-
 export function getOnboardingState(): OnboardingState | null {
-  if (typeof window === 'undefined') return null
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY)
-    return raw ? JSON.parse(raw) : null
-  } catch {
-    return null
-  }
+  return null
 }
 
-export function saveOnboardingState(state: OnboardingState) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
+export function saveOnboardingState(_state: OnboardingState) {
+  // No-op: modal shows on every visit
 }
 
 export function OnboardingModal({ onComplete }: { onComplete: (state: OnboardingState) => void }) {
