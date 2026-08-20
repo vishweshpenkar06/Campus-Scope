@@ -176,7 +176,7 @@ export function Predictor({ defaultExam }: { defaultExam?: 'JEE' | 'CET' }) {
               <div className="mt-5 max-h-48 overflow-y-auto">
                 {result.matchingColleges.slice(0, 8).map((c) => (
                   <div
-                    key={`${c.id}-${c.branch}`}
+                    key={`${c.id}-${c.branch}-${c.capRound}-${c.percentile}`}
                     className="flex items-center justify-between border-b border-border py-2 text-sm last:border-0"
                   >
                     <div>
