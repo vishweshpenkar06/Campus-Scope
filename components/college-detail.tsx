@@ -80,11 +80,14 @@ export function CollegeDetail({ id }: { id: string }) {
   return (
     <main className="mx-auto max-w-7xl px-5 py-10 pb-28">
       {googleData?.photos?.[0] && (
-        <div className="mb-8 overflow-hidden rounded-xl">
+        <div className="mb-8 overflow-hidden rounded-xl bg-muted">
           <img
             src={googleData.photos[0]}
             alt={college.name}
             className="h-64 w-full object-cover md:h-80"
+            onError={(e) => {
+              e.currentTarget.style.display = 'none'
+            }}
           />
         </div>
       )}
