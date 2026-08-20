@@ -43,12 +43,38 @@ function CompareContent() {
         ) : !state ? (
           <div className="mt-10 h-64 animate-pulse rounded-xl bg-muted" />
         ) : (
-          <div className="mt-10 overflow-x-auto rounded-xl border border-border">
-            <table className="w-full min-w-[720px] text-left">
-              <thead className="bg-muted">
-                <tr>
-                  <th className="w-44 p-5 text-sm text-muted-foreground">Metric</th>
-                  {state.data.map((c) => (
+          <CompareTable data={state.data} />
+        )}
+      </main>
+    </AppShell>
+  )
+}
+
+function CompareTable({ data }: { data: CompareResponse['data'] }) {
+  const rows: [string, (c: (typeof data)[0]) => string][] = [
+    ['Annual fees', (c) => formatINR(c.fees)],
+    ['Rating', (c) => `${c.rating.toFixed(1)} / 5`],
+    ['Latest average package', (c) =>
+      c.placements[0] ? formatPackage(c.placements[0].avgPackage) : 'Not listed'],
+    ['Highest package', (c) =>
+      c.placements[0] ? formatPackage(c.placements[0].highestPackage) : 'Not listed'],
+    ['Placement rate', (c) =>
+      c.placements[0] ? `${c.placements[0].placementRate}%` : 'Not listed'],
+    ['Courses offered', (c) =>
+      c.courses.length ? c.courses.map((cr) => cr.name).join(', ') : 'Not listed'],
+    ['Reviews', (c) =>
+      c.reviews.length
+        ? `${c.reviews.length} review${c.reviews.length > 1 ? 's' : ''}`
+        : 'No reviews'],
+  ]
+
+  return (
+    <div className="mt-10 overflow-x-auto rounded-xl border border-border">
+      <table className="w-full min-w-[720px] text-left">
+        <thead className="bg-muted">
+          <tr>
+            <th className="w-44 p-5 text-sm text-muted-foreground">Metric</th>
+            {data.map((c) => (
                     <th key={c.id} className="p-5">
                       <div className="font-bold">{c.name}</div>
                       <div className="mt-1 text-sm font-normal text-muted-foreground">{c.location}</div>
