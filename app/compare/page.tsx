@@ -75,45 +75,27 @@ function CompareTable({ data }: { data: CompareResponse['data'] }) {
           <tr>
             <th className="w-44 p-5 text-sm text-muted-foreground">Metric</th>
             {data.map((c) => (
-                    <th key={c.id} className="p-5">
-                      <div className="font-bold">{c.name}</div>
-                      <div className="mt-1 text-sm font-normal text-muted-foreground">{c.location}</div>
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {[
-                  ['Annual fees', (c: (typeof state.data)[0]) => formatINR(c.fees)],
-                  ['Rating', (c: (typeof state.data)[0]) => `${c.rating.toFixed(1)} / 5`],
-                  ['Latest average package', (c: (typeof state.data)[0]) =>
-                    c.placements[0] ? formatPackage(c.placements[0].avgPackage) : 'Not listed'],
-                  ['Highest package', (c: (typeof state.data)[0]) =>
-                    c.placements[0] ? formatPackage(c.placements[0].highestPackage) : 'Not listed'],
-                  ['Placement rate', (c: (typeof state.data)[0]) =>
-                    c.placements[0] ? `${c.placements[0].placementRate}%` : 'Not listed'],
-                  ['Courses offered', (c: (typeof state.data)[0]) =>
-                    c.courses.length ? c.courses.map((cr) => cr.name).join(', ') : 'Not listed'],
-                  ['Reviews', (c: (typeof state.data)[0]) =>
-                    c.reviews.length
-                      ? `${c.reviews.length} review${c.reviews.length > 1 ? 's' : ''}`
-                      : 'No reviews'],
-                ].map(([label, fn]) => (
-                  <tr key={String(label)} className="border-t border-border">
-                    <td className="p-5 text-sm font-medium text-muted-foreground">{String(label)}</td>
-                    {state.data.map((c) => (
-                      <td key={c.id} className="p-5 text-sm">
-                        {(fn as (c: (typeof state.data)[0]) => string)(c)}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </main>
-    </AppShell>
+              <th key={c.id} className="p-5">
+                <div className="font-bold">{c.name}</div>
+                <div className="mt-1 text-sm font-normal text-muted-foreground">{c.location}</div>
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map(([label, fn]) => (
+            <tr key={label} className="border-t border-border">
+              <td className="p-5 text-sm font-medium text-muted-foreground">{label}</td>
+              {data.map((c) => (
+                <td key={c.id} className="p-5 text-sm">
+                  {fn(c)}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   )
 }
 
