@@ -1,9 +1,9 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { MapPin, Star, GitCompareArrows, RotateCcw } from 'lucide-react'
+import { MapPin, Star, GitCompareArrows, RotateCcw, Home, TrendingUp } from 'lucide-react'
 import { useCompare } from './compare-context'
-import { formatINR, formatPackage, formatRating } from '@/lib/format'
+import { formatINR, formatPackage, formatRating, formatROI, parseFacilities } from '@/lib/format'
 import type { CollegeDetail as Detail } from '@/lib/types'
 
 export function CollegeDetail({ id }: { id: string }) {
@@ -54,11 +54,16 @@ export function CollegeDetail({ id }: { id: string }) {
     )
 
   const selected = items.some((item) => item.id === college.id)
+  const facilities = parseFacilities(college.facilities)
+  const latestPlacement = college.placements[0]
+  const totalFees = college.fees * 4
+  const roi = latestPlacement ? formatROI(latestPlacement.avgPackage * 100000, totalFees) : null
 
   const tabs = [
     { id: 'overview', label: 'Overview' },
     { id: 'courses', label: `Courses (${college.courses.length})` },
     { id: 'placements', label: `Placements (${college.placements.length})` },
+    { id: 'cutoffs', label: `Cutoffs (${college.cutoffs.length})` },
     { id: 'reviews', label: `Reviews (${college.reviews.length})` },
   ]
 
@@ -99,6 +104,18 @@ export function CollegeDetail({ id }: { id: string }) {
         <div className="rounded-lg border border-border bg-card px-4 py-2 text-sm">
           {formatINR(college.fees)} / year
         </div>
+        {roi && (
+          <div className="flex items-center gap-1 rounded-lg border border-green-200 bg-green-50 px-4 py-2 text-sm font-medium text-green-700">
+            <TrendingUp className="size-4" />
+            ROI: {roi}
+          </div>
+        )}
+        {college.hostelAvailable && (
+          <div className="rounded-lg border border-border bg-card px-4 py-2 text-sm">
+            <Home className="mr-1 inline size-4" />
+            Hostel: {formatINR(college.hostelFees)}/yr
+          </div>
+        )}
         <div className="rounded-lg border border-border bg-card px-4 py-2 text-sm">
           {college.courses.length} courses
         </div>
@@ -106,6 +123,19 @@ export function CollegeDetail({ id }: { id: string }) {
           {college.reviews.length} reviews
         </div>
       </div>
+
+      {facilities.length > 0 && (
+        <div className="mt-4 flex flex-wrap gap-2">
+          {facilities.map((f) => (
+            <span
+              key={f}
+              className="inline-flex items-center rounded-full border border-border bg-muted px-2.5 py-1 text-xs font-medium"
+            >
+              {f}
+            </span>
+          ))}
+        </div>
+      )}
 
       <div className="mt-8 flex gap-1 border-b border-border">
         {tabs.map((t) => (
@@ -170,6 +200,7 @@ export function CollegeDetail({ id }: { id: string }) {
                     <th className="p-4 text-sm font-medium text-muted-foreground">
                       Placement Rate
                     </th>
+                    <th className="p-4 text-sm font-medium text-muted-foreground">ROI Index</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -179,6 +210,9 @@ export function CollegeDetail({ id }: { id: string }) {
                       <td className="p-4 text-sm">{formatPackage(p.avgPackage)}</td>
                       <td className="p-4 text-sm">{formatPackage(p.highestPackage)}</td>
                       <td className="p-4 text-sm">{p.placementRate}%</td>
+                      <td className="p-4 text-sm font-medium text-green-700">
+                        {formatROI(p.avgPackage * 100000, totalFees)}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -186,6 +220,13 @@ export function CollegeDetail({ id }: { id: string }) {
             </div>
           ) : (
             <Empty text="No placement data available" />
+          ))}
+
+        {tab === 'cutoffs' &&
+          (college.cutoffs.length ? (
+            <CutoffTable cutoffs={college.cutoffs} />
+          ) : (
+            <Empty text="No cutoff data available" />
           ))}
 
         {tab === 'reviews' &&
@@ -209,6 +250,81 @@ export function CollegeDetail({ id }: { id: string }) {
           ))}
       </div>
     </main>
+  )
+}
+
+function CutoffTable({ cutoffs }: { cutoffs: Detail['cutoffs'] }) {
+  const [exam, setExam] = useState<string>(cutoffs[0]?.exam || 'JEE')
+  const [round, setRound] = useState<number>(cutoffs[0]?.capRound || 1)
+  const [category, setCategory] = useState<string>(cutoffs[0]?.category || 'OPEN')
+
+  const filtered = cutoffs.filter(
+    (c) => c.exam === exam && c.capRound === round && c.category === category
+  )
+
+  const exams = [...new Set(cutoffs.map((c) => c.exam))]
+  const rounds = [...new Set(cutoffs.map((c) => c.capRound))].sort()
+  const categories = [...new Set(cutoffs.map((c) => c.category))]
+
+  return (
+    <div>
+      <div className="mb-4 flex flex-wrap gap-3">
+        <select
+          value={exam}
+          onChange={(e) => setExam(e.target.value)}
+          className="rounded-lg border border-input bg-background px-3 py-2 text-sm"
+        >
+          {exams.map((e) => (
+            <option key={e}>{e}</option>
+          ))}
+        </select>
+        <select
+          value={round}
+          onChange={(e) => setRound(Number(e.target.value))}
+          className="rounded-lg border border-input bg-background px-3 py-2 text-sm"
+        >
+          {rounds.map((r) => (
+            <option key={r} value={r}>
+              Round {r}
+            </option>
+          ))}
+        </select>
+        <select
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          className="rounded-lg border border-input bg-background px-3 py-2 text-sm"
+        >
+          {categories.map((c) => (
+            <option key={c}>{c}</option>
+          ))}
+        </select>
+      </div>
+
+      {filtered.length ? (
+        <div className="overflow-x-auto rounded-xl border border-border">
+          <table className="w-full text-left">
+            <thead className="bg-muted">
+              <tr>
+                <th className="p-4 text-sm font-medium text-muted-foreground">Branch</th>
+                <th className="p-4 text-sm font-medium text-muted-foreground">Cutoff Percentile</th>
+                <th className="p-4 text-sm font-medium text-muted-foreground">Year</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map((c) => (
+                <tr key={c.id} className="border-t border-border">
+                  <td className="p-4 text-sm font-medium">{c.branch}</td>
+                  <td className="p-4 text-sm">{c.percentile.toFixed(2)}</td>
+                  <td className="p-4 text-sm text-muted-foreground">{c.year}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <Empty text="No cutoffs match the selected filters" />
+      )}
+    </div>
   )
 }
 
