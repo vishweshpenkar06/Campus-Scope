@@ -48,7 +48,7 @@ export function Predictor() {
             type="number"
             min="1"
             placeholder="e.g. 2400"
-            className="h-11 border border-primary-foreground/25 bg-primary-foreground/10 px-3 font-normal text-primary-foreground outline-none placeholder:text-primary-foreground/45 focus:border-primary-foreground"
+            className="h-11 rounded-lg border border-input bg-background px-3 text-sm font-normal text-foreground outline-none placeholder:text-muted-foreground focus:ring-2 focus:ring-ring"
           />
         </label>
         <label className="grid gap-2 text-sm font-semibold">
@@ -60,7 +60,7 @@ export function Predictor() {
             type="number"
             min="1"
             placeholder="₹ lakhs"
-            className="h-11 border border-primary-foreground/25 bg-primary-foreground/10 px-3 font-normal text-primary-foreground outline-none placeholder:text-primary-foreground/45 focus:border-primary-foreground"
+            className="h-11 rounded-lg border border-input bg-background px-3 text-sm font-normal text-foreground outline-none placeholder:text-muted-foreground focus:ring-2 focus:ring-ring"
           />
         </label>
         <label className="grid gap-2 text-sm font-semibold">
@@ -69,7 +69,7 @@ export function Predictor() {
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             placeholder="Optional"
-            className="h-11 border border-primary-foreground/25 bg-primary-foreground/10 px-3 font-normal text-primary-foreground outline-none placeholder:text-primary-foreground/45 focus:border-primary-foreground"
+            className="h-11 rounded-lg border border-input bg-background px-3 text-sm font-normal text-foreground outline-none placeholder:text-muted-foreground focus:ring-2 focus:ring-ring"
           />
         </label>
         <button
@@ -80,13 +80,13 @@ export function Predictor() {
           <ArrowRight className="size-4" />
         </button>
         {error && (
-          <p role="alert" className="text-sm text-red-200 sm:col-span-3">
+          <p role="alert" className="text-sm text-destructive sm:col-span-3">
             {error}
           </p>
         )}
       </form>
 
-      <div className="border border-primary-foreground/20 bg-primary-foreground/10 p-6">
+      <div className="rounded-xl border border-border bg-card p-6">
         <div className="flex items-center justify-between text-sm font-semibold">
           <span>Your readout</span>
           <CircleHelp className="size-4 opacity-70" />
