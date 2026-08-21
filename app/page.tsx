@@ -7,6 +7,8 @@ import { AppShell } from '@/components/app-shell'
 import { CollegeExplorer } from '@/components/college-explorer'
 import { Predictor } from '@/components/predictor'
 import { OnboardingModal, getOnboardingState } from '@/components/onboarding-modal'
+import { FilterBanner } from '@/components/filter-banner'
+import { AutoAllotment } from '@/components/auto-allotment'
 import type { OnboardingState } from '@/lib/types'
 
 export default function Page() {
@@ -15,7 +17,7 @@ export default function Page() {
 
   useEffect(() => {
     const existing = getOnboardingState()
-    if (existing) {
+    if (existing?.exam && existing?.percentile) {
       setOnboarding(existing)
     } else {
       setShowModal(true)
@@ -25,11 +27,23 @@ export default function Page() {
   function handleOnboardingComplete(state: OnboardingState) {
     setOnboarding(state)
     setShowModal(false)
+    if (state.exam && state.percentile) {
+      setTimeout(() => {
+        document.getElementById('recommendations')?.scrollIntoView({ behavior: 'smooth' })
+      }, 100)
+    }
   }
+
+  function handleEditExam() {
+    setShowModal(true)
+  }
+
+  const hasResults = onboarding?.exam && onboarding?.percentile
 
   return (
     <AppShell>
       {showModal && <OnboardingModal onComplete={handleOnboardingComplete} />}
+      {hasResults && <FilterBanner onboarding={onboarding!} onEdit={handleEditExam} />}
       <main>
         <section className="border-b border-foreground/10 px-5 pb-20 pt-16 lg:px-8 lg:pb-28 lg:pt-24">
           <div className="mx-auto grid max-w-7xl gap-16 lg:grid-cols-[1.15fr_.85fr] lg:items-end">
@@ -44,10 +58,11 @@ export default function Page() {
               </p>
               <div className="mt-9 flex flex-wrap gap-3">
                 <Link
-                  href="#explore"
+                  href="#recommendations"
                   className="inline-flex items-center gap-2 bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground"
                 >
-                  Start with the directory <ArrowDown className="size-4" />
+                  {hasResults ? 'See your matches' : 'Start with the directory'}{' '}
+                  <ArrowDown className="size-4" />
                 </Link>
                 <Link
                   href="#predictor"
@@ -72,11 +87,32 @@ export default function Page() {
           </div>
         </section>
 
+        {hasResults && (
+          <section id="recommendations" className="scroll-mt-8 px-5 py-20 lg:px-8">
+            <div className="mx-auto max-w-7xl">
+              <div className="mb-10 flex flex-col gap-4 border-b border-foreground/10 pb-6 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <p className="eyebrow">01 · Your Matches</p>
+                  <h2 className="mt-3 font-serif text-4xl font-semibold tracking-tight">
+                    Colleges for you
+                  </h2>
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    Based on {onboarding!.exam === 'JEE' ? 'JEE Main' : 'MHT-CET'}{' '}
+                    {onboarding!.percentile}% · {onboarding!.category} ·{' '}
+                    {onboarding!.branch === 'All Branches' ? 'All Branches' : onboarding!.branch}
+                  </p>
+                </div>
+              </div>
+              <AutoAllotment onboarding={onboarding!} />
+            </div>
+          </section>
+        )}
+
         <section id="explore" className="scroll-mt-8 px-5 py-20 lg:px-8">
           <div className="mx-auto max-w-7xl">
             <div className="mb-10 flex flex-col gap-4 border-b border-foreground/10 pb-6 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <p className="eyebrow">01 · Directory</p>
+                <p className="eyebrow">{hasResults ? '02' : '01'} · Directory</p>
                 <h2 className="mt-3 font-serif text-4xl font-semibold tracking-tight">
                   Find the right set of options
                 </h2>
@@ -97,7 +133,7 @@ export default function Page() {
           <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[.8fr_1.2fr] lg:items-start">
             <div>
               <p className="text-xs font-bold uppercase tracking-[.2em] text-primary-foreground/65">
-                02 · Shortlist check
+                {hasResults ? '03' : '02'} · Shortlist check
               </p>
               <h2 className="mt-4 font-serif text-5xl font-semibold leading-none tracking-tight">
                 A useful first read, not a promise.
