@@ -265,8 +265,16 @@ export function CollegeDetail({ id }: { id: string }) {
 
       <div className="mt-8">
         {tab === 'overview' && (
-          <div className="prose max-w-none">
-            <p className="text-base leading-7 text-muted-foreground">{college.overview}</p>
+          <div className="grid gap-6">
+            <p className="max-w-3xl text-base leading-7 text-muted-foreground">{college.overview}</p>
+            <FinancialCard
+              fees={college.fees}
+              hostelFees={college.hostelFees}
+              hostelAvailable={college.hostelAvailable}
+              cautionDeposit={college.cautionDeposit}
+              eligibleScholarships={college.eligibleScholarships}
+            />
+            <CommuteChecker collegeName={college.name} location={college.location} />
           </div>
         )}
 
