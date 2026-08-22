@@ -173,6 +173,10 @@ export function CollegeDetail({ id }: { id: string }) {
               )}
             </div>
           )}
+
+          <div className="mt-5 print:hidden">
+            <ShareActions college={college} />
+          </div>
         </div>
         <button
           onClick={() =>
