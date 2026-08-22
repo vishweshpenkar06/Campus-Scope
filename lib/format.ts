@@ -24,3 +24,6 @@ export function parseFacilities(facilities: string): string[] {
     return []
   }
 }
+
+// same shape as facilities — any JSON string[] column (scholarships, recruiters)
+export const parseList = parseFacilities
