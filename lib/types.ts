@@ -13,14 +13,24 @@ export type CollegeCard = {
   hostelFees: number
   hostelAvailable: boolean
   facilities: string
+  cautionDeposit?: number
+  eligibleScholarships?: string
+  topRecruiters?: string
+  studentFacultyRatio?: string
+  nirfRank?: number
+  autonomous?: boolean
+  placements?: { avgPackage: number; year: number }[]
   _count?: { courses: number; reviews: number }
 }
 
-export type CollegeDetail = CollegeCard & {
+export type CollegeDetail = Omit<CollegeCard, 'placements'> & {
   courses: { id: number; name: string; duration: string; fees: number }[]
   placements: { id: number; year: number; avgPackage: number; highestPackage: number; placementRate: number }[]
   reviews: { id: number; author: string; rating: number; comment: string; createdAt: string }[]
   cutoffs: CutoffRecord[]
+  capRoundTrends?: CapRoundTrendRecord[]
+  seatMatrices?: SeatMatrixRecord[]
+  campusInsights?: CampusInsightRecord[]
 }
 
 export type CutoffRecord = {
@@ -31,6 +41,57 @@ export type CutoffRecord = {
   branch: string
   percentile: number
   year: number
+}
+
+export type CapRoundTrendRecord = {
+  id: number
+  year: number
+  exam: string
+  category: string
+  branch: string
+  round1Cutoff: number
+  round2Cutoff: number
+  round3Cutoff: number
+  spotRoundCutoff: number | null
+}
+
+export type SeatMatrixRecord = {
+  id: number
+  branch: string
+  totalSeats: number
+  openSeats: number
+  obcSeats: number
+  scSeats: number
+  stSeats: number
+  tfwsSeats: number
+  allIndiaSeats: number
+}
+
+export type CampusInsightRecord = {
+  id: number
+  authorRole: string
+  attendanceStrictness: string
+  canteenRating: number
+  placementSupport: string
+  content: string
+  createdAt: string
+}
+
+export type DeadlineRecord = {
+  id: number
+  title: string
+  description: string
+  eventDate: string
+  category: string
+  officialLink: string
+}
+
+export type DistanceEstimate = {
+  origin: string
+  destination: string
+  drivingText: string | null
+  transitText: string | null
+  distanceText: string | null
 }
 
 export type CollegeListResponse = {
