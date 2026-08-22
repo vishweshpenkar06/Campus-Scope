@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict'
+import { bestRoundOutcome, roundChances } from '../lib/probability'
 import { classify, computeScore, dedupeLatestRound } from '../lib/predict-core'
 import { findOrderWarnings, simulateAllotment, type SimulatorChoice } from '../lib/simulator'
 
@@ -44,3 +45,16 @@ assert.equal(simulateAllotment([mk(2, 'B', 91), mk(1, 'A', 88)], 92.4)?.choice.n
 assert.equal(simulateAllotment([mk(2, 'B', 91), mk(1, 'A', 88)], 80), null)
 
 console.log('simulator selfcheck passed')
+
+// probability engine: logistic monotonicity, quota penalty, best-round selection
+const cutoffs = { round1Cutoff: 96, round2Cutoff: 94.5, round3Cutoff: 93, spotRoundCutoff: 91 }
+assert.ok(roundChances(95, cutoffs).round2 > roundChances(93, cutoffs).round2, 'higher percentile ? higher chance')
+assert.ok(roundChances(95, cutoffs).round3 > roundChances(95, cutoffs).round1, 'later rounds easier (cutoffs drop)')
+assert.ok(roundChances(95, cutoffs, false).round2 < roundChances(95, cutoffs, true).round2, 'OTH quota penalised')
+const chances = roundChances(94.4, cutoffs)
+const best = bestRoundOutcome(chances)
+assert.equal(best.roundLabel, 'CAP Round 3') // 94.4 clears r3 comfortably, r2 at boundary
+assert.ok(best.probability > 0.5)
+
+console.log('probability selfcheck passed')
+

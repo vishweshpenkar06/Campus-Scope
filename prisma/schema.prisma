@@ -28,6 +28,10 @@ model College {
   studentFacultyRatio  String      @default("")
   nirfRank             Int         @default(0)
   autonomous           Boolean     @default(false)
+  ebcConcessionPct     Int         @default(50)
+  tfwsConcessionPct    Int         @default(100)
+  scStConcessionPct    Int         @default(100)
+  minorityConcessionPct Int        @default(30)
   createdAt            DateTime    @default(now())
   courses              Course[]
   placements           Placement[]
@@ -61,6 +65,7 @@ model User {
   savedColleges SavedCollege[]
   applications  ApplicationTracker[]
   peerRequests  PeerConnectRequest[]
+  spotApplications SpotApplication[]
 }
 
 model Account {
@@ -151,8 +156,34 @@ model SpotRoundNotice {
   noticePdfUrl        String   @default("")
   publishedAt         DateTime @default(now())
   college             College  @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  applications        SpotApplication[]
 
   @@index([applicationDeadline])
+}
+
+model SpotApplication {
+  id          Int      @id @default(autoincrement())
+  userId      String
+  noticeId    Int
+  status      String   @default("Applying")
+  submittedAt DateTime?
+  createdAt   DateTime @default(now())
+  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  notice      SpotRoundNotice  @relation(fields: [noticeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, noticeId])
+}
+
+// ponytail: one generic event table for all lightweight telemetry (search/simulator/docs) instead of
+// three tables; if volume ever demands it, partition by `type` or move to a real analytics store.
+model AnalyticsEvent {
+  id        Int      @id @default(autoincrement())
+  type      String
+  label     String
+  value     Int      @default(0)
+  createdAt DateTime @default(now())
+
+  @@index([type, label])
 }
 
 model Course {
