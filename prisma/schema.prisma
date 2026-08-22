@@ -8,25 +8,34 @@ datasource db {
 }
 
 model College {
-  id              Int         @id @default(autoincrement())
-  name            String
-  location        String
-  fees            Int
-  rating          Float
-  overview        String
-  websiteUrl      String      @default("")
-  admissionUrl    String      @default("")
-  establishedYear Int         @default(0)
-  campusSize      String      @default("")
-  accreditation   String      @default("")
-  hostelFees      Int         @default(0)
-  hostelAvailable Boolean     @default(false)
-  facilities      String      @default("[]")
-  createdAt       DateTime    @default(now())
-  courses         Course[]
-  placements      Placement[]
-  reviews         Review[]
-  cutoffs         Cutoff[]
+  id                   Int         @id @default(autoincrement())
+  name                 String
+  location             String
+  fees                 Int
+  rating               Float
+  overview             String
+  websiteUrl           String      @default("")
+  admissionUrl         String      @default("")
+  establishedYear      Int         @default(0)
+  campusSize           String      @default("")
+  accreditation        String      @default("")
+  hostelFees           Int         @default(0)
+  hostelAvailable      Boolean     @default(false)
+  facilities           String      @default("[]")
+  cautionDeposit       Int         @default(0)
+  eligibleScholarships String      @default("[]")
+  topRecruiters        String      @default("[]")
+  studentFacultyRatio  String      @default("")
+  nirfRank             Int         @default(0)
+  autonomous           Boolean     @default(false)
+  createdAt            DateTime    @default(now())
+  courses              Course[]
+  placements           Placement[]
+  reviews              Review[]
+  cutoffs              Cutoff[]
+  capRoundTrends       CapRoundTrend[]
+  seatMatrices         SeatMatrix[]
+  campusInsights       CampusInsight[]
 
   @@index([name])
   @@index([location])
@@ -78,9 +87,68 @@ model Cutoff {
   branch     String
   percentile Float
   year       Int
-  college    College  @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  college    College @relation(fields: [collegeId], references: [id], onDelete: Cascade)
 
   @@index([collegeId, exam, year])
   @@index([exam, category, branch])
   @@index([percentile])
+}
+
+// ponytail: College.fees doubles as annual tuitionFee and hostelFees as hostelFee — no duplicate columns.
+model CapRoundTrend {
+  id              Int     @id @default(autoincrement())
+  collegeId       Int
+  year            Int
+  exam            String
+  category        String
+  branch          String
+  round1Cutoff    Float
+  round2Cutoff    Float
+  round3Cutoff    Float
+  spotRoundCutoff Float?
+  college         College @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+
+  @@unique([collegeId, year, exam, category, branch])
+  @@index([exam, category, branch])
+}
+
+model SeatMatrix {
+  id            Int     @id @default(autoincrement())
+  collegeId     Int
+  branch        String
+  totalSeats    Int
+  openSeats     Int
+  obcSeats      Int
+  scSeats       Int
+  stSeats       Int
+  tfwsSeats     Int
+  allIndiaSeats Int
+  college       College @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+
+  @@unique([collegeId, branch])
+}
+
+model CampusInsight {
+  id                   Int      @id @default(autoincrement())
+  collegeId            Int
+  authorRole           String
+  attendanceStrictness String
+  canteenRating        Float
+  placementSupport     String
+  content              String
+  createdAt            DateTime @default(now())
+  college              College  @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+
+  @@index([collegeId])
+}
+
+model AdmissionDeadline {
+  id           Int      @id @default(autoincrement())
+  title        String
+  description  String
+  eventDate    DateTime
+  category     String
+  officialLink String   @default("")
+
+  @@index([eventDate])
 }
