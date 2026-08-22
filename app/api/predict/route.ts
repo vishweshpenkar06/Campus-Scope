@@ -54,6 +54,8 @@ export async function POST(request: Request) {
       id: c.college.id,
       name: c.college.name,
       location: c.college.location,
+      fees: c.college.fees,
+      rating: c.college.rating,
       percentile: c.percentile,
       branch: c.branch,
       capRound: c.capRound,
