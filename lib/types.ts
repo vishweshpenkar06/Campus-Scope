@@ -139,6 +139,8 @@ export type PredictorResult = {
     id: number
     name: string
     location: string
+    fees: number
+    rating: number
     percentile: number
     branch: string
     capRound: number
