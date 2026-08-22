@@ -112,6 +112,7 @@ async function main() {
         studentFacultyRatio: `1:${12 + (index % 8)}`,
         nirfRank: rating >= 4.4 ? 10 + ((index * 3) % 40) : 0,
         autonomous: index % 3 === 0,
+        minorityConcessionPct: [30, 40, 20][index % 3],
         courses: sparse
           ? undefined
           : {

@@ -33,6 +33,8 @@ CampusScope is a Track A college discovery platform for researching Indian engin
 - `/api/compare?ids=1,2` — comparison payload.
 - `/api/locations` — location filter options.
 - `/api/predict` — directional predictor against real Cutoff records, not an admission guarantee.
+- `/api/predict/probability` — round-wise allotment probability percentages (logistic model on historical cutoffs).
+- `/admin/analytics` — admin dashboard (searched branches, shortlist leaders, percentile histogram, readiness); gate via `ADMIN_EMAILS` env CSV.
 - `/api/deadlines` — upcoming admission events for the homepage banner.
 - `/api/distance` — travel time estimates via Google Distance Matrix (requires `GOOGLE_MAPS_API_KEY`).
 - `/api/google-places` — campus photos/ratings; `/api/google-places/photo` proxies media bytes.
