@@ -15,7 +15,18 @@ type Filters = {
   page: number
 }
 
+const emptyFilters: Filters = {
+  q: '',
+  location: '',
+  minFee: '',
+  maxFee: '',
+  minRating: '',
+  branch: '',
+  page: 1,
+}
+
 function readFilters(): Filters {
+  if (typeof window === 'undefined') return emptyFilters
   const params = new URLSearchParams(window.location.search)
   return {
     q: params.get('q') ?? '',
@@ -29,22 +40,13 @@ function readFilters(): Filters {
 }
 
 export function CollegeExplorer({ defaultExam }: { defaultExam?: 'JEE' | 'CET' }) {
-  const [filters, setFilters] = useState<Filters>({
-    q: '',
-    location: '',
-    minFee: '',
-    maxFee: '',
-    minRating: '',
-    branch: '',
-    page: 1,
-  })
+  const [filters, setFilters] = useState<Filters>(readFilters)
   const [data, setData] = useState<CollegeListResponse | null>(null)
   const [locations, setLocations] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
 
   useEffect(() => {
-    setFilters(readFilters())
     fetch('/api/locations')
       .then((response) => (response.ok ? response.json() : Promise.reject()))
       .then((body) => setLocations(body.data))
@@ -61,7 +63,7 @@ export function CollegeExplorer({ defaultExam }: { defaultExam?: 'JEE' | 'CET' }
     if (filters.maxFee) params.set('maxFee', String(Number(filters.maxFee) * 100000))
     if (filters.minRating) params.set('minRating', filters.minRating)
     if (filters.branch) params.set('branch', filters.branch)
-    window.history.replaceState(null, '', `/?${params.toString()}`)
+    window.history.replaceState(null, '', `${window.location.pathname}?${params.toString()}`)
     try {
       const response = await fetch(`/api/colleges?${params}`)
       if (!response.ok) throw new Error()
