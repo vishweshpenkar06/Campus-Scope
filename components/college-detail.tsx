@@ -13,6 +13,7 @@ import { SeatMatrix } from './seat-matrix'
 import { CampusInsights } from './campus-insights'
 import { AskSenior } from './ask-senior'
 import { CampusMap } from './campus-map'
+import { SaveCollegeButton } from './save-college-button'
 import type { CollegeDetail as Detail, GooglePlaceData } from '@/lib/types'
 
 export function CollegeDetail({ id }: { id: string }) {
