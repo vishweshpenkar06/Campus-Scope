@@ -1,6 +1,6 @@
 # CampusScope
 
-CampusScope is a Track A college discovery platform for researching Indian engineering colleges. The MVP covers discovery filters, college detail pages, side-by-side comparison, and an explainable shortlist predictor.
+CampusScope is a Track A college discovery platform for researching Indian engineering colleges. The MVP covers discovery filters, college detail pages, side-by-side comparison, and an explainable shortlist predictor. Advanced tooling adds CAP round analytics, seat matrices, financial planning, commute estimates, an option form generator, senior insights, ROI badges, sharing/export, and an admission deadline tracker.
 
 ## Architecture
 
@@ -10,17 +10,23 @@ CampusScope is a Track A college discovery platform for researching Indian engin
 - The production catalog is database-backed. If the preview database is unavailable, routes use the small, clearly labeled `lib/demo-data.ts` dataset so the UI remains demonstrable.
 - Compare state is client-side for the active session, while the compare page reads selected IDs from the URL.
 - The interface uses an editorial research direction: Newsreader display type, DM Sans body type, paper-toned background, ink/navy brand color, restrained borders, and no decorative gradients.
+- Google Places photos are proxied through `/api/google-places/photo` so API keys never reach browsers.
+- PDF exports use the browser print pipeline (`window.print()` + print CSS); no PDF library is bundled.
 
 ## Key routes
 
-- `/` — discovery, filters, shortlist cards, and predictor.
-- `/college/[id]` — college profile with academics, placements, and reviews.
-- `/compare?ids=1,2` — comparison table for two or three colleges.
+- `/` — deadline tracker banner, onboarding, discovery filters, shortlist cards, and predictor.
+- `/college/[id]` — college profile with academics, placements, CAP cutoff trends, seat matrix, financial breakdown, senior insights, reviews, share/PDF export, and commute checker.
+- `/compare?ids=1,2` — comparison matrix for two or three colleges (packages, recruiters, ratios, NIRF, hostel).
+- `/option-form` — CAP preference list generator with reorder plus CSV/print-PDF export.
 - `/api/colleges` — validated, paginated listing.
 - `/api/colleges/:id` — detail payload.
 - `/api/compare?ids=1,2` — comparison payload.
 - `/api/locations` — location filter options.
-- `/api/predict` — directional predictor, not an admission guarantee.
+- `/api/predict` — directional predictor against real Cutoff records, not an admission guarantee.
+- `/api/deadlines` — upcoming admission events for the homepage banner.
+- `/api/distance` — travel time estimates via Google Distance Matrix (requires `GOOGLE_MAPS_API_KEY`).
+- `/api/google-places` — campus photos/ratings; `/api/google-places/photo` proxies media bytes.
 
 ## Deployment handoff
 
@@ -39,4 +45,6 @@ CampusScope is a Track A college discovery platform for researching Indian engin
 
 ## Verification
 
-The project passes Prisma Client generation, TypeScript checking, `next build`, and `git diff --check`. Browser verification covers the redesigned homepage at mobile width, live college discovery, and the IIT Delhi detail route.
+The project passes Prisma Client generation, TypeScript checking, `next build`, `pnpm check` (predictor-logic self-check), and `git diff --check`. Browser verification covers the redesigned homepage at mobile width, live college discovery, and the IIT Delhi detail route.
+
+> Security note: `.env` was previously committed to git history. It is now untracked and gitignored — rotate the Neon database URL and Google API keys before production use.
