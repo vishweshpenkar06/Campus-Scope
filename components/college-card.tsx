@@ -95,6 +95,14 @@ export function CollegeCard({ college }: { college: College }) {
           <div>
             <p className="text-xs text-muted-foreground">Annual fees from</p>
             <p className="text-sm font-semibold">{formatINR(college.fees)}</p>
+            <div className="mt-1">
+              <RoiBadge
+                compact
+                avgPackageInr={college.placements?.[0]?.avgPackage}
+                fees={college.fees}
+                hostelFees={college.hostelAvailable ? college.hostelFees : 0}
+              />
+            </div>
           </div>
           <div className="flex items-center gap-1.5 text-sm">
             <Star className="size-3.5 fill-amber-500 text-amber-500" />
