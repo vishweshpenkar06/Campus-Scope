@@ -41,8 +41,6 @@ const CACHE_TTL = 48 * 60 * 60 * 1000 // 48 hours
 
 export type NearbyLandmark = { label: string; name: string; address: string | null }
 
-export type NearbyLandmark = { label: string; name: string; address: string | null }
-
 const landmarkCache = new Map<string, { data: NearbyLandmark[]; timestamp: number }>()
 
 // ponytail: three fixed searchText probes instead of full Nearby/Places exploration — cheap and
