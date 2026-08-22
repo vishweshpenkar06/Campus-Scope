@@ -27,6 +27,15 @@
 - PDF export uses the browser print pipeline with print-scoped CSS (`[data-print-root]`); CSV export builds a Blob client-side. No PDF/CSV dependency was added.
 - Option form default ordering sorts by closing cutoff descending because CAP allots the highest preference a candidate clears.
 - `.env` had been committed historically; it is now untracked and ignored. Keys must be rotated.
+
+## Candidate portal & counselling expansion (2026-08-22)
+
+- Auth: Auth.js (NextAuth v5, `next-auth@beta`) with JWT sessions + Prisma adapter. Google provider activates only when `AUTH_GOOGLE_ID`/`AUTH_GOOGLE_SECRET` exist; the UI hides sign-in and everything else works unauthenticated. Email magic links need SMTP — deferred.
+- New models: `SavedCollege` (target branch/category/priority/status per user, unique per user+college), `ApplicationTracker`, `PeerConnectRequest` (moderated request flow with query templates — no realtime chat until a transport exists), `SpotRoundNotice` (vacancy feed; seeded sample notices).
+- `/simulator` reuses the pure `lib/simulator.ts` (order-inversion warnings, duplicate detection, probable-allotment walk) on both client and server; covered by `pnpm check`. Drag-and-drop uses framer-motion's `Reorder` (the one explicitly requested animation dependency).
+- Simulator cutoffs come from `CapRoundTrend` spot/round-3 closing percentiles for the chosen exam+category.
+- Campus map tab embeds keyless Google Maps iframe; landmark probes reuse the Places text-search helper with caching.
+- Document readiness checklist is a static policy snapshot in `app/documents/page.tsx` persisted to localStorage per device — move to DB when admin management is needed.
 - Prisma uses a `globalThis` singleton in `lib/prisma.ts` to prevent hot-reload connection exhaustion.
 - College listing defaults to 12 results per page and caps client-controlled page size at 50.
 - Compare selection uses React Context only; the compare URL is the source of truth for refreshable/shared comparison pages.
