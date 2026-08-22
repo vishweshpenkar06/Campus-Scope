@@ -58,3 +58,21 @@ assert.ok(best.probability > 0.5)
 
 console.log('probability selfcheck passed')
 
+
+// scholarship matrix: income gating + no-stacking best-waiver math
+import { bestNetTuitionPerYear, schemeMatrix, type ConcessionPolicy } from '../lib/scholarships'
+const policy: ConcessionPolicy = { ebcConcessionPct: 50, tfwsConcessionPct: 100, scStConcessionPct: 100, minorityConcessionPct: 30 }
+const openLow = schemeMatrix('OPEN', 'under25L', policy)
+assert.ok(openLow.find((r) => r.name === 'TFWS Tuition Waiver')!.eligible)
+assert.equal(bestNetTuitionPerYear(200000, openLow), 0) // TFWS 100% wins
+const openHigh = schemeMatrix('OPEN', 'above8L', policy)
+assert.ok(!openHigh.find((r) => r.name === 'EBC Scholarship')!.eligible)
+assert.equal(bestNetTuitionPerYear(200000, openHigh), 200000) // nothing applies
+const scRows = schemeMatrix('SC', 'above8L', policy) // caste waiver ignores income
+assert.ok(scRows.find((r) => r.name === 'SC/ST Fee Reimbursement')!.eligible)
+// EBC halves between 2.5L–8L: pct drops to half even though TFWS still wins overall
+assert.equal(schemeMatrix('OBC', 'under25L', policy).find((r) => r.name === 'EBC Scholarship')!.concessionPct, 50)
+assert.equal(schemeMatrix('OBC', 'under8L', policy).find((r) => r.name === 'EBC Scholarship')!.concessionPct, 25)
+assert.equal(bestNetTuitionPerYear(200000, schemeMatrix('OBC', 'under8L', policy)), 0) // TFWS 100% still applies
+
+console.log('scholarship selfcheck passed')
