@@ -28,3 +28,19 @@ assert.equal(computeScore({ safe: 5, target: 0, reach: 0 }, 5, undefined, undefi
 assert.ok(computeScore({ safe: 10, target: 0, reach: 0 }, 10, 100, 'Mumbai') <= 95)
 
 console.log('predict-core selfcheck passed')
+
+// simulator: order warnings + allotment walk
+const mk = (id: number, name: string, cutoff: number): SimulatorChoice => ({ collegeId: id, name, branch: 'CS', cutoff })
+// descending (ideal) order ? no warnings
+assert.equal(findOrderWarnings([mk(1, 'A', 95), mk(2, 'B', 90)]).length, 0)
+// easy college above a harder one the student would also clear ? warn on the harder one
+const warned = findOrderWarnings([mk(2, 'B', 90), mk(1, 'A', 95)])
+assert.equal(warned.length, 1)
+assert.equal(warned[0].index, 1)
+// duplicates flagged
+assert.ok(findOrderWarnings([mk(1, 'A', 95), mk(1, 'A', 95)]).some((w) => w.message.includes('Duplicate')))
+// allotment: first choice the percentile clears; null when nothing clears
+assert.equal(simulateAllotment([mk(2, 'B', 91), mk(1, 'A', 88)], 92.4)?.choice.name, 'B')
+assert.equal(simulateAllotment([mk(2, 'B', 91), mk(1, 'A', 88)], 80), null)
+
+console.log('simulator selfcheck passed')
