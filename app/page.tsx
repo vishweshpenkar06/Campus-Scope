@@ -43,6 +43,7 @@ export default function Page() {
 
   return (
     <AppShell>
+      <DeadlineBanner />
       {showModal && <OnboardingModal onComplete={handleOnboardingComplete} />}
       {hasResults && <FilterBanner onboarding={onboarding!} onEdit={handleEditExam} />}
       <main>
