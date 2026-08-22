@@ -2,6 +2,8 @@
 
 > Complete analysis of the CampusScope project by Claude. Generated on 2026-08-20.
 
+> **⚠️ STALE BELOW — 2026-08-22 overhaul addendum:** Sections 4–6, 16 and 18 predate a major expansion. Since then: the predictor matches percentile/category/branch against a new `Cutoff` table with Safe/Target/Reach bands (`lib/predict-core.ts`); an onboarding modal (localStorage) drives `FilterBanner` + `AutoAllotment` on the homepage; Google Places integration (`lib/google-places.ts`, photos proxied via `/api/google-places/photo`); new pages `/explore`, `/predictor`, `/option-form`; new models `CapRoundTrend`, `SeatMatrix`, `CampusInsight`, `AdmissionDeadline`; College fields for cautionDeposit, eligibleScholarships, topRecruiters, studentFacultyRatio, nirfRank, autonomous; APIs `/api/deadlines`, `/api/distance`. See DECISIONS.md and README.md for the current truth.
+
 ---
 
 ## 1. Project Overview
