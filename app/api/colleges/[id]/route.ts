@@ -16,6 +16,9 @@ export async function GET(_: Request, { params }: { params: Promise<{ id: string
         placements: { orderBy: { year: 'desc' } },
         reviews: { orderBy: { createdAt: 'desc' } },
         cutoffs: { orderBy: { percentile: 'desc' } },
+        capRoundTrends: { orderBy: [{ year: 'desc' }, { branch: 'asc' }] },
+        seatMatrices: { orderBy: { branch: 'asc' } },
+        campusInsights: { orderBy: { createdAt: 'desc' } },
       },
     })
 
