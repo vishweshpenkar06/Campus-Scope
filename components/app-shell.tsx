@@ -30,6 +30,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               Predictor
             </Link>
             <Link
+              href="/option-form"
+              className="px-3 py-2 text-muted-foreground transition hover:text-foreground"
+            >
+              Option Form
+            </Link>
+            <Link
               href="/compare"
               className="ml-2 inline-flex items-center gap-2 border border-foreground/15 px-3 py-2 font-semibold transition hover:border-primary hover:text-primary"
             >

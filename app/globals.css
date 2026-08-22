@@ -166,8 +166,8 @@
 
 @media print {
   body * { visibility: hidden; }
-  #print-summary, #print-summary * { visibility: visible; }
-  #print-summary {
+  [data-print-root], [data-print-root] * { visibility: visible; }
+  [data-print-root] {
     position: absolute;
     inset: 0 auto auto 0;
     width: 100%;
