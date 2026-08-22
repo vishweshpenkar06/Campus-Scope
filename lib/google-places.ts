@@ -76,10 +76,8 @@ export async function getGooglePlaceData(
 
     const photos = (place.photos || [])
       .slice(0, 6)
-      .map(
-        (p) =>
-          `https://places.googleapis.com/v1/${p.name}/media?maxHeightPx=800&key=${API_KEY}`
-      )
+      // ponytail: proxy through our own route so the Google API key is never exposed to browsers
+      .map((p) => `/api/google-places/photo?name=${encodeURIComponent(p.name)}`)
 
     const reviews = (place.reviews || [])
       .slice(0, 10)
@@ -108,8 +106,4 @@ export async function getGooglePlaceData(
   } catch {
     return null
   }
-}
-
-export function getPhotoUrl(photoName: string, apiKey: string): string {
-  return `https://places.googleapis.com/v1/${photoName}/media?maxHeightPx=800&key=${apiKey}`
 }
