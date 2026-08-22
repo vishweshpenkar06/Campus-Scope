@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict'
 import { classify, computeScore, dedupeLatestRound } from '../lib/predict-core'
+import { findOrderWarnings, simulateAllotment, type SimulatorChoice } from '../lib/simulator'
 
 // classify: ±2.0 percentile band boundaries
 assert.equal(classify(95, 92.9), 'Safe') // >= cutoff + 2

@@ -11,14 +11,14 @@ export type ChoiceWarning = { index: number; message: string }
 // choice sitting below an easier one is unreachable if you clear the easier one first.
 export function findOrderWarnings(choices: SimulatorChoice[]): ChoiceWarning[] {
   const warnings: ChoiceWarning[] = []
-  let highestCutoff = -Infinity
+  let lowestEarlier = Infinity
   choices.forEach((choice, index) => {
-    if (choice.cutoff > highestCutoff) highestCutoff = choice.cutoff
-    else if (choice.cutoff < highestCutoff)
+    if (index > 0 && choice.cutoff > lowestEarlier)
       warnings.push({
         index,
-        message: `Lower cutoff than an earlier choice (${highestCutoff.toFixed(2)}) — this seat would likely be consumed before reaching it. Move safer/easier options below your top picks.`,
+        message: `Preference #${index} closes at ${lowestEarlier.toFixed(2)} above this — you would likely be allotted there first and never reach ${choice.name}.`,
       })
+    lowestEarlier = Math.min(lowestEarlier, choice.cutoff)
   })
 
   const seen = new Map<string, number>()
