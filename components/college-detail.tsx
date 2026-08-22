@@ -289,6 +289,12 @@ export function CollegeDetail({ id }: { id: string }) {
               hostelAvailable={college.hostelAvailable}
               cautionDeposit={college.cautionDeposit}
               eligibleScholarships={college.eligibleScholarships}
+              policy={{
+                ebcConcessionPct: college.ebcConcessionPct ?? 50,
+                tfwsConcessionPct: college.tfwsConcessionPct ?? 100,
+                scStConcessionPct: college.scStConcessionPct ?? 100,
+                minorityConcessionPct: college.minorityConcessionPct ?? 30,
+              }}
             />
             <CommuteChecker collegeName={college.name} location={college.location} />
             <AskSenior collegeId={college.id} branches={college.courses.map((c) => c.name)} />
