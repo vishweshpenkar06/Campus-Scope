@@ -16,7 +16,17 @@
 5. Add production security headers and monitoring once the deployment domain and API origins are known.
 
 - Prisma is the ORM because it is mandatory in the TRD; Neon remains the PostgreSQL runtime via `DATABASE_URL`.
-- Prisma uses a `globalThis` singleton in `lib/predict-core.ts`… (see below)
+
+## Admissions intelligence expansion (2026-08-22)
+
+- New models: `CapRoundTrend` (round-over-round closing cutoffs incl. spot), `SeatMatrix` (quota split per branch), `CampusInsight` (moderated senior notes, read-only — no public write path), `AdmissionDeadline` (global timeline, homepage banner).
+- `College` gained `cautionDeposit`, `eligibleScholarships`, `topRecruiters`, `studentFacultyRatio`, `nirfRank`, `autonomous`. Existing `fees`/`hostelFees` double as tuition/hostel fees rather than duplicating columns.
+- Predictor logic (classify ±2.0 band, latest-round dedupe, score) lives in `lib/predict-core.ts`, covered by `pnpm check`. DB failures now return 503 instead of faking an empty result.
+- ROI = avg package ÷ (4-yr tuition + hostel); shown as a badge on cards, profiles, and compare.
+- Google Places photo URLs are proxied through `/api/google-places/photo` so the API key stays server-side. Travel estimates use Google Distance Matrix via `/api/distance` (`GOOGLE_MAPS_API_KEY`).
+- PDF export uses the browser print pipeline with print-scoped CSS (`[data-print-root]`); CSV export builds a Blob client-side. No PDF/CSV dependency was added.
+- Option form default ordering sorts by closing cutoff descending because CAP allots the highest preference a candidate clears.
+- `.env` had been committed historically; it is now untracked and ignored. Keys must be rotated.
 - Prisma uses a `globalThis` singleton in `lib/prisma.ts` to prevent hot-reload connection exhaustion.
 - College listing defaults to 12 results per page and caps client-controlled page size at 50.
 - Compare selection uses React Context only; the compare URL is the source of truth for refreshable/shared comparison pages.
