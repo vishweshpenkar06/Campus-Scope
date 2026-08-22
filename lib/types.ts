@@ -19,6 +19,10 @@ export type CollegeCard = {
   studentFacultyRatio?: string
   nirfRank?: number
   autonomous?: boolean
+  ebcConcessionPct?: number
+  tfwsConcessionPct?: number
+  scStConcessionPct?: number
+  minorityConcessionPct?: number
   placements?: { avgPackage: number; year: number }[]
   _count?: { courses: number; reviews: number }
 }
