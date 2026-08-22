@@ -7,6 +7,16 @@ const facilities = [
   'Canteen', 'Medical Center', 'Transport', 'Bank/ATM', 'Gym',
 ]
 
+const recruiterPool = [
+  ['TCS', 'Infosys', 'Microsoft', 'Goldman Sachs', 'Amazon'],
+  ['Google', 'Deutsche Bank', 'Qualcomm', 'Adobe', 'L&T'],
+  ['Flipkart', 'Wipro', 'Samsung R&D', 'Deloitte', 'Zoho'],
+  ['Accenture', 'Oracle', 'Texas Instruments', 'Paytm', 'Siemens'],
+]
+
+const scholarshipsBase = ['EBC Scholarship', 'TFWS Tuition Waiver']
+const scholarshipsMaharashtra = ['Punjabrao Deshmukh Scheme']
+
 const colleges = [
   ['IIT Bombay', 'Mumbai', 245000, 4.8, 85000, true, 0, 1958, '550 Acres', 'NAAC A++', 'https://www.iitb.ac.in', 'https://jossa.nic.in'],
   ['IIT Delhi', 'New Delhi', 240000, 4.9, 90000, true, 1, 1961, '320 Acres', 'NAAC A++', 'https://www.iitd.ac.in', 'https://jossa.nic.in'],
@@ -39,13 +49,30 @@ const colleges = [
   ['Chandigarh University', 'Mohali', 175000, 4.0, 58000, true, 3, 2012, '200 Acres', 'NAAC A+', 'https://www.cuchd.in', 'https://www.cuchd.in/admissions'],
   ['SASTRA Deemed University', 'Thanjavur', 145000, 4.1, 48000, true, 4, 1984, '250 Acres', 'NAAC A++', 'https://www.sastra.edu', 'https://www.sastra.edu/admissions'],
   ['Bharati Vidyapeeth', 'Pune', 230000, 3.8, 65000, true, 0, 1964, '85 Acres', 'NAAC A+', 'https://www.bharatividyapeeth.edu', 'https://www.bharatividyapeeth.edu/admissions'],
-  ['Kalinga Institute of Industrial Technology', 'Bhubaneswar', 290000, 4.0, 78000, true, 1, 1992, '350 Acres', 'NAAC A++', 'https://www.kiit.ac.in', 'https://www.kiit.ac.in/admissions'],
-  ['Graphic Era University', 'Dehradun', 210000, 4.0, 62000, true, 2, 1993, '50 Acres', 'NAAC A+', 'https://www.geu.ac.in', 'https://www.geu.ac.in/admissions'],
-  ['PES Modern College', 'Pune', 125000, 3.7, 42000, true, 3, 1970, '20 Acres', 'NAAC A', 'https://www.moderncollegepune.edu.in', 'https://www.moderncollegepune.edu.in/admissions'],
-  ['Agnel Institute of Technology', 'Navi Mumbai', 105000, 3.6, 38000, true, 4, 1999, '15 Acres', 'NAAC A', 'https://www.aitpune.com', 'https://www.cetcell.mahacet.org'],
+  ['Graphic Era University', 'Dehradun', 210000, 4.0, 62000, true, 1, 1993, '50 Acres', 'NAAC A+', 'https://www.geu.ac.in', 'https://www.geu.ac.in/admissions'],
+  ['PES Modern College', 'Pune', 125000, 3.7, 42000, true, 2, 1970, '20 Acres', 'NAAC A', 'https://www.moderncollegepune.edu.in', 'https://www.moderncollegepune.edu.in/admissions'],
+  ['Agnel Institute of Technology', 'Navi Mumbai', 105000, 3.6, 38000, true, 3, 1999, '15 Acres', 'NAAC A', 'https://www.aitpune.com', 'https://www.cetcell.mahacet.org'],
 ] as const
 
+// ponytail: Maharashtra-linked colleges get the state-only scholarship; everything else stays on central schemes
+const maharashtraLocations = new Set(['Mumbai', 'Pune', 'Navi Mumbai'])
+
+const branches = [
+  'Computer Science & Engineering',
+  'Electronics & Communication',
+  'Mechanical Engineering',
+  'Information Technology',
+  'Electrical Engineering',
+  'Civil Engineering',
+]
+const categories = ['OPEN', 'OBC', 'SC', 'ST', 'TFWS']
+const exams = ['JEE', 'CET']
+
 async function main() {
+  await prisma.campusInsight.deleteMany()
+  await prisma.capRoundTrend.deleteMany()
+  await prisma.seatMatrix.deleteMany()
+  await prisma.admissionDeadline.deleteMany()
   await prisma.cutoff.deleteMany()
   await prisma.review.deleteMany()
   await prisma.placement.deleteMany()
@@ -75,6 +102,15 @@ async function main() {
         hostelFees,
         hostelAvailable,
         facilities: JSON.stringify(collegeFacilities),
+        cautionDeposit: fees > 300000 ? 25000 : 10000,
+        eligibleScholarships: JSON.stringify([
+          ...scholarshipsBase,
+          ...(maharashtraLocations.has(location) ? scholarshipsMaharashtra : []),
+        ]),
+        topRecruiters: JSON.stringify(recruiterPool[index % recruiterPool.length]),
+        studentFacultyRatio: `1:${12 + (index % 8)}`,
+        nirfRank: rating >= 4.4 ? 10 + ((index * 3) % 40) : 0,
+        autonomous: index % 3 === 0,
         courses: sparse
           ? undefined
           : {
@@ -105,10 +141,14 @@ async function main() {
     })
 
     if (!sparse) {
-      const cutoffs = generateCutoffs(index, college.id)
-      await prisma.cutoff.createMany({ data: cutoffs })
+      await prisma.cutoff.createMany({ data: generateCutoffs(index, college.id) })
     }
+    await prisma.capRoundTrend.createMany({ data: generateTrends(index, college.id) })
+    await prisma.seatMatrix.createMany({ data: generateSeatMatrix(index, college.id) })
+    await prisma.campusInsight.createMany({ data: generateInsights(college.id, name, index) })
   }
+
+  await prisma.admissionDeadline.createMany({ data: generateDeadlines() })
 }
 
 function generateCutoffs(collegeIndex: number, collegeId: number) {
@@ -122,20 +162,8 @@ function generateCutoffs(collegeIndex: number, collegeId: number) {
     year: number
   }> = []
 
-  const exams = ['JEE', 'CET']
-  const rounds = [1, 2, 3]
-  const categories = ['OPEN', 'OBC', 'SC', 'ST', 'TFWS']
-  const branches = [
-    'Computer Science & Engineering',
-    'Electronics & Communication',
-    'Mechanical Engineering',
-    'Information Technology',
-    'Electrical Engineering',
-    'Civil Engineering',
-  ]
-
   for (const exam of exams) {
-    for (const round of rounds) {
+    for (const round of [1, 2, 3]) {
       for (const category of categories) {
         const branchCount = 2 + (collegeIndex % 3)
         for (let b = 0; b < branchCount; b++) {
@@ -159,6 +187,192 @@ function generateCutoffs(collegeIndex: number, collegeId: number) {
     }
   }
   return cutoffs
+}
+
+// Round-over-round closing cutoffs drop as seats stay vacant — spot rounds close lowest.
+function round2(value: number) {
+  return Math.round(value * 100) / 100
+}
+
+function generateTrends(collegeIndex: number, collegeId: number) {
+  const trends: Array<{
+    collegeId: number
+    year: number
+    exam: string
+    category: string
+    branch: string
+    round1Cutoff: number
+    round2Cutoff: number
+    round3Cutoff: number
+    spotRoundCutoff: number | null
+  }> = []
+  const year = 2025
+
+  for (const exam of exams) {
+    for (const category of categories) {
+      const branchCount = 2 + (collegeIndex % 3)
+      for (let b = 0; b < branchCount; b++) {
+        const branch = branches[b % branches.length]
+        const base =
+          68 +
+          (collegeIndex % 25) +
+          (category === 'OPEN' ? 10 : category === 'OBC' ? 5 : 0) -
+          categories.indexOf(category) * 2 +
+          b * 0.5 +
+          (exam === 'JEE' ? 2 : 0)
+        const r1 = Math.min(99.9, Math.max(30, base))
+        trends.push({
+          collegeId,
+          year,
+          exam,
+          category,
+          branch,
+          round1Cutoff: round2(r1),
+          round2Cutoff: round2(Math.max(30, r1 - 1.8)),
+          round3Cutoff: round2(Math.max(30, r1 - 3.1)),
+          spotRoundCutoff: round2(Math.max(30, r1 - 4.4)),
+        })
+      }
+    }
+  }
+  return trends
+}
+
+// Quota split approximates DTE's OPEN/OBC/SC/ST/TFWS/All-India distribution.
+function generateSeatMatrix(collegeIndex: number, collegeId: number) {
+  const rows: Array<{
+    collegeId: number
+    branch: string
+    totalSeats: number
+    openSeats: number
+    obcSeats: number
+    scSeats: number
+    stSeats: number
+    tfwsSeats: number
+    allIndiaSeats: number
+  }> = []
+  const branchCount = 3 + (collegeIndex % 3)
+
+  for (let b = 0; b < branchCount; b++) {
+    const total = 60 + ((collegeIndex + b) % 5) * 30
+    const open = Math.round(total * 0.35)
+    const obc = Math.round(total * 0.25)
+    const sc = Math.round(total * 0.1)
+    const st = Math.round(total * 0.05)
+    const tfws = Math.round(total * 0.05)
+    rows.push({
+      collegeId,
+      branch: branches[b],
+      totalSeats: total,
+      openSeats: open,
+      obcSeats: obc,
+      scSeats: sc,
+      stSeats: st,
+      tfwsSeats: tfws,
+      allIndiaSeats: total - open - obc - sc - st - tfws,
+    })
+  }
+  return rows
+}
+
+function generateInsights(collegeId: number, name: string, index: number) {
+  const strictness = [
+    'Very strict — daily attendance tracked, 75% hard rule',
+    'Moderate — warnings below 75%, proxies common in big lectures',
+    'Relaxed — attendance barely enforced after first year',
+  ]
+  const support = [
+    'Dedicated placement cell runs mock interviews from semester 5',
+    'Training and placement support exists but you drive your own prep',
+    'Placement support is limited; most students apply off-campus',
+  ]
+  return [
+    {
+      collegeId,
+      authorRole: 'Final-year Student',
+      attendanceStrictness: strictness[index % strictness.length],
+      canteenRating: Math.round((3.4 + (index % 13) * 0.1) * 10) / 10,
+      placementSupport: support[index % support.length],
+      content: `Attendance rules at ${name} are enforced differently by department, so ask seniors about your branch specifically. Campus life is active and the peer group pushes you to build projects beyond coursework.`,
+    },
+    {
+      collegeId,
+      authorRole: 'Alumnus (Batch of 2023)',
+      attendanceStrictness: strictness[(index + 1) % strictness.length],
+      canteenRating: Math.round((3.2 + (index % 16) * 0.1) * 10) / 10,
+      placementSupport: support[(index + 2) % support.length],
+      content: `What nobody tells you about ${name}: the placement season rewards students who started internships early. Hostel rooms fill fast, so confirm your admission quickly if you want on-campus housing.`,
+    },
+  ]
+}
+
+function generateDeadlines() {
+  const d = (iso: string) => new Date(iso)
+  return [
+    {
+      title: 'MHT-CET CAP 2026 registration opens',
+      description: 'Fresh registrations and document upload on the CET Cell portal.',
+      eventDate: d('2026-09-01T10:00:00+05:30'),
+      category: 'Registration',
+      officialLink: 'https://cetcell.mahacet.org',
+    },
+    {
+      title: 'Document verification window',
+      description: 'Get original documents verified at your assigned facilitation center.',
+      eventDate: d('2026-09-10T10:00:00+05:30'),
+      category: 'CAP',
+      officialLink: 'https://cetcell.mahacet.org',
+    },
+    {
+      title: 'Provisional merit list released',
+      description: 'Check your merit number and raise objections within 48 hours.',
+      eventDate: d('2026-09-18T17:00:00+05:30'),
+      category: 'Merit List',
+      officialLink: 'https://cetcell.mahacet.org',
+    },
+    {
+      title: 'Option form submission opens',
+      description: 'Fill and lock your preference list. Use the Option Form generator to prepare.',
+      eventDate: d('2026-09-25T10:00:00+05:30'),
+      category: 'Option Form',
+      officialLink: 'https://cetcell.mahacet.org',
+    },
+    {
+      title: 'CAP Round 1 allotment',
+      description: 'Provisional allotment published. Accept and pay the seat fee to confirm.',
+      eventDate: d('2026-10-12T17:00:00+05:30'),
+      category: 'CAP',
+      officialLink: 'https://cetcell.mahacet.org',
+    },
+    {
+      title: 'CAP Round 2 allotment',
+      description: 'Round 2 results and freeze/betterment choices.',
+      eventDate: d('2026-10-24T17:00:00+05:30'),
+      category: 'CAP',
+      officialLink: 'https://cetcell.mahacet.org',
+    },
+    {
+      title: 'CAP Round 3 allotment',
+      description: 'Final regular round — cutoffs usually drop further.',
+      eventDate: d('2026-11-05T17:00:00+05:30'),
+      category: 'CAP',
+      officialLink: 'https://cetcell.mahacet.org',
+    },
+    {
+      title: 'Institute-level spot rounds',
+      description: 'Vacant seats filled directly by institutes. Watch late-round opportunities.',
+      eventDate: d('2026-11-18T10:00:00+05:30'),
+      category: 'Spot Round',
+      officialLink: 'https://cetcell.mahacet.org',
+    },
+    {
+      title: 'JEE Main 2027 session 1 registration',
+      description: 'Expected opening of applications for the next cycle.',
+      eventDate: d('2026-12-01T10:00:00+05:30'),
+      category: 'Registration',
+      officialLink: 'https://jeemain.nta.nic.in',
+    },
+  ]
 }
 
 main().finally(() => prisma.$disconnect())
