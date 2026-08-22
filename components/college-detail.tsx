@@ -194,7 +194,7 @@ export function CollegeDetail({ id }: { id: string }) {
         </button>
       </div>
 
-      <div className="mt-8 flex flex-wrap gap-3">
+      <div id="print-summary" className="mt-8 flex flex-wrap gap-3">
         <div className="rounded-lg border border-border bg-card px-4 py-2 text-sm">
           <Star className="mr-1 inline size-4 fill-amber-500 text-amber-500" />
           {formatRating(college.rating)} / 5
@@ -202,10 +202,22 @@ export function CollegeDetail({ id }: { id: string }) {
         <div className="rounded-lg border border-border bg-card px-4 py-2 text-sm">
           {formatINR(college.fees)} / year
         </div>
-        {roi && (
-          <div className="flex items-center gap-1 rounded-lg border border-green-200 bg-green-50 px-4 py-2 text-sm font-medium text-green-700">
-            <TrendingUp className="size-4" />
-            ROI: {roi}
+        {latestPlacement && (
+          <RoiBadge avgPackageInr={latestPlacement.avgPackage} fees={college.fees} hostelFees={college.hostelAvailable ? college.hostelFees : 0} />
+        )}
+        {college.nirfRank ? (
+          <div className="rounded-lg border border-border bg-card px-4 py-2 text-sm">
+            NIRF Rank #{college.nirfRank}
+          </div>
+        ) : null}
+        {college.autonomous && (
+          <div className="rounded-lg border border-primary/20 bg-primary/10 px-4 py-2 text-sm font-medium text-primary">
+            Autonomous
+          </div>
+        )}
+        {college.studentFacultyRatio && (
+          <div className="rounded-lg border border-border bg-card px-4 py-2 text-sm">
+            Faculty ratio {college.studentFacultyRatio}
           </div>
         )}
         {college.hostelAvailable && (
