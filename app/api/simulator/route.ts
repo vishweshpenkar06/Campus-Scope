@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { prisma } from '@/lib/prisma'
+import { logEvent } from '@/lib/telemetry'
 import { errorResponse } from '@/lib/validation'
 
 const querySchema = z.object({
@@ -11,6 +12,8 @@ export async function GET(request: Request) {
   const params = new URL(request.url).searchParams
   const parsed = querySchema.safeParse({ exam: params.get('exam') ?? undefined, category: params.get('category') ?? undefined })
   if (!parsed.success) return errorResponse('Invalid exam/category', 400, parsed.error.flatten())
+
+  logEvent('simulator', `${parsed.data.exam}/${parsed.data.category}`)
 
   try {
     // latest round's closing cutoff per college+branch is the simulator's clearing bar

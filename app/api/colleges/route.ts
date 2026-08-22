@@ -41,6 +41,8 @@ export async function GET(request: Request) {
         : {}),
     }
 
+    if (branch) logEvent('search', branch)
+
     const [total, data] = await Promise.all([
       prisma.college.count({ where }),
       prisma.college.findMany({

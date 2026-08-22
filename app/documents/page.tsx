@@ -90,6 +90,20 @@ export default function DocumentsPage() {
   const doneCount = docs.filter((d) => checked[d.name]).length
   const missing = docs.filter((d) => !checked[d.name])
 
+  // ponytail: coarse readiness telemetry (category + % complete, no document names) for the admin dashboard
+  useEffect(() => {
+    if (!docs.length) return
+    const pct = Math.round((doneCount / docs.length) * 100)
+    const timer = setTimeout(() => {
+      fetch('/api/analytics/event', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ type: 'docs', label: category, value: pct }),
+      }).catch(() => {})
+    }, 1500)
+    return () => clearTimeout(timer)
+  }, [doneCount, docs.length, category])
+
   return (
     <AppShell>
       <main className="mx-auto max-w-4xl px-5 py-10 pb-28">
