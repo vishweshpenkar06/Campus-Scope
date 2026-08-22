@@ -36,6 +36,14 @@
 - Simulator cutoffs come from `CapRoundTrend` spot/round-3 closing percentiles for the chosen exam+category.
 - Campus map tab embeds keyless Google Maps iframe; landmark probes reuse the Places text-search helper with caching.
 - Document readiness checklist is a static policy snapshot in `app/documents/page.tsx` persisted to localStorage per device — move to DB when admin management is needed.
+
+## Probability engine, scholarships matrix & telemetry (2026-08-22)
+
+- `/api/predict/probability` uses a one-parameter logistic on `CapRoundTrend` closing cutoffs (k=1.2 percentile points); OTH-university quota subtracts 3 effective percentile points. Round chances are enforced monotonic non-decreasing. Pure logic in `lib/probability.ts`, covered by `pnpm check`.
+- Scholarship waivers now live on `College` (`ebc/tfws/scSt/minorityConcessionPct`) — this retires the hardcoded EBC/TFWS constants flagged in the earlier FinancialCard ponytail note. Eligibility gating (income brackets, category) is shared math in `lib/scholarships.ts`; only the single best waiver applies (no stacking).
+- Spot-round tracking: `SpotApplication` (unique per user+notice) with Applying/Submitted/Attended/Allotted flow via `/api/user/spot-applications`.
+- Telemetry: one generic `AnalyticsEvent` table + fire-and-forget writes (`lib/telemetry.ts`); branch searches logged from listings, simulator loads, and coarse docs-readiness percentages from the checklist client. No PII. Admin view at `/admin/analytics` gated by `ADMIN_EMAILS` env CSV — no roles table until needed; charts are CSS bars (no chart library).
+- Reticle runtime verification is not available in this environment; equivalent verification is executed manually each round: `tsc --noEmit`, `pnpm check` selfchecks, production build, and live-server smoke tests of every touched route.
 - Prisma uses a `globalThis` singleton in `lib/prisma.ts` to prevent hot-reload connection exhaustion.
 - College listing defaults to 12 results per page and caps client-controlled page size at 50.
 - Compare selection uses React Context only; the compare URL is the source of truth for refreshable/shared comparison pages.
