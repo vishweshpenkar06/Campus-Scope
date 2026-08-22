@@ -11,6 +11,8 @@ import { CommuteChecker } from './commute-checker'
 import { CapRoundTrends } from './cap-round-trends'
 import { SeatMatrix } from './seat-matrix'
 import { CampusInsights } from './campus-insights'
+import { AskSenior } from './ask-senior'
+import { CampusMap } from './campus-map'
 import type { CollegeDetail as Detail, GooglePlaceData } from '@/lib/types'
 
 export function CollegeDetail({ id }: { id: string }) {
