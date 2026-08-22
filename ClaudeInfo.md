@@ -26,7 +26,7 @@
 | Styling | Tailwind 4, tw-animate-css, CVA; framer-motion (Reorder) in `/simulator` only |
 | Charts | CSS bars only (no chart library) |
 | External APIs | Google Places (New) Text Search + Photo Media, Google Distance Matrix |
-| Analytics | @vercel/analytics (production only) |
+| Analytics | none (self-hostable; event sink in-app) |
 
 ## 3. Directory Structure
 
@@ -163,7 +163,7 @@ Header (`AppShell`): nav (Explore/Predictor/Simulator/Documents/Spot Rounds/My S
 
 - `pnpm check` → `scripts/selfcheck.ts`: four assert suites covering predictor classification/dedupe/scoring, simulator ordering/allotment, probability monotonicity + OTH penalty + best-round selection, scholarship income gating + no-stacking net tuition.
 - `tsc --noEmit` clean; `next build` generates 33 routes.
-- Cron: point Vercel Cron at `/api/cron/sync-cutoffs` (e.g. `"0 */6 * * *"`).
+- Cron: point any external scheduler at `/api/cron/sync-cutoffs` with the bearer token (e.g. `"0 */6 * * *"`).
 - Seed (`pnpm db:seed`) wipes and rebuilds catalog + derived data; mentor/demo users persist across reseeds.
 
 ## 12. Known Limitations & Ponytail Trade-offs
