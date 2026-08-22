@@ -86,6 +86,7 @@ export function CollegeDetail({ id }: { id: string }) {
     ...(college.seatMatrices?.length ? [{ id: 'seats', label: 'Seat Matrix' }] : []),
     { id: 'reviews', label: `Reviews (${college.reviews.length})` },
     ...(college.campusInsights?.length ? [{ id: 'insights', label: 'Senior Talk' }] : []),
+    { id: 'campus', label: 'Campus & Travel' },
     ...(googleData ? [{ id: 'google', label: `Google (${googleData.totalReviews.toLocaleString()} reviews)` }] : []),
   ]
 
@@ -286,6 +287,7 @@ export function CollegeDetail({ id }: { id: string }) {
               eligibleScholarships={college.eligibleScholarships}
             />
             <CommuteChecker collegeName={college.name} location={college.location} />
+            <AskSenior collegeId={college.id} branches={college.courses.map((c) => c.name)} />
           </div>
         )}
 
