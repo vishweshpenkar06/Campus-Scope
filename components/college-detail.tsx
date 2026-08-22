@@ -195,6 +195,15 @@ export function CollegeDetail({ id }: { id: string }) {
       </div>
 
       <div id="print-summary" className="mt-8 flex flex-wrap gap-3">
+        <div className="hidden w-full print:block">
+          <h1 className="font-serif text-3xl font-bold">{college.name}</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {college.location}
+            {college.accreditation ? ` · ${college.accreditation}` : ''}
+            {college.establishedYear ? ` · Est. ${college.establishedYear}` : ''}
+            {' · campusscope'}
+          </p>
+        </div>
         <div className="rounded-lg border border-border bg-card px-4 py-2 text-sm">
           <Star className="mr-1 inline size-4 fill-amber-500 text-amber-500" />
           {formatRating(college.rating)} / 5
