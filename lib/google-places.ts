@@ -39,6 +39,54 @@ export type GooglePlaceData = {
 const cache = new Map<string, { data: GooglePlaceData; timestamp: number }>()
 const CACHE_TTL = 48 * 60 * 60 * 1000 // 48 hours
 
+export type NearbyLandmark = { label: string; name: string; address: string | null }
+
+export type NearbyLandmark = { label: string; name: string; address: string | null }
+
+const landmarkCache = new Map<string, { data: NearbyLandmark[]; timestamp: number }>()
+
+// ponytail: three fixed searchText probes instead of full Nearby/Places exploration — cheap and
+// covers the landmarks students actually ask about; swap for Places (New) Nearby Search if richer data is needed.
+export async function getNearbyLandmarks(location: string): Promise<NearbyLandmark[] | null> {
+  if (!API_KEY) return null
+
+  const probes: [string, string][] = [
+    ['Railway station', `${location} railway station`],
+    ['PG / hostel hub', `paying guest hostel near ${location}`],
+    ['Mess / tiffin', 'tiffin mess canteen'],
+  ]
+  const cached = landmarkCache.get(location)
+  if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+    return cached.data
+  }
+
+  try {
+    const results = await Promise.all(
+      probes.map(async ([label, query]) => {
+        const res = await fetch(`${BASE_URL}/places:searchText`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Goog-Api-Key': API_KEY,
+            'X-Goog-FieldMask': 'places.displayName,places.formattedAddress',
+          },
+          body: JSON.stringify({ textQuery: `${query} ${location}`, maxResultCount: 2, languageCode: 'en' }),
+        })
+        if (!res.ok) return [] as NearbyLandmark[]
+        const body = await res.json()
+        return ((body.places ?? []) as Array<{ displayName?: { text?: string }; formattedAddress?: string }>).map(
+          (p): NearbyLandmark => ({ label, name: p.displayName?.text ?? 'Unknown', address: p.formattedAddress ?? null })
+        )
+      })
+    )
+    const landmarks = results.flat()
+    landmarkCache.set(location, { data: landmarks, timestamp: Date.now() })
+    return landmarks
+  } catch {
+    return null
+  }
+}
+
 export async function getGooglePlaceData(
   collegeName: string,
   location: string
