@@ -180,6 +180,9 @@ export function CollegeDetail({ id }: { id: string }) {
 
           <div className="mt-5 print:hidden">
             <ShareActions college={college} />
+            <div className="mt-2">
+              <SaveCollegeButton collegeId={college.id} branches={college.courses.map((c) => c.name)} />
+            </div>
           </div>
         </div>
         <button

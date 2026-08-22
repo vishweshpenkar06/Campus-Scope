@@ -73,6 +73,7 @@ async function main() {
   await prisma.capRoundTrend.deleteMany()
   await prisma.seatMatrix.deleteMany()
   await prisma.admissionDeadline.deleteMany()
+  await prisma.spotRoundNotice.deleteMany()
   await prisma.cutoff.deleteMany()
   await prisma.review.deleteMany()
   await prisma.placement.deleteMany()
