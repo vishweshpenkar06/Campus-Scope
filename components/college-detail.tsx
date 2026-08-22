@@ -347,6 +347,16 @@ export function CollegeDetail({ id }: { id: string }) {
             <Empty text="No cutoff data available" />
           ))}
 
+        {tab === 'trends' && college.capRoundTrends && (
+          <CapRoundTrends trends={college.capRoundTrends} />
+        )}
+
+        {tab === 'seats' && college.seatMatrices && <SeatMatrix matrices={college.seatMatrices} />}
+
+        {tab === 'insights' && college.campusInsights && (
+          <CampusInsights insights={college.campusInsights} />
+        )}
+
         {tab === 'reviews' &&
           (college.reviews.length ? (
             <div className="space-y-4">
