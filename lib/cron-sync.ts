@@ -12,8 +12,8 @@ export async function runCutoffSync(prisma: PrismaClient): Promise<SyncResult> {
   const result: SyncResult = { trendsUpdated: 0, cutoffsUpdated: 0, noticesCreated: 0 }
 
   // round-robin over colleges keeps each run cheap and avoids hammering one slice of the table
-  const [{ _max }] = await prisma.college.aggregate({ _max: { id: true } })
-  const cursor = Math.max(0, (Number(process.env.SYNC_CURSOR ?? 0) % Math.max(1, (_max?.id ?? 1))) )
+  const maxId = await prisma.college.aggregate({ _max: { id: true } })
+  const cursor = Number(process.env.SYNC_CURSOR ?? 0) % Math.max(1, maxId._max.id ?? 1)
   const batch = await prisma.college.findMany({
     where: { id: { gt: cursor } },
     orderBy: { id: 'asc' },

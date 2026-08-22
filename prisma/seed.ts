@@ -152,6 +152,57 @@ async function main() {
 
   await prisma.admissionDeadline.createMany({ data: generateDeadlines() })
   await seedSpotNotices()
+  await seedMentorsAndForum()
+}
+
+// Mentors are demo alumni accounts; their slots/posts cascade away with college deletes so reseeding stays clean.
+async function seedMentorsAndForum() {
+  const colleges = await prisma.college.findMany({ orderBy: { id: 'asc' }, take: 8, select: { id: true } })
+  if (!colleges.length) return
+
+  const mentorNames = ['Rohit Deshmukh', 'Sneha Kulkarni', 'Arjun Mehta', 'Priya Nair']
+  const mentors: Array<{ id: string }> = []
+  for (const [i, name] of mentorNames.entries()) {
+    mentors.push(
+      await prisma.user.upsert({
+        where: { email: `mentor${i}@campusscope.test` },
+        update: {},
+        create: { email: `mentor${i}@campusscope.test`, name },
+      })
+    )
+  }
+
+  const slots: Array<{ mentorId: string; collegeId: number; startTime: Date; durationMin: number }> = []
+  colleges.forEach((college, ci) => {
+    for (let day = 1; day <= 3; day++) {
+      const start = new Date(Date.now() + day * 86400000)
+      start.setHours(17 + (ci % 3), (ci % 2) * 30, 0, 0)
+      slots.push({ mentorId: mentors[(ci + day) % mentors.length].id, collegeId: college.id, startTime: start, durationMin: 15 })
+    }
+  })
+  await prisma.mentorSlot.createMany({ data: slots })
+
+  const questions: [string, string][] = [
+    ['Is TFWS applicable for ACAP / institute-level rounds?', 'I am OPEN category with 93 percentile — does the tuition fee waiver carry into institute-level spot rounds or only CAP rounds?'],
+    ['How strictly is attendance enforced in the IT department?', 'Incoming first-year here. Are proxies realistic or is biometric attendance strict from semester one?'],
+    ['What is the actual hostel mess food quality?', 'Considering hostel vs PG. How is the mess rotation menu and hygiene in practice?'],
+    ['Does the college allow branch change after first year?', 'What CGPA is realistically needed and how many seats typically open up for CSE?'],
+  ]
+  for (const [i, college] of colleges.entries()) {
+    const [title, content] = questions[i % questions.length]
+    const asker = mentors[(i + 1) % mentors.length]
+    const post = await prisma.forumPost.create({
+      data: { collegeId: college.id, userId: asker.id, title, content, upvotes: 2 + ((i * 5) % 11) },
+    })
+    await prisma.forumComment.create({
+      data: {
+        postId: post.id,
+        userId: mentors[i % mentors.length].id,
+        content: 'Speaking from my own admission cycle — happy to hop on a guidance call this week if useful.',
+        isSeniorAnswer: true,
+      },
+    })
+  }
 }
 
 // Institute-level vacancy notices typically appear right after CAP round 3 — deadlines are tight (5–10 days).

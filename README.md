@@ -35,6 +35,10 @@ CampusScope is a Track A college discovery platform for researching Indian engin
 - `/api/predict` — directional predictor against real Cutoff records, not an admission guarantee.
 - `/api/predict/probability` — round-wise allotment probability percentages (logistic model on historical cutoffs).
 - `/admin/analytics` — admin dashboard (searched branches, shortlist leaders, percentile histogram, readiness); gate via `ADMIN_EMAILS` env CSV.
+- `/api/cron/sync-cutoffs` — Vercel Cron ingestion gate (`Authorization: Bearer $CRON_SECRET`); refreshes cutoff trends, mirrors to `Cutoff`, opens spot notices, notifies watchers.
+- `/api/user/notifications` — in-app alerts (bell drawer): cutoff updates, new spot rounds, deadline reminders.
+- `/api/mentors/slots` · `/api/mentors/book` — verified-senior guidance calls; atomic slot claiming.
+- `/api/forum` (+ `/api/forum/[postId]`, `/api/forum/vote`) — per-college Q&A board with upvotes, Newest/Most-upvoted sorting, verified-senior badges.
 - `/api/deadlines` — upcoming admission events for the homepage banner.
 - `/api/distance` — travel time estimates via Google Distance Matrix (requires `GOOGLE_MAPS_API_KEY`).
 - `/api/google-places` — campus photos/ratings; `/api/google-places/photo` proxies media bytes.
