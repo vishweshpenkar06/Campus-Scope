@@ -21,6 +21,7 @@ type MatchCollege = {
 export function AutoAllotment({ onboarding }: { onboarding: OnboardingState }) {
   const [matches, setMatches] = useState<MatchCollege[]>([])
   const [loading, setLoading] = useState(true)
+  const [failed, setFailed] = useState(false)
 
   useEffect(() => {
     if (!onboarding.exam || !onboarding.percentile) {
@@ -38,13 +39,13 @@ export function AutoAllotment({ onboarding }: { onboarding: OnboardingState }) {
         exam: onboarding.exam,
       }),
     })
-      .then((r) => r.json())
-      .then((body) => {
-        if (body.data?.matchingColleges) {
-          setMatches(body.data.matchingColleges)
-        }
+      .then(async (r) => {
+        const body = await r.json()
+        if (!r.ok) throw new Error(body.error)
+        setFailed(false)
+        setMatches(body.data?.matchingColleges ?? [])
       })
-      .catch(() => {})
+      .catch(() => setFailed(true))
       .finally(() => setLoading(false))
   }, [onboarding])
 
@@ -59,6 +60,17 @@ export function AutoAllotment({ onboarding }: { onboarding: OnboardingState }) {
       <div className="flex items-center justify-center py-12">
         <Loader2 className="size-6 animate-spin text-primary" />
         <span className="ml-3 text-sm text-muted-foreground">Finding your best matches…</span>
+      </div>
+    )
+  }
+
+  if (failed) {
+    return (
+      <div className="rounded-xl border border-destructive/20 bg-destructive/5 p-10 text-center">
+        <p className="font-semibold">We couldn&apos;t load your matches.</p>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Check your connection and try again in a moment.
+        </p>
       </div>
     )
   }
@@ -92,7 +104,7 @@ export function AutoAllotment({ onboarding }: { onboarding: OnboardingState }) {
       />
       <Tier
         label="Reach / Dream"
-        description="Percentile between Cutoff - 5.0% and Cutoff - 2.0% — Aspirational"
+        description="Percentile below Cutoff − 2.0% — Aspirational, worth listing higher in your option form"
         colleges={reach}
         color="red"
         icon={<TrendingUp className="size-5" />}
