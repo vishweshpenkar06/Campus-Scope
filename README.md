@@ -28,6 +28,7 @@ CampusScope is a Track A college discovery platform for researching Indian engin
 - `/api/spot-notices` — vacancy notices feed.
 - `/api/peer-connect` — senior-connect requests (auth-guarded).
 - `/api/places/nearby?location=` — station/PG/mess landmarks around a campus.
+- `/api/colleges` — validated, paginated listing.
 - `/api/colleges/:id` — detail payload.
 - `/api/compare?ids=1,2` — comparison payload.
 - `/api/locations` — location filter options.
