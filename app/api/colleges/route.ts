@@ -87,7 +87,7 @@ async function demoList(request: Request) {
     if (query.minFee !== undefined && college.fees < query.minFee) return false
     if (query.maxFee !== undefined && college.fees > query.maxFee) return false
     if (query.minRating !== undefined && college.rating < query.minRating) return false
-    if (query.branch && !college.courses?.some((c) => c.name.toLowerCase().includes(query.branch.toLowerCase()))) return false
+    if (query.branch && !college.courses?.some((c) => c.name.toLowerCase().includes(query.branch!.toLowerCase()))) return false
     return true
   })
 
