@@ -29,7 +29,7 @@ export async function POST(request: Request) {
         ...(branch ? { branch: { contains: branch, mode: 'insensitive' } } : {}),
       },
       include: {
-        college: { select: { id: true, name: true, location: true, fees: true } },
+        college: { select: { id: true, name: true, location: true, fees: true, rating: true } },
       },
       orderBy: { percentile: 'desc' },
     })
