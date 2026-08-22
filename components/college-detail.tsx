@@ -370,6 +370,8 @@ export function CollegeDetail({ id }: { id: string }) {
           <CampusInsights insights={college.campusInsights} />
         )}
 
+        {tab === 'campus' && <CampusMap collegeName={college.name} location={college.location} />}
+
         {tab === 'reviews' &&
           (college.reviews.length ? (
             <div className="space-y-4">
