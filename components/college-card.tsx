@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { ArrowUpRight, GitCompareArrows, Star, Home, Wifi, Building2 } from 'lucide-react'
 import { formatINR, formatRating, parseFacilities } from '@/lib/format'
+import { RoiBadge } from './roi-badge'
 import { useCompare } from './compare-context'
 import type { CollegeCard as College, GooglePlaceData } from '@/lib/types'
 
