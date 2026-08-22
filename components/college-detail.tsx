@@ -72,15 +72,18 @@ export function CollegeDetail({ id }: { id: string }) {
   const selected = items.some((item) => item.id === college.id)
   const facilities = parseFacilities(college.facilities)
   const latestPlacement = college.placements[0]
-  const totalFees = college.fees * 4
-  const roi = latestPlacement ? formatROI(latestPlacement.avgPackage * 100000, totalFees) : null
+  // ROI denominator includes hostel across 4 years, matching the Financial Breakdown card
+  const totalFees = college.fees * 4 + (college.hostelAvailable ? college.hostelFees * 4 : 0)
 
   const tabs = [
     { id: 'overview', label: 'Overview' },
     { id: 'courses', label: `Courses (${college.courses.length})` },
     { id: 'placements', label: `Placements (${college.placements.length})` },
     { id: 'cutoffs', label: `Cutoffs (${college.cutoffs.length})` },
+    ...(college.capRoundTrends?.length ? [{ id: 'trends', label: 'CAP Trends' }] : []),
+    ...(college.seatMatrices?.length ? [{ id: 'seats', label: 'Seat Matrix' }] : []),
     { id: 'reviews', label: `Reviews (${college.reviews.length})` },
+    ...(college.campusInsights?.length ? [{ id: 'insights', label: 'Senior Talk' }] : []),
     ...(googleData ? [{ id: 'google', label: `Google (${googleData.totalReviews.toLocaleString()} reviews)` }] : []),
   ]
 
