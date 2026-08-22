@@ -36,11 +36,123 @@ model College {
   capRoundTrends       CapRoundTrend[]
   seatMatrices         SeatMatrix[]
   campusInsights       CampusInsight[]
+  spotRoundNotices     SpotRoundNotice[]
+  peerRequests         PeerConnectRequest[]
+  savedBy              SavedCollege[]
 
   @@index([name])
   @@index([location])
   @@index([location, fees])
   @@index([rating])
+}
+
+// Auth.js identity tables (JWT sessions; Account/Session kept for OAuth bookkeeping)
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  exam          String?
+  percentile    Float?
+  category      String    @default("OPEN")
+  accounts      Account[]
+  sessions      Session[]
+  savedColleges SavedCollege[]
+  applications  ApplicationTracker[]
+  peerRequests  PeerConnectRequest[]
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([sessionToken])
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+}
+
+model SavedCollege {
+  id           Int      @id @default(autoincrement())
+  userId       String
+  collegeId    Int
+  targetBranch String
+  category     String   @default("OPEN")
+  priority     Int      @default(0)
+  status       String   @default("Researching")
+  createdAt    DateTime @default(now())
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  college      College  @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, collegeId])
+  @@index([userId, priority])
+}
+
+model ApplicationTracker {
+  id        String   @id @default(cuid())
+  userId    String
+  collegeId Int?
+  label     String
+  round     String
+  status    String   @default("Pending")
+  notes     String   @default("")
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model PeerConnectRequest {
+  id           Int      @id @default(autoincrement())
+  studentId    String
+  collegeId    Int
+  targetBranch String
+  status       String   @default("Pending")
+  notes        String   @default("")
+  createdAt    DateTime @default(now())
+  student      User     @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  college      College  @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+
+  @@index([collegeId])
+  @@index([studentId])
+}
+
+model SpotRoundNotice {
+  id                  Int      @id @default(autoincrement())
+  collegeId           Int
+  branch              String
+  vacancyCount        Int
+  applicationDeadline DateTime
+  noticePdfUrl        String   @default("")
+  publishedAt         DateTime @default(now())
+  college             College  @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+
+  @@index([applicationDeadline])
 }
 
 model Course {
