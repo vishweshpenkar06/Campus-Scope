@@ -93,8 +93,7 @@ export function CollegeExplorer({ defaultExam }: { defaultExam?: 'JEE' | 'CET' }
       ...(patch.page === undefined ? { page: 1 } : {}),
     }))
 
-  const reset = () =>
-    setFilters({ q: '', location: '', minFee: '', maxFee: '', minRating: '', branch: '', page: 1 })
+  const reset = () => setFilters(emptyFilters)
 
   return (
     <section className="mx-auto max-w-7xl px-5 pb-28">
