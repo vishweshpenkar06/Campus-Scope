@@ -9,6 +9,7 @@ import { Predictor } from '@/components/predictor'
 import { OnboardingModal, getOnboardingState } from '@/components/onboarding-modal'
 import { FilterBanner } from '@/components/filter-banner'
 import { AutoAllotment } from '@/components/auto-allotment'
+import { DeadlineBanner } from '@/components/deadline-banner'
 import type { OnboardingState } from '@/lib/types'
 
 export default function Page() {
