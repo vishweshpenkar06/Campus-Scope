@@ -16,6 +16,7 @@
 5. Add production security headers and monitoring once the deployment domain and API origins are known.
 
 - Prisma is the ORM because it is mandatory in the TRD; Neon remains the PostgreSQL runtime via `DATABASE_URL`.
+- Prisma uses a `globalThis` singleton in `lib/predict-core.ts`… (see below)
 - Prisma uses a `globalThis` singleton in `lib/prisma.ts` to prevent hot-reload connection exhaustion.
 - College listing defaults to 12 results per page and caps client-controlled page size at 50.
 - Compare selection uses React Context only; the compare URL is the source of truth for refreshable/shared comparison pages.
