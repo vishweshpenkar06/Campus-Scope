@@ -1,9 +1,16 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { MapPin, Star, GitCompareArrows, RotateCcw, Home, TrendingUp, ExternalLink, Phone, Building2 } from 'lucide-react'
+import { MapPin, Star, GitCompareArrows, RotateCcw, Home, ExternalLink, Phone, Building2 } from 'lucide-react'
 import { useCompare } from './compare-context'
 import { formatINR, formatPackage, formatRating, formatROI, parseFacilities } from '@/lib/format'
+import { RoiBadge } from './roi-badge'
+import { ShareActions } from './share-actions'
+import { FinancialCard } from './financial-card'
+import { CommuteChecker } from './commute-checker'
+import { CapRoundTrends } from './cap-round-trends'
+import { SeatMatrix } from './seat-matrix'
+import { CampusInsights } from './campus-insights'
 import type { CollegeDetail as Detail, GooglePlaceData } from '@/lib/types'
 
 export function CollegeDetail({ id }: { id: string }) {
