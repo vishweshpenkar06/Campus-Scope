@@ -6,6 +6,7 @@ import { SessionProvider } from 'next-auth/react'
 import { CompareProvider } from './compare-context'
 import { CompareTray } from './compare-tray'
 import { AuthButton } from './auth-button'
+import { NotificationBell } from './notification-bell'
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   return (
@@ -47,6 +48,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               </Link>
             </nav>
             <div className="flex items-center gap-2">
+              <NotificationBell />
               <AuthButton />
               <CompareMobileNav />
             </div>

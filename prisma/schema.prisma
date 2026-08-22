@@ -43,6 +43,8 @@ model College {
   spotRoundNotices     SpotRoundNotice[]
   peerRequests         PeerConnectRequest[]
   savedBy              SavedCollege[]
+  mentorSlots          MentorSlot[]
+  forumPosts           ForumPost[]
 
   @@index([name])
   @@index([location])
@@ -66,6 +68,12 @@ model User {
   applications  ApplicationTracker[]
   peerRequests  PeerConnectRequest[]
   spotApplications SpotApplication[]
+  notifications Notification[]
+  mentorSlots   MentorSlot[] @relation("MentorSlots")
+  slotBookings  Booking[]    @relation("SlotBookings")
+  forumPosts    ForumPost[]
+  forumComments ForumComment[]
+  forumVotes    ForumVote[]
 }
 
 model Account {
@@ -172,6 +180,92 @@ model SpotApplication {
   notice      SpotRoundNotice  @relation(fields: [noticeId], references: [id], onDelete: Cascade)
 
   @@unique([userId, noticeId])
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  userId    String
+  title     String
+  message   String
+  type      String   @default("info")
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  dedupeKey String?
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, read, createdAt])
+  @@unique([userId, dedupeKey])
+}
+
+model MentorSlot {
+  id           Int       @id @default(autoincrement())
+  mentorId     String
+  collegeId    Int
+  startTime    DateTime
+  durationMin  Int       @default(15)
+  status       String    @default("Open")
+  college      College   @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  mentor       User      @relation("MentorSlots", fields: [mentorId], references: [id], onDelete: Cascade)
+  bookings     Booking[]
+
+  @@index([collegeId, status, startTime])
+}
+
+model Booking {
+  id          Int      @id @default(autoincrement())
+  slotId      Int      @unique
+  candidateId String
+  status      String   @default("Confirmed")
+  createdAt   DateTime @default(now())
+  slot        MentorSlot @relation(fields: [slotId], references: [id], onDelete: Cascade)
+  candidate   User       @relation("SlotBookings", fields: [candidateId], references: [id], onDelete: Cascade)
+
+  @@index([candidateId])
+}
+
+model ForumPost {
+  id        Int            @id @default(autoincrement())
+  collegeId Int
+  userId    String
+  title     String
+  content   String
+  upvotes   Int            @default(0)
+  isSeniorAnswer Boolean   @default(false)
+  createdAt DateTime       @default(now())
+  college   College        @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  author    User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  comments  ForumComment[]
+  voters    ForumVote[]
+
+  @@index([collegeId, createdAt])
+}
+
+model ForumComment {
+  id        Int       @id @default(autoincrement())
+  postId    Int
+  userId    String
+  content   String
+  isSeniorAnswer Boolean @default(false)
+  createdAt DateTime  @default(now())
+  post      ForumPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  voters    ForumVote[]
+
+  @@index([postId, createdAt])
+}
+
+// ponytail: single vote table for posts and comments (nullable opposite side) instead of two tables
+model ForumVote {
+  id        Int          @id @default(autoincrement())
+  userId    String
+  postId    Int?
+  commentId Int?
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post      ForumPost?   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  comment   ForumComment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId])
+  @@unique([userId, commentId])
 }
 
 // ponytail: one generic event table for all lightweight telemetry (search/simulator/docs) instead of
