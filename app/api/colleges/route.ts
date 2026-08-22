@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma'
 import { collegeQuerySchema, errorResponse } from '@/lib/validation'
+import { logEvent } from '@/lib/telemetry'
 import { Prisma } from '@prisma/client'
 import { demoColleges } from '@/lib/demo-data'
 
