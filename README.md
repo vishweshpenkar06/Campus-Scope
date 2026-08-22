@@ -43,7 +43,8 @@ CampusScope is a Track A college discovery platform for researching Indian engin
 2. Provide `DATABASE_URL` for the Neon/Postgres database in the deployment environment. The project already contains the Prisma schema and seeded catalog structure.
 3. Run `pnpm prisma generate`, then `pnpm build` before deploying. Run the existing seed only when intentionally replacing the catalog.
 4. Do not commit `.env` files, database URLs, or generated secrets.
-5. After deployment, verify `/`, `/college/1`, `/compare?ids=1,2`, `/api/colleges`, and `/api/predict`.
+5. Candidate accounts use Auth.js (NextAuth v5) with Google: set `AUTH_SECRET`, `AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET`. Without them the sign-in button hides and all other features keep working.
+6. After deployment, verify `/`, `/college/1`, `/compare?ids=1,2`, `/api/colleges`, `/api/predict`, `/simulator`, and `/spot-rounds`.
 
 ## Handoff checklist
 
