@@ -16,10 +16,18 @@ CampusScope is a Track A college discovery platform for researching Indian engin
 ## Key routes
 
 - `/` — deadline tracker banner, onboarding, discovery filters, shortlist cards, and predictor.
-- `/college/[id]` — college profile with academics, placements, CAP cutoff trends, seat matrix, financial breakdown, senior insights, reviews, share/PDF export, and commute checker.
+- `/college/[id]` — college profile with academics, placements, CAP cutoff trends, seat matrix, financial breakdown, senior insights, reviews, share/PDF export, commute checker, campus map, and Ask-a-Senior.
 - `/compare?ids=1,2` — comparison matrix for two or three colleges (packages, recruiters, ratios, NIRF, hostel).
 - `/option-form` — CAP preference list generator with reorder plus CSV/print-PDF export.
-- `/api/colleges` — validated, paginated listing.
+- `/simulator` — mock option form with drag-and-drop reordering, CET Cell rule warnings, and probable seat allotment.
+- `/documents` — document readiness calculator per candidate category for E-scrutiny.
+- `/shortlist` — signed-in candidates manage saved colleges and application status (Google sign-in via Auth.js).
+- `/spot-rounds` — live institute-level / spot-round vacancy feed.
+- `/api/user/shortlist` — saved-college CRUD (auth-guarded).
+- `/api/simulator?exam=&category=` — cutoff choices for the simulator pool.
+- `/api/spot-notices` — vacancy notices feed.
+- `/api/peer-connect` — senior-connect requests (auth-guarded).
+- `/api/places/nearby?location=` — station/PG/mess landmarks around a campus.
 - `/api/colleges/:id` — detail payload.
 - `/api/compare?ids=1,2` — comparison payload.
 - `/api/locations` — location filter options.

@@ -150,6 +150,42 @@ async function main() {
   }
 
   await prisma.admissionDeadline.createMany({ data: generateDeadlines() })
+  await seedSpotNotices()
+}
+
+// Institute-level vacancy notices typically appear right after CAP round 3 — deadlines are tight (5–10 days).
+async function seedSpotNotices() {
+  const colleges = await prisma.college.findMany({
+    where: { name: { in: ['PES Modern College', 'Agnel Institute of Technology', 'Bharati Vidyapeeth', 'MIT World Peace University', 'LNM Institute of Information Technology'] } },
+    select: { id: true, name: true },
+  })
+  if (!colleges.length) return
+
+  const notices: Array<{
+    collegeId: number
+    branch: string
+    vacancyCount: number
+    applicationDeadline: Date
+    noticePdfUrl: string
+    publishedAt: Date
+  }> = []
+  const day = (n: number) => new Date(Date.now() + n * 86400000)
+  const branchPool = branches.slice(0, 4)
+
+  colleges.forEach((college, i) => {
+    for (let b = 0; b < 2 + (i % 2); b++) {
+      notices.push({
+        collegeId: college.id,
+        branch: branchPool[(i + b) % branchPool.length],
+        vacancyCount: 3 + ((i + b) % 9),
+        applicationDeadline: day(6 + b * 5 + (i % 7)),
+        noticePdfUrl: '',
+        publishedAt: day(-1),
+      })
+    }
+  })
+
+  await prisma.spotRoundNotice.createMany({ data: notices })
 }
 
 function generateCutoffs(collegeIndex: number, collegeId: number) {
