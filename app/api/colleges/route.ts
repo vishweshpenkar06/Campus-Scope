@@ -47,7 +47,10 @@ export async function GET(request: Request) {
         orderBy: [{ rating: 'desc' }, { name: 'asc' }],
         skip: (page - 1) * pageSize,
         take: pageSize,
-        include: { _count: { select: { courses: true, reviews: true } } },
+        include: {
+          _count: { select: { courses: true, reviews: true } },
+          placements: { orderBy: { year: 'desc' }, take: 1, select: { avgPackage: true, year: true } },
+        },
       }),
     ])
 
@@ -56,28 +59,49 @@ export async function GET(request: Request) {
       meta: { total, page, pageSize, totalPages: Math.ceil(total / pageSize) },
     })
   } catch {
-    const { searchParams } = new URL(request.url)
-    const q = searchParams.get('q')?.toLowerCase() ?? ''
-    const location = searchParams.get('location')?.toLowerCase() ?? ''
-    const page = Math.max(1, Number(searchParams.get('page') ?? 1) || 1)
-    const pageSize = 12
-    const filtered = demoColleges.filter(
-      (college) =>
-        (!q || `${college.name} ${college.location}`.toLowerCase().includes(q)) &&
-        (!location || college.location.toLowerCase().includes(location))
-    )
-    return Response.json(
-      {
-        data: filtered.slice((page - 1) * pageSize, page * pageSize),
-        meta: {
-          total: filtered.length,
-          page,
-          pageSize,
-          totalPages: Math.ceil(filtered.length / pageSize),
-        },
-        source: 'preview-demo',
-      },
-      { status: 200 }
-    )
+    return Response.json(await demoList(request))
   }
+}
+
+// ponytail: mirrors the Prisma filters in plain JS so the preview dataset behaves the same offline
+async function demoList(request: Request) {
+  const { searchParams } = new URL(request.url)
+  const raw = Object.fromEntries(searchParams.entries())
+  const parsed = collegeQuerySchema.safeParse(raw)
+  const query = parsed.success
+    ? parsed.data
+    : {
+        q: (raw.q ?? '').toLowerCase(),
+        location: (raw.location ?? '').toLowerCase(),
+        minFee: raw.minFee !== undefined ? Number(raw.minFee) : undefined,
+        maxFee: raw.maxFee !== undefined ? Number(raw.maxFee) : undefined,
+        minRating: raw.minRating !== undefined ? Number(raw.minRating) : undefined,
+        branch: raw.branch ?? '',
+        page: Math.max(1, Number(raw.page ?? 1) || 1),
+        pageSize: 12,
+      }
+
+  const filtered = demoColleges.filter((college) => {
+    if (query.q && !`${college.name} ${college.location}`.toLowerCase().includes(query.q)) return false
+    if (query.location && !college.location.toLowerCase().includes(query.location)) return false
+    if (query.minFee !== undefined && college.fees < query.minFee) return false
+    if (query.maxFee !== undefined && college.fees > query.maxFee) return false
+    if (query.minRating !== undefined && college.rating < query.minRating) return false
+    if (query.branch && !college.courses?.some((c) => c.name.toLowerCase().includes(query.branch.toLowerCase()))) return false
+    return true
+  })
+
+  return Response.json(
+    {
+      data: filtered.slice((query.page - 1) * query.pageSize, query.page * query.pageSize),
+      meta: {
+        total: filtered.length,
+        page: query.page,
+        pageSize: query.pageSize,
+        totalPages: Math.ceil(filtered.length / query.pageSize),
+      },
+      source: 'preview-demo',
+    },
+    { status: 200 }
+  )
 }
