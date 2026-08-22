@@ -47,7 +47,7 @@
 
 ## Cron sync, notifications, mentors & forum (2026-08-22)
 
-- `/api/cron/sync-cutoffs` gates on `Authorization: Bearer $CRON_SECRET` (Vercel Cron convention) — 403 on any mismatch. The pipeline is a simulated upstream (ponytail-noted): round-robin college batches, per-row drift updates on `CapRoundTrend`, mirrored decrements on `Cutoff`, one open `SpotRoundNotice` per college. No long transactions → no locks; run status lands in `AnalyticsEvent`.
+- `/api/cron/sync-cutoffs` gates on `Authorization: Bearer $CRON_SECRET` (standard bearer-token convention) — 403 on any mismatch. The pipeline is a simulated upstream (ponytail-noted): round-robin college batches, per-row drift updates on `CapRoundTrend`, mirrored decrements on `Cutoff`, one open `SpotRoundNotice` per college. No long transactions → no locks; run status lands in `AnalyticsEvent`.
 - `Notification` model with nullable `dedupeKey` unique per user — cron emits cutoff/spot alerts once per day per college; deadline reminders (≤24h out) are synthesized at read time instead of needing another cron.
 - Bell drawer polls every 60s while signed in — "live enough" at zero infra cost (SSE/websockets deliberately deferred).
 - Mentoring: mentors publish 15-min slots; booking claims the slot via a conditional `updateMany` (status Open→Booked), which is atomic — concurrent candidates cannot double-book; failed booking creation compensates back to Open. Verified-senior badge = author hosts slots at that college (reuses real data rather than a self-reported flag).
