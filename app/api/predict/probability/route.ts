@@ -2,6 +2,7 @@ import { z } from 'zod'
 import { prisma } from '@/lib/prisma'
 import { errorResponse } from '@/lib/validation'
 import { bestRoundOutcome, roundChances } from '@/lib/probability'
+import { allow, clientIp } from '@/lib/rate-limit'
 
 const inputSchema = z.object({
   percentile: z.coerce.number().min(0).max(100),
@@ -12,6 +13,10 @@ const inputSchema = z.object({
 })
 
 export async function POST(request: Request) {
+  // heavy DB query endpoint — keep the free tier friendly
+  if (!allow(`probability:${clientIp(request)}`, 30)) {
+    return errorResponse('Too many requests — try again in a minute.', 429)
+  }
   const parsed = inputSchema.safeParse(await request.json().catch(() => null))
   if (!parsed.success) return errorResponse('Enter a valid percentile and category.', 400, parsed.error.flatten())
 

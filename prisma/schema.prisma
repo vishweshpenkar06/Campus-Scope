@@ -167,6 +167,7 @@ model SpotRoundNotice {
   applications        SpotApplication[]
 
   @@index([applicationDeadline])
+  @@index([collegeId])
 }
 
 model SpotApplication {
@@ -238,6 +239,7 @@ model ForumPost {
   voters    ForumVote[]
 
   @@index([collegeId, createdAt])
+  @@index([collegeId, upvotes])
 }
 
 model ForumComment {

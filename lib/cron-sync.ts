@@ -8,19 +8,23 @@ export type SyncResult = {
 
 // ponytail: simulated upstream — a real pipeline would pull DTE/JoSAA feeds; the diff-and-upsert
 // shape (small batches, per-row updates, no long transaction) is what we actually want to keep.
+// ponytail: module-level round-robin cursor — resets per serverless instance, which is fine for a
+// best-effort sync; persist to DB if exact continuation ever matters.
+let syncCursor = 0
+
 export async function runCutoffSync(prisma: PrismaClient): Promise<SyncResult> {
   const result: SyncResult = { trendsUpdated: 0, cutoffsUpdated: 0, noticesCreated: 0 }
 
   // round-robin over colleges keeps each run cheap and avoids hammering one slice of the table
   const maxId = await prisma.college.aggregate({ _max: { id: true } })
-  const cursor = Number(process.env.SYNC_CURSOR ?? 0) % Math.max(1, maxId._max.id ?? 1)
+  const cursor = syncCursor % Math.max(1, maxId._max.id ?? 1)
   const batch = await prisma.college.findMany({
     where: { id: { gt: cursor } },
     orderBy: { id: 'asc' },
     take: 6,
     include: { capRoundTrends: { where: { year: 2025 }, take: 4 } },
   })
-  process.env.SYNC_CURSOR = String(batch.at(-1)?.id ?? 0)
+  syncCursor = batch.at(-1)?.id ?? 0
 
   for (const college of batch) {
     if (!college.capRoundTrends.length) continue
