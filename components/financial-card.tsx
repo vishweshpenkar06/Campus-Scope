@@ -2,6 +2,7 @@
 
 import { GraduationCap, IndianRupee, Wallet } from 'lucide-react'
 import { formatINR, parseList } from '@/lib/format'
+import { ScholarshipCalculator } from './scholarship-calculator'
 
 type Props = {
   fees: number
@@ -9,25 +10,39 @@ type Props = {
   hostelAvailable: boolean
   cautionDeposit?: number
   eligibleScholarships?: string
+  policy: {
+    ebcConcessionPct: number
+    tfwsConcessionPct: number
+    scStConcessionPct: number
+    minorityConcessionPct: number
+  }
 }
 
-// ponytail: concession percentages are hardcoded policy constants (EBC 50%, TFWS 100% tuition);
-// move to a Scholarship table once real scheme rules vary by income/category.
-const concessions = [
-  { name: 'OPEN', label: 'No concession', tuitionFactor: 1 },
-  { name: 'EBC', label: 'EBC scholarship — 50% tuition waiver', tuitionFactor: 0.5 },
-  { name: 'TFWS', label: 'TFWS — 100% tuition waiver', tuitionFactor: 0 },
-]
-
-export function FinancialCard({ fees, hostelFees, hostelAvailable, cautionDeposit = 0, eligibleScholarships }: Props) {
+export function FinancialCard({ fees, hostelFees, hostelAvailable, cautionDeposit = 0, eligibleScholarships, policy }: Props) {
   const scholarships = eligibleScholarships ? parseList(eligibleScholarships) : []
   const hostel = hostelAvailable ? hostelFees : 0
 
+  // headline rows use the college's own recorded waiver percentages (TFWS/EBC)
+  const headlineRows = [
+    { name: 'OPEN', label: 'No concession', tuitionFactor: 1 },
+    { name: 'EBC', label: `EBC scholarship — ${policy.ebcConcessionPct}% tuition waiver`, tuitionFactor: 1 - policy.ebcConcessionPct / 100 },
+    { name: 'TFWS', label: `TFWS — ${policy.tfwsConcessionPct}% tuition waiver`, tuitionFactor: 1 - policy.tfwsConcessionPct / 100 },
+  ]
+
   return (
     <div className="rounded-xl border border-border bg-card p-6">
-      <div className="flex items-center gap-2">
-        <Wallet className="size-4 text-primary" />
-        <h3 className="font-serif text-xl font-semibold">Financial Breakdown</h3>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-2">
+          <Wallet className="size-4 text-primary" />
+          <h3 className="font-serif text-xl font-semibold">Financial Breakdown</h3>
+        </div>
+        <ScholarshipCalculator
+          fees={fees}
+          hostelFees={hostelFees}
+          hostelAvailable={hostelAvailable}
+          cautionDeposit={cautionDeposit}
+          policy={policy}
+        />
       </div>
 
       <div className="mt-4 grid gap-2 text-sm sm:grid-cols-3">
@@ -59,7 +74,7 @@ export function FinancialCard({ fees, hostelFees, hostelAvailable, cautionDeposi
             </tr>
           </thead>
           <tbody>
-            {concessions.map((c) => (
+            {headlineRows.map((c) => (
               <tr key={c.name} className="border-t border-border">
                 <td className="px-3 py-2">
                   <span className="font-semibold">{c.name}</span>
