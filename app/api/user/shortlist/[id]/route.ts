@@ -20,16 +20,17 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
   const numericId = Number(id)
   if (!Number.isInteger(numericId)) return errorResponse('Invalid entry id', 400)
 
+  const existing = await prisma.savedCollege.findUnique({ where: { id: numericId } })
+  if (!existing || existing.userId !== session.user.id) return errorResponse('Entry not found', 404)
+
   try {
     const item = await prisma.savedCollege.update({
       where: { id: numericId },
       data: parsed.data,
     })
-    // ownership check after update keeps the query simple; revert is unnecessary since we 403 below
-    if (item.userId !== session.user.id) return errorResponse('Not your entry', 403)
     return Response.json({ data: item })
   } catch {
-    return errorResponse('Entry not found', 404)
+    return errorResponse('Could not update entry', 500)
   }
 }
 
