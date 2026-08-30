@@ -8,7 +8,8 @@
     "start": "next start",
     "db:push": "prisma db push",
     "db:seed": "tsx prisma/seed.ts",
-    "check": "tsx scripts/selfcheck.ts"
+    "check": "tsx scripts/selfcheck.ts",
+    "verify": "tsc --noEmit && pnpm check"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.3",
