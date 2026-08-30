@@ -37,8 +37,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="light bg-background">
-      <body className={`${dmSans.variable} ${newsreader.variable} font-sans antialiased`}>
+      <html lang="en" className="bg-background">
+        <body className={`${dmSans.variable} ${newsreader.variable} font-sans antialiased`}>
         {children}
       </body>
     </html>
