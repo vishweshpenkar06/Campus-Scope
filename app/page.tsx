@@ -124,7 +124,7 @@ export default function Page() {
                 field.
               </p>
             </div>
-            <CollegeExplorer defaultExam={onboarding?.exam || undefined} />
+            <CollegeExplorer />
           </div>
         </section>
 
@@ -146,7 +146,7 @@ export default function Page() {
                 guarantee.
               </p>
             </div>
-            <Predictor defaultExam={onboarding?.exam || undefined} />
+            <Predictor />
           </div>
         </section>
 

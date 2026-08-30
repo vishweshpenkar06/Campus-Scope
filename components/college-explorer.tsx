@@ -39,7 +39,7 @@ function readFilters(): Filters {
   }
 }
 
-export function CollegeExplorer({ defaultExam }: { defaultExam?: 'JEE' | 'CET' }) {
+export function CollegeExplorer() {
   const [filters, setFilters] = useState<Filters>(readFilters)
   const [data, setData] = useState<CollegeListResponse | null>(null)
   const [locations, setLocations] = useState<string[]>([])

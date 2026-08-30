@@ -3,9 +3,9 @@
 import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { AppShell } from '@/components/app-shell'
-import { Reorder, AnimatePresence, motion } from 'framer-motion'
+import { Reorder, motion } from 'framer-motion'
 import { findOrderWarnings, simulateAllotment, type SimulatorChoice } from '@/lib/simulator'
-import { AlertTriangle, GripVertical, Loader2, Play, Plus, X, Trophy } from 'lucide-react'
+import { AlertTriangle, GripVertical, Loader2, Plus, X, Trophy } from 'lucide-react'
 
 const MAX_CHOICES = 100
 

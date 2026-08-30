@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useSession } from 'next-auth/react'
-import { Bell, BellRing, X } from 'lucide-react'
+import { Bell, BellRing } from 'lucide-react'
 
 type Notification = {
   id: number

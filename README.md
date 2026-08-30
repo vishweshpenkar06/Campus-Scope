@@ -6,12 +6,13 @@
 
 <br>
 
-![Next.js](https://img.shields.io/badge/Next.js_16-000000?style=for-the-badge&logo=next.js&logoColor=white)
-![React](https://img.shields.io/badge/React_19-61DAFB?style=for-the-badge&logo=react&logoColor=black)
-![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Neon-336791?style=for-the-badge&logo=postgresql&logoColor=white)
-![Prisma](https://img.shields.io/badge/Prisma_6-2D3748?style=for-the-badge&logo=prisma&logoColor=white)
-![Tailwind](https://img.shields.io/badge/Tailwind_v4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
+[![Next.js](https://img.shields.io/badge/Next.js_16-000000?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React_19-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://typescriptlang.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Neon-336791?style=for-the-badge&logo=postgresql&logoColor=white)](https://neon.tech/)
+[![Prisma](https://img.shields.io/badge/Prisma_6-2D3748?style=for-the-badge&logo=prisma&logoColor=white)](https://prisma.io/)
+[![Tailwind](https://img.shields.io/badge/Tailwind_v4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![pnpm](https://img.shields.io/badge/pnpm-v10-f9a825?style=for-the-badge&logo=pnpm&logoColor=white)](https://pnpm.io/)
 
 <br>
 
@@ -20,11 +21,31 @@
 
 <br>
 
-**[Get Started](#-getting-started)** · **[How It Works](#-architecture)** · **[Features](#-features)** · **[API](#-api-endpoints)** · **[Deploy](#-deploy)**
+**[Get Started](#-getting-started)** · **[Architecture](#-architecture)** · **[Features](#-features)** · **[API](#-api-endpoints)** · **[Deploy](#-deploy)** · **[Contributing](docs/CONTRIBUTING.md)**
 
 </div>
 
 ---
+
+<br>
+
+## Table of Contents
+
+- [Problem](#problem)
+- [Architecture](#architecture)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Design System](#design-system)
+- [Getting Started](#getting-started)
+- [Environment Variables](#environment-variables)
+- [Project Structure](#project-structure)
+- [Database](#database)
+- [Testing](#testing)
+- [API Endpoints](#api-endpoints)
+- [Deploy](#deploy)
+- [Contributing](#contributing)
+- [License](#license)
+- [Author](#author)
 
 <br>
 

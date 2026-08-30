@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { MapPin, Star, GitCompareArrows, RotateCcw, Home, ExternalLink, Phone, Building2 } from 'lucide-react'
+import { MapPin, Star, GitCompareArrows, RotateCcw, Home, ExternalLink, Phone } from 'lucide-react'
 import { useCompare } from './compare-context'
 import { formatINR, formatPackage, formatRating, formatROI, parseFacilities } from '@/lib/format'
 import { RoiBadge } from './roi-badge'
