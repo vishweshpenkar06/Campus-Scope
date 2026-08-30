@@ -2,10 +2,17 @@
   "name": "campusscope",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "dev": "next dev",
+    "dev:clean": "rm -rf .next && pnpm dev",
     "build": "next build",
+    "build:check": "tsc --noEmit && pnpm build",
     "start": "next start",
+    "prod:start": "pnpm start",
+    "clean": "rm -rf .next",
     "db:push": "prisma db push",
     "db:seed": "tsx prisma/seed.ts",
     "check": "tsx scripts/selfcheck.ts",
