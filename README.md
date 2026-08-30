@@ -241,7 +241,34 @@ A: Currently tuned for Indian engineering admissions (JEE/CET).
 **Q: How do I update cutoffs?**
 A: Configure `CRON_SECRET` and trigger `/api/cron/sync-cutoffs`.
 
+## License
+
+Distributed under the MIT License.
+
+## Acknowledgements
+
+- Built with [Next.js](https://nextjs.org/)
+- UI powered by [Tailwind CSS](https://tailwindcss.com/)
+- Database by [Neon](https://neon.tech/)
+- ORM by [Prisma](https://prisma.io/)
+
+## Contributors
+
+- [Vishwesh Penkar](https://github.com/vishweshpenkar06)
+
 ---
+
+### How to verify
+
+Run the following command to ensure the project is stable:
+
+```bash
+pnpm verify
+```
+
+### Security
+
+Please report security issues directly to the maintainer. See [SECURITY.md](docs/SECURITY.md) for details.
 
 | Layer | Technology |
 |-------|-----------|

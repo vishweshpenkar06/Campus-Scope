@@ -1,0 +1,7 @@
+# humans.txt
+# The humans.txt file identifies the developers of the site.
+# See: https://humanstxt.org/
+
+TEAM
+    Vishwesh Penkar (Maintainer)
+    https://github.com/vishweshpenkar06

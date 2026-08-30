@@ -15,14 +15,23 @@ export type ClassifiedCollege = {
   classification: 'Safe' | 'Target' | 'Reach'
 }
 
+/**
+ * Predicts college classification based on percentile band boundaries.
+ * @param percentile Candidate percentile
+ * @param cutoff Closing percentile
+ * @returns 'Safe', 'Target', or 'Reach'
+ */
 export function classify(percentile: number, cutoff: number): 'Safe' | 'Target' | 'Reach' {
   if (percentile >= cutoff + 2.0) return 'Safe'
   if (percentile >= cutoff - 2.0) return 'Target'
   return 'Reach'
 }
 
-// ponytail: keeps one row per college+branch — the latest round's closing cutoff is what a
-// late-round applicant faces; upgrade path is averaging rounds once real multi-year data exists.
+/**
+ * Dedupes cutoff rows to keep only the latest round's closing percentile per college+branch.
+ * @param rows Array of cutoff rows
+ * @returns Deduped rows
+ */
 export function dedupeLatestRound<T extends CutoffRow>(rows: T[]): T[] {
   const best = new Map<string, T>()
   for (const row of rows) {

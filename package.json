@@ -18,10 +18,21 @@
     "db:seed": "tsx prisma/seed.ts",
     "seed": "tsx prisma/seed.ts",
     "check": "tsx scripts/selfcheck.ts",
+    "test": "tsx scripts/selfcheck.ts",
     "verify": "tsc --noEmit && pnpm check",
     "lint": "next lint",
+    "lint:fix": "next lint --fix",
     "format": "prettier --write .",
     "prod:build": "pnpm build"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,css}": [
+      "prettier --write"
+    ]
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.3",
@@ -41,15 +52,21 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@commitlint/cli": "^21.2.2",
+    "@commitlint/config-conventional": "^21.2.2",
     "@tailwindcss/postcss": "^4.3.3",
     "@types/node": "^24",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint-config-next": "16.3.3",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.4.1",
     "postcss": "^8.5",
     "prettier": "^3.9.6",
+    "prettier-plugin-tailwindcss": "^0.8.1",
     "tailwindcss": "^4.3.3",
     "tsx": "^4.23.12",
-    "typescript": "5.7.3"
+    "typescript": "5.7.3",
+    "vitest": "^4.1.11"
   }
 }
