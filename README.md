@@ -13,6 +13,7 @@
 [![Prisma](https://img.shields.io/badge/Prisma_6-2D3748?style=for-the-badge&logo=prisma&logoColor=white)](https://prisma.io/)
 [![Tailwind](https://img.shields.io/badge/Tailwind_v4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![pnpm](https://img.shields.io/badge/pnpm-v10-f9a825?style=for-the-badge&logo=pnpm&logoColor=white)](https://pnpm.io/)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvishweshpenkar06%2FCampus-Scope)
 
 <br>
 
@@ -21,7 +22,7 @@
 
 <br>
 
-**[Get Started](#-getting-started)** · **[Architecture](#-architecture)** · **[Features](#-features)** · **[API](#-api-endpoints)** · **[Deploy](#-deploy)** · **[Contributing](docs/CONTRIBUTING.md)**
+**[Get Started](#-getting-started)** · **[Architecture](#-architecture)** · **[Features](#-features)** · **[API](#-api-endpoints)** · **[Deploy](#-deploy)** · **[Contributing](docs/CONTRIBUTING.md)** · **[Security](docs/SECURITY.md)** · **[Issues](https://github.com/vishweshpenkar06/Campus-Scope/issues)**
 
 </div>
 
@@ -34,6 +35,7 @@
 - [Problem](#problem)
 - [Architecture](#architecture)
 - [Features](#features)
+- [Performance](#performance)
 - [Tech Stack](#tech-stack)
 - [Design System](#design-system)
 - [Getting Started](#getting-started)
@@ -41,6 +43,7 @@
 - [Project Structure](#project-structure)
 - [Database](#database)
 - [Testing](#testing)
+- [FAQ](#faq)
 - [API Endpoints](#api-endpoints)
 - [Deploy](#deploy)
 - [Contributing](#contributing)
@@ -221,7 +224,24 @@ All four are covered by `pnpm check` — assert-based suites, no test framework 
 
 ---
 
-## Tech Stack
+## Performance
+
+- **Framework**: Next.js 16 with Turbopack for fast dev builds.
+- **Rendering**: Static shell with dynamic data fetching, aggressively cached via Prisma.
+- **Styling**: Pure CSS (`oklch` tokens), zero runtime JS for styling. CSS bars instead of chart libraries.
+- **Assets**: Minimized iconography via `lucide-react`.
+
+...
+
+## FAQ
+
+**Q: Can I use this for other exams?**
+A: Currently tuned for Indian engineering admissions (JEE/CET).
+
+**Q: How do I update cutoffs?**
+A: Configure `CRON_SECRET` and trigger `/api/cron/sync-cutoffs`.
+
+---
 
 | Layer | Technology |
 |-------|-----------|
