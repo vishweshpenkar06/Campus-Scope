@@ -53,32 +53,33 @@ export default function SimulatorPage() {
         </div>
 
         <section className="mt-6 flex flex-wrap gap-3 rounded-2xl border border-border bg-card p-4">
-          <label className="grid gap-1.5 text-xs font-bold uppercase tracking-wide text-muted-foreground">
-            Exam
-            <select value={exam} onChange={(e) => setExam(e.target.value as 'JEE' | 'CET')} className="h-11 rounded-lg border border-input bg-background px-3 text-sm font-normal normal-case">
-              <option value="JEE">JEE Main</option>
-              <option value="CET">MHT-CET</option>
-            </select>
-          </label>
-          <label className="grid gap-1.5 text-xs font-bold uppercase tracking-wide text-muted-foreground">
-            Category
-            <select value={category} onChange={(e) => setCategory(e.target.value)} className="h-11 rounded-lg border border-input bg-background px-3 text-sm font-normal normal-case">
-              {['OPEN', 'OBC', 'SC', 'ST', 'TFWS'].map((c) => <option key={c}>{c}</option>)}
-            </select>
-          </label>
-          <label className="grid grow gap-1.5 text-xs font-bold uppercase tracking-wide text-muted-foreground sm:grow-0">
-            Your percentile
-            <input
-              value={percentile}
-              onChange={(e) => setPercentile(e.target.value)}
-              type="number"
-              min="0"
-              max="100"
-              step="0.01"
-              placeholder="e.g. 92.50"
-              className="h-11 w-full rounded-lg border border-input bg-background px-3 text-sm font-normal normal-case sm:w-44"
-            />
-          </label>
+            <label className="grid gap-1.5 text-xs font-bold uppercase tracking-wide text-muted-foreground">
+              Exam
+              <select aria-label="Select exam" value={exam} onChange={(e) => setExam(e.target.value as 'JEE' | 'CET')} className="h-11 rounded-lg border border-input bg-background px-3 text-sm font-normal normal-case">
+                <option value="JEE">JEE Main</option>
+                <option value="CET">MHT-CET</option>
+              </select>
+            </label>
+            <label className="grid gap-1.5 text-xs font-bold uppercase tracking-wide text-muted-foreground">
+              Category
+              <select aria-label="Select category" value={category} onChange={(e) => setCategory(e.target.value)} className="h-11 rounded-lg border border-input bg-background px-3 text-sm font-normal normal-case">
+                {['OPEN', 'OBC', 'SC', 'ST', 'TFWS'].map((c) => <option key={c}>{c}</option>)}
+              </select>
+            </label>
+            <label className="grid grow gap-1.5 text-xs font-bold uppercase tracking-wide text-muted-foreground sm:grow-0">
+              Your percentile
+              <input
+                aria-label="Your percentile"
+                value={percentile}
+                onChange={(e) => setPercentile(e.target.value)}
+                type="number"
+                min="0"
+                max="100"
+                step="0.01"
+                placeholder="e.g. 92.50"
+                className="h-11 w-full rounded-lg border border-input bg-background px-3 text-sm font-normal normal-case sm:w-44"
+              />
+            </label>
         </section>
 
         {error && (

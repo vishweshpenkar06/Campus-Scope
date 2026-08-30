@@ -18,12 +18,13 @@
     "db:seed": "tsx prisma/seed.ts",
     "seed": "tsx prisma/seed.ts",
     "check": "tsx scripts/selfcheck.ts",
-    "test": "tsx scripts/selfcheck.ts",
-    "verify": "tsc --noEmit && pnpm check",
+    "test": "vitest",
+    "verify": "tsc --noEmit && pnpm check && pnpm test",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "format": "prettier --write .",
-    "prod:build": "pnpm build"
+    "prod:build": "next build",
+    "prod:start": "pnpm start"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

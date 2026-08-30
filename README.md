@@ -230,6 +230,7 @@ All four are covered by `pnpm check` — assert-based suites, no test framework 
 - **Rendering**: Static shell with dynamic data fetching, aggressively cached via Prisma.
 - **Styling**: Pure CSS (`oklch` tokens), zero runtime JS for styling. CSS bars instead of chart libraries.
 - **Assets**: Minimized iconography via `lucide-react`.
+- **Telemetry**: Lightweight event tracking via `AnalyticsEvent` table. No PII is collected.
 
 ...
 
@@ -409,16 +410,18 @@ campus-scope/
 
 PostgreSQL on Neon through Prisma. `prisma db push && pnpm run db:seed` sets up everything.
 
-| Model Group | Models | Purpose |
-|-------------|--------|---------|
-| Catalog | `College` · `Course` · `Placement` · `Review` | Core listing + profile data |
-| Admissions | `Cutoff` · `CapRoundTrend` · `SeatMatrix` | Round-wise closing percentiles, quota splits |
-| Counselling | `AdmissionDeadline` · `SpotRoundNotice` · `SpotApplication` | Timeline, vacancies, candidate tracking |
-| Identity | `User` · `Account` · `Session` · `VerificationToken` | Auth.js-managed identity |
-| Portal | `SavedCollege` · `ApplicationTracker` · `PeerConnectRequest` · `Notification` | Shortlists, requests, alerts |
-| Community | `ForumPost` · `ForumComment` · `ForumVote` · `CampusInsight` | Q&A board, senior notes |
-| Mentoring | `MentorSlot` · `Booking` | Guidance calls, race-safe claims |
-| Ops | `AnalyticsEvent` | Generic telemetry (search/docs/simulator/cron) |
+### Schema Overview
+
+The schema is divided into seven functional groups:
+- **Catalog**: `College`, `Course`, `Placement`, `Review`
+- **Admissions**: `Cutoff`, `CapRoundTrend`, `SeatMatrix`
+- **Counselling**: `AdmissionDeadline`, `SpotRoundNotice`, `SpotApplication`
+- **Identity**: `User`, `Account`, `Session`, `VerificationToken`
+- **Portal**: `SavedCollege`, `ApplicationTracker`, `PeerConnectRequest`, `Notification`
+- **Community**: `ForumPost`, `ForumComment`, `ForumVote`, `CampusInsight`
+- **Mentoring**: `MentorSlot`, `Booking`
+
+For the full definition, see `prisma/schema.prisma`.
 
 Notable constraints: unique `(userId, collegeId)` on saves, unique `(collegeId, year, exam, category, branch)` on trends, nullable-unique `(userId, dedupeKey)` on notifications for idempotent alert generation, unique `(slotId)` bookings enforced by conditional-update claims.
 
