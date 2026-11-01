@@ -1,0 +1,56 @@
+{
+  "generatedAt": "2026-11-01T15:22:49.156Z",
+  "queries": 100,
+  "slotAccuracy": 1,
+  "exactMatch": 1,
+  "expectedSlots": 408,
+  "correctSlots": 408,
+  "extraSlots": 2,
+  "citationValidity": 1,
+  "refusalRate": 1,
+  "hallucinatedCutoffs": 0,
+  "targets": {
+    "slotAccuracy": 0.9,
+    "citationValidity": 0.95,
+    "hallucinatedCutoffs": 0
+  },
+  "byTag": {
+    "predict": {
+      "cases": 60,
+      "expected": 331,
+      "correct": 331,
+      "accuracy": 1
+    },
+    "deadline": {
+      "cases": 10,
+      "expected": 15,
+      "correct": 15,
+      "accuracy": 1
+    },
+    "fees": {
+      "cases": 8,
+      "expected": 17,
+      "correct": 17,
+      "accuracy": 1
+    },
+    "eligibility": {
+      "cases": 8,
+      "expected": 16,
+      "correct": 16,
+      "accuracy": 1
+    },
+    "compare": {
+      "cases": 8,
+      "expected": 23,
+      "correct": 23,
+      "accuracy": 1
+    },
+    "unknown": {
+      "cases": 6,
+      "expected": 6,
+      "correct": 6,
+      "accuracy": 1
+    }
+  },
+  "failures": []
+}

@@ -1,0 +1,74 @@
+{
+  "generatedAt": "2026-11-01T15:22:49.371Z",
+  "modelVersion": "logistic-1.1.0",
+  "source": "synthetic fixture — Proxy fixture for pipeline verification. Not official cutoff data. Rerun `pnpm backtest --db` against production rows before quoting metrics.",
+  "rows": 272,
+  "observations": 1761,
+  "synthetic": true,
+  "brier": 0.0694,
+  "logLoss": 0.2657,
+  "accuracy": 1,
+  "baseRate": 0.6911,
+  "calibration": [
+    {
+      "bucket": "0–10%",
+      "count": 0,
+      "predicted": null,
+      "actual": null
+    },
+    {
+      "bucket": "10–20%",
+      "count": 272,
+      "predicted": 0.159,
+      "actual": 0
+    },
+    {
+      "bucket": "20–30%",
+      "count": 0,
+      "predicted": null,
+      "actual": null
+    },
+    {
+      "bucket": "30–40%",
+      "count": 272,
+      "predicted": 0.303,
+      "actual": 0
+    },
+    {
+      "bucket": "40–50%",
+      "count": 0,
+      "predicted": null,
+      "actual": null
+    },
+    {
+      "bucket": "50–60%",
+      "count": 272,
+      "predicted": 0.5,
+      "actual": 1
+    },
+    {
+      "bucket": "60–70%",
+      "count": 0,
+      "predicted": null,
+      "actual": null
+    },
+    {
+      "bucket": "70–80%",
+      "count": 408,
+      "predicted": 0.777,
+      "actual": 1
+    },
+    {
+      "bucket": "80–90%",
+      "count": 0,
+      "predicted": null,
+      "actual": null
+    },
+    {
+      "bucket": "90–100%",
+      "count": 537,
+      "predicted": 0.944,
+      "actual": 1
+    }
+  ]
+}

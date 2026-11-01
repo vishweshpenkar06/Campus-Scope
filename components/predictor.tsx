@@ -4,11 +4,12 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { ArrowRight, CircleHelp, RotateCcw, Shield, Target, TrendingUp } from 'lucide-react'
 import type { PredictorResult } from '@/lib/types'
+import { SourceBadge } from '@/components/data/SourceBadge'
 
 export function Predictor({ defaultExam }: { defaultExam?: 'JEE' | 'CET' }) {
   const [percentile, setPercentile] = useState('')
   const [category, setCategory] = useState('OPEN')
-  const [branch, setBranch] = useState('Computer Science & Engineering')
+  const [branch, setBranch] = useState('Computer Engineering')
   const [exam, setExam] = useState<'JEE' | 'CET'>(defaultExam || 'JEE')
   const [budget, setBudget] = useState('')
   const [location, setLocation] = useState('')
@@ -97,10 +98,11 @@ export function Predictor({ defaultExam }: { defaultExam?: 'JEE' | 'CET' }) {
             onChange={(e) => setBranch(e.target.value)}
             className="h-11 rounded-lg border border-input bg-background px-3 text-sm font-normal text-foreground outline-none focus:ring-2 focus:ring-ring"
           >
-            <option>Computer Science & Engineering</option>
+            <option>Computer Engineering</option>
+            <option>Information Technology</option>
+            <option>Electronics & Telecommunication</option>
             <option>Electronics & Communication</option>
             <option>Mechanical Engineering</option>
-            <option>Information Technology</option>
             <option>Electrical Engineering</option>
             <option>Civil Engineering</option>
           </select>
@@ -184,6 +186,14 @@ export function Predictor({ defaultExam }: { defaultExam?: 'JEE' | 'CET' }) {
                     <div>
                       <div className="font-medium">{c.name}</div>
                       <div className="text-xs text-muted-foreground">{c.branch}</div>
+                      <div className="mt-1">
+                        <SourceBadge
+                          sourceName={c.sourceName}
+                          sourceUrl={c.sourceUrl}
+                          sourceDate={c.sourceDate}
+                          verifiedAt={c.verifiedAt}
+                        />
+                      </div>
                     </div>
                     <span
                       className={`rounded-full px-2 py-0.5 text-xs font-semibold ${

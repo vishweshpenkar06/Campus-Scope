@@ -1,0 +1,100 @@
+{"query": "MHT-CET 85 percentile CS Mumbai, OPEN category, under 1.5 lakh, other than home university", "expected": {"intent": "predict", "percentile": 85, "branch": "Computer Engineering", "city": "Mumbai", "category": "OPEN", "exam": "MHT-CET", "budget": 150000, "homeUniversity": false}, "tags": ["predict"]}
+{"query": "JEE I scored 92.5 percentile, looking for IT in Nashik", "expected": {"intent": "predict", "percentile": 92.5, "branch": "Information Technology", "city": "Nashik", "exam": "JEE"}, "tags": ["predict"]}
+{"query": "Can I get ECE in Kolhapur with 78.4 percentile?, EWS category", "expected": {"intent": "predict", "percentile": 78.4, "branch": "Electronics & Communication", "city": "Kolhapur", "category": "EWS"}, "tags": ["predict"]}
+{"query": "MHT-CET percentile 99.1 AI Nanded", "expected": {"intent": "predict", "percentile": 99.1, "branch": "Artificial Intelligence & Data Science", "city": "Nanded", "exam": "MHT-CET"}, "tags": ["predict"]}
+{"query": "JEE 70 percentile Computer Science Nagpur, SEBC category", "expected": {"intent": "predict", "percentile": 70, "branch": "Computer Engineering", "city": "Nagpur", "category": "SEBC", "exam": "JEE"}, "tags": ["predict"]}
+{"query": "I scored 88.25 percentile, looking for EXTC in Thane, under 2 lakh", "expected": {"intent": "predict", "percentile": 88.25, "branch": "Electronics & Telecommunication", "city": "Thane", "budget": 200000}, "tags": ["predict"]}
+{"query": "MHT-CET Can I get Civil in Amravati with 95 percentile?, SC category", "expected": {"intent": "predict", "percentile": 95, "branch": "Civil Engineering", "city": "Amravati", "category": "SC", "exam": "MHT-CET"}, "tags": ["predict"]}
+{"query": "JEE percentile 65.5 CSE Pune, other than home university", "expected": {"intent": "predict", "percentile": 65.5, "branch": "Computer Engineering", "city": "Pune", "exam": "JEE", "homeUniversity": false}, "tags": ["predict"]}
+{"query": "81 percentile Information Technology Navi Mumbai, GENERAL category", "expected": {"intent": "predict", "percentile": 81, "branch": "Information Technology", "city": "Navi Mumbai", "category": "OPEN"}, "tags": ["predict"]}
+{"query": "MHT-CET I scored 90.75 percentile, looking for Mechanical in Aurangabad", "expected": {"intent": "predict", "percentile": 90.75, "branch": "Mechanical Engineering", "city": "Aurangabad", "exam": "MHT-CET"}, "tags": ["predict"]}
+{"query": "JEE Can I get CS in Mumbai with 85 percentile?, OPEN category, under 1 lakh", "expected": {"intent": "predict", "percentile": 85, "branch": "Computer Engineering", "city": "Mumbai", "category": "OPEN", "exam": "JEE", "budget": 100000}, "tags": ["predict"]}
+{"query": "percentile 92.5 IT Nashik", "expected": {"intent": "predict", "percentile": 92.5, "branch": "Information Technology", "city": "Nashik"}, "tags": ["predict"]}
+{"query": "MHT-CET 78.4 percentile ECE Kolhapur, EWS category", "expected": {"intent": "predict", "percentile": 78.4, "branch": "Electronics & Communication", "city": "Kolhapur", "category": "EWS", "exam": "MHT-CET"}, "tags": ["predict"]}
+{"query": "JEE I scored 99.1 percentile, looking for AI in Nanded", "expected": {"intent": "predict", "percentile": 99.1, "branch": "Artificial Intelligence & Data Science", "city": "Nanded", "exam": "JEE"}, "tags": ["predict"]}
+{"query": "Can I get Computer Science in Nagpur with 70 percentile?, SEBC category, other than home university", "expected": {"intent": "predict", "percentile": 70, "branch": "Computer Engineering", "city": "Nagpur", "category": "SEBC", "homeUniversity": false}, "tags": ["predict"]}
+{"query": "MHT-CET percentile 88.25 EXTC Thane, under 2.5 lakh", "expected": {"intent": "predict", "percentile": 88.25, "branch": "Electronics & Telecommunication", "city": "Thane", "exam": "MHT-CET", "budget": 250000}, "tags": ["predict"]}
+{"query": "JEE 95 percentile Civil Amravati, SC category", "expected": {"intent": "predict", "percentile": 95, "branch": "Civil Engineering", "city": "Amravati", "category": "SC", "exam": "JEE"}, "tags": ["predict"]}
+{"query": "I scored 65.5 percentile, looking for CSE in Pune", "expected": {"intent": "predict", "percentile": 65.5, "branch": "Computer Engineering", "city": "Pune"}, "tags": ["predict"]}
+{"query": "MHT-CET Can I get Information Technology in Navi Mumbai with 81 percentile?, GENERAL category", "expected": {"intent": "predict", "percentile": 81, "branch": "Information Technology", "city": "Navi Mumbai", "category": "OPEN", "exam": "MHT-CET"}, "tags": ["predict"]}
+{"query": "JEE percentile 90.75 Mechanical Aurangabad", "expected": {"intent": "predict", "percentile": 90.75, "branch": "Mechanical Engineering", "city": "Aurangabad", "exam": "JEE"}, "tags": ["predict"]}
+{"query": "85 percentile CS Mumbai, OPEN category, under 3 lakh", "expected": {"intent": "predict", "percentile": 85, "branch": "Computer Engineering", "city": "Mumbai", "category": "OPEN", "budget": 300000}, "tags": ["predict"]}
+{"query": "MHT-CET I scored 92.5 percentile, looking for IT in Nashik, other than home university", "expected": {"intent": "predict", "percentile": 92.5, "branch": "Information Technology", "city": "Nashik", "exam": "MHT-CET", "homeUniversity": false}, "tags": ["predict"]}
+{"query": "JEE Can I get ECE in Kolhapur with 78.4 percentile?, EWS category", "expected": {"intent": "predict", "percentile": 78.4, "branch": "Electronics & Communication", "city": "Kolhapur", "category": "EWS", "exam": "JEE"}, "tags": ["predict"]}
+{"query": "percentile 99.1 AI Nanded", "expected": {"intent": "predict", "percentile": 99.1, "branch": "Artificial Intelligence & Data Science", "city": "Nanded"}, "tags": ["predict"]}
+{"query": "MHT-CET 70 percentile Computer Science Nagpur, SEBC category", "expected": {"intent": "predict", "percentile": 70, "branch": "Computer Engineering", "city": "Nagpur", "category": "SEBC", "exam": "MHT-CET"}, "tags": ["predict"]}
+{"query": "JEE I scored 88.25 percentile, looking for EXTC in Thane, under 1.5 lakh", "expected": {"intent": "predict", "percentile": 88.25, "branch": "Electronics & Telecommunication", "city": "Thane", "exam": "JEE", "budget": 150000}, "tags": ["predict"]}
+{"query": "Can I get Civil in Amravati with 95 percentile?, SC category", "expected": {"intent": "predict", "percentile": 95, "branch": "Civil Engineering", "city": "Amravati", "category": "SC"}, "tags": ["predict"]}
+{"query": "MHT-CET percentile 65.5 CSE Pune", "expected": {"intent": "predict", "percentile": 65.5, "branch": "Computer Engineering", "city": "Pune", "exam": "MHT-CET"}, "tags": ["predict"]}
+{"query": "JEE 81 percentile Information Technology Navi Mumbai, GENERAL category, other than home university", "expected": {"intent": "predict", "percentile": 81, "branch": "Information Technology", "city": "Navi Mumbai", "category": "OPEN", "exam": "JEE", "homeUniversity": false}, "tags": ["predict"]}
+{"query": "I scored 90.75 percentile, looking for Mechanical in Aurangabad", "expected": {"intent": "predict", "percentile": 90.75, "branch": "Mechanical Engineering", "city": "Aurangabad"}, "tags": ["predict"]}
+{"query": "MHT-CET Can I get CS in Mumbai with 85 percentile?, OPEN category, under 2 lakh", "expected": {"intent": "predict", "percentile": 85, "branch": "Computer Engineering", "city": "Mumbai", "category": "OPEN", "exam": "MHT-CET", "budget": 200000}, "tags": ["predict"]}
+{"query": "JEE percentile 92.5 IT Nashik", "expected": {"intent": "predict", "percentile": 92.5, "branch": "Information Technology", "city": "Nashik", "exam": "JEE"}, "tags": ["predict"]}
+{"query": "78.4 percentile ECE Kolhapur, EWS category", "expected": {"intent": "predict", "percentile": 78.4, "branch": "Electronics & Communication", "city": "Kolhapur", "category": "EWS"}, "tags": ["predict"]}
+{"query": "MHT-CET I scored 99.1 percentile, looking for AI in Nanded", "expected": {"intent": "predict", "percentile": 99.1, "branch": "Artificial Intelligence & Data Science", "city": "Nanded", "exam": "MHT-CET"}, "tags": ["predict"]}
+{"query": "JEE Can I get Computer Science in Nagpur with 70 percentile?, SEBC category", "expected": {"intent": "predict", "percentile": 70, "branch": "Computer Engineering", "city": "Nagpur", "category": "SEBC", "exam": "JEE"}, "tags": ["predict"]}
+{"query": "percentile 88.25 EXTC Thane, under 1 lakh, other than home university", "expected": {"intent": "predict", "percentile": 88.25, "branch": "Electronics & Telecommunication", "city": "Thane", "budget": 100000, "homeUniversity": false}, "tags": ["predict"]}
+{"query": "MHT-CET 95 percentile Civil Amravati, SC category", "expected": {"intent": "predict", "percentile": 95, "branch": "Civil Engineering", "city": "Amravati", "category": "SC", "exam": "MHT-CET"}, "tags": ["predict"]}
+{"query": "JEE I scored 65.5 percentile, looking for CSE in Pune", "expected": {"intent": "predict", "percentile": 65.5, "branch": "Computer Engineering", "city": "Pune", "exam": "JEE"}, "tags": ["predict"]}
+{"query": "Can I get Information Technology in Navi Mumbai with 81 percentile?, GENERAL category", "expected": {"intent": "predict", "percentile": 81, "branch": "Information Technology", "city": "Navi Mumbai", "category": "OPEN"}, "tags": ["predict"]}
+{"query": "MHT-CET percentile 90.75 Mechanical Aurangabad", "expected": {"intent": "predict", "percentile": 90.75, "branch": "Mechanical Engineering", "city": "Aurangabad", "exam": "MHT-CET"}, "tags": ["predict"]}
+{"query": "JEE 85 percentile CS Mumbai, OPEN category, under 2.5 lakh", "expected": {"intent": "predict", "percentile": 85, "branch": "Computer Engineering", "city": "Mumbai", "category": "OPEN", "exam": "JEE", "budget": 250000}, "tags": ["predict"]}
+{"query": "I scored 92.5 percentile, looking for IT in Nashik", "expected": {"intent": "predict", "percentile": 92.5, "branch": "Information Technology", "city": "Nashik"}, "tags": ["predict"]}
+{"query": "MHT-CET Can I get ECE in Kolhapur with 78.4 percentile?, EWS category, other than home university", "expected": {"intent": "predict", "percentile": 78.4, "branch": "Electronics & Communication", "city": "Kolhapur", "category": "EWS", "exam": "MHT-CET", "homeUniversity": false}, "tags": ["predict"]}
+{"query": "JEE percentile 99.1 AI Nanded", "expected": {"intent": "predict", "percentile": 99.1, "branch": "Artificial Intelligence & Data Science", "city": "Nanded", "exam": "JEE"}, "tags": ["predict"]}
+{"query": "70 percentile Computer Science Nagpur, SEBC category", "expected": {"intent": "predict", "percentile": 70, "branch": "Computer Engineering", "city": "Nagpur", "category": "SEBC"}, "tags": ["predict"]}
+{"query": "MHT-CET I scored 88.25 percentile, looking for EXTC in Thane, under 3 lakh", "expected": {"intent": "predict", "percentile": 88.25, "branch": "Electronics & Telecommunication", "city": "Thane", "exam": "MHT-CET", "budget": 300000}, "tags": ["predict"]}
+{"query": "JEE Can I get Civil in Amravati with 95 percentile?, SC category", "expected": {"intent": "predict", "percentile": 95, "branch": "Civil Engineering", "city": "Amravati", "category": "SC", "exam": "JEE"}, "tags": ["predict"]}
+{"query": "percentile 65.5 CSE Pune", "expected": {"intent": "predict", "percentile": 65.5, "branch": "Computer Engineering", "city": "Pune"}, "tags": ["predict"]}
+{"query": "MHT-CET 81 percentile Information Technology Navi Mumbai, GENERAL category", "expected": {"intent": "predict", "percentile": 81, "branch": "Information Technology", "city": "Navi Mumbai", "category": "OPEN", "exam": "MHT-CET"}, "tags": ["predict"]}
+{"query": "JEE I scored 90.75 percentile, looking for Mechanical in Aurangabad, other than home university", "expected": {"intent": "predict", "percentile": 90.75, "branch": "Mechanical Engineering", "city": "Aurangabad", "exam": "JEE", "homeUniversity": false}, "tags": ["predict"]}
+{"query": "Can I get CS in Mumbai with 85 percentile?, OPEN category, under 1.5 lakh", "expected": {"intent": "predict", "percentile": 85, "branch": "Computer Engineering", "city": "Mumbai", "category": "OPEN", "budget": 150000}, "tags": ["predict"]}
+{"query": "MHT-CET percentile 92.5 IT Nashik", "expected": {"intent": "predict", "percentile": 92.5, "branch": "Information Technology", "city": "Nashik", "exam": "MHT-CET"}, "tags": ["predict"]}
+{"query": "JEE 78.4 percentile ECE Kolhapur, EWS category", "expected": {"intent": "predict", "percentile": 78.4, "branch": "Electronics & Communication", "city": "Kolhapur", "category": "EWS", "exam": "JEE"}, "tags": ["predict"]}
+{"query": "I scored 99.1 percentile, looking for AI in Nanded", "expected": {"intent": "predict", "percentile": 99.1, "branch": "Artificial Intelligence & Data Science", "city": "Nanded"}, "tags": ["predict"]}
+{"query": "MHT-CET Can I get Computer Science in Nagpur with 70 percentile?, SEBC category", "expected": {"intent": "predict", "percentile": 70, "branch": "Computer Engineering", "city": "Nagpur", "category": "SEBC", "exam": "MHT-CET"}, "tags": ["predict"]}
+{"query": "JEE percentile 88.25 EXTC Thane, under 2 lakh", "expected": {"intent": "predict", "percentile": 88.25, "branch": "Electronics & Telecommunication", "city": "Thane", "exam": "JEE", "budget": 200000}, "tags": ["predict"]}
+{"query": "95 percentile Civil Amravati, SC category, other than home university", "expected": {"intent": "predict", "percentile": 95, "branch": "Civil Engineering", "city": "Amravati", "category": "SC", "homeUniversity": false}, "tags": ["predict"]}
+{"query": "MHT-CET I scored 65.5 percentile, looking for CSE in Pune", "expected": {"intent": "predict", "percentile": 65.5, "branch": "Computer Engineering", "city": "Pune", "exam": "MHT-CET"}, "tags": ["predict"]}
+{"query": "JEE Can I get Information Technology in Navi Mumbai with 81 percentile?, GENERAL category", "expected": {"intent": "predict", "percentile": 81, "branch": "Information Technology", "city": "Navi Mumbai", "category": "OPEN", "exam": "JEE"}, "tags": ["predict"]}
+{"query": "percentile 90.75 Mechanical Aurangabad", "expected": {"intent": "predict", "percentile": 90.75, "branch": "Mechanical Engineering", "city": "Aurangabad"}, "tags": ["predict"]}
+{"query": "What is the last date for CAP round 3?", "expected": {"intent": "deadline"}, "tags": ["deadline"]}
+{"query": "When is the MHT-CET admission deadline?", "expected": {"intent": "deadline", "exam": "MHT-CET"}, "tags": ["deadline"]}
+{"query": "Important dates for JEE counselling", "expected": {"intent": "deadline", "exam": "JEE"}, "tags": ["deadline"]}
+{"query": "CAP round 2 last date to apply", "expected": {"intent": "deadline"}, "tags": ["deadline"]}
+{"query": "When should I apply for MHT CET CAP rounds?", "expected": {"intent": "deadline", "exam": "MHT-CET"}, "tags": ["deadline"]}
+{"query": "Deadline for document verification", "expected": {"intent": "deadline"}, "tags": ["deadline"]}
+{"query": "JEE Main counselling important dates", "expected": {"intent": "deadline", "exam": "JEE"}, "tags": ["deadline"]}
+{"query": "Last date for spot round admission", "expected": {"intent": "deadline"}, "tags": ["deadline"]}
+{"query": "MHT CET counselling schedule", "expected": {"intent": "deadline", "exam": "MHT-CET"}, "tags": ["deadline"]}
+{"query": "When is the admission deadline for engineering?", "expected": {"intent": "deadline"}, "tags": ["deadline"]}
+{"query": "What are the fees for COEP?", "expected": {"intent": "fees", "colleges": ["COEP"]}, "tags": ["fees"]}
+{"query": "Hostel fee at VJTI", "expected": {"intent": "fees", "colleges": ["VJTI"]}, "tags": ["fees"]}
+{"query": "Total cost of studying at VIT", "expected": {"intent": "fees", "colleges": ["VIT"]}, "tags": ["fees"]}
+{"query": "Tuition fees for Computer Engineering at COEP", "expected": {"intent": "fees", "colleges": ["COEP"], "branch": "Computer Engineering"}, "tags": ["fees"]}
+{"query": "Is SPIT affordable?", "expected": {"intent": "fees", "colleges": ["SPIT"]}, "tags": ["fees"]}
+{"query": "Fees under 1.5 lakh", "expected": {"intent": "fees", "budget": 150000}, "tags": ["fees"]}
+{"query": "MIT Pune fees", "expected": {"intent": "fees", "colleges": ["MIT"]}, "tags": ["fees"]}
+{"query": "How much does COEP charge?", "expected": {"intent": "fees", "colleges": ["COEP"]}, "tags": ["fees"]}
+{"query": "Am I eligible for TFWS?", "expected": {"intent": "eligibility", "category": "TFWS"}, "tags": ["eligibility"]}
+{"query": "Eligibility for OBC reservation", "expected": {"intent": "eligibility", "category": "OBC"}, "tags": ["eligibility"]}
+{"query": "Can I apply for MHT-CET with 60 percentile?", "expected": {"intent": "eligibility", "exam": "MHT-CET", "percentile": 60}, "tags": ["eligibility"]}
+{"query": "What is the eligibility for SC category?", "expected": {"intent": "eligibility", "category": "SC"}, "tags": ["eligibility"]}
+{"query": "Do I need a domicile certificate?", "expected": {"intent": "eligibility"}, "tags": ["eligibility"]}
+{"query": "Can I apply with a DEF certificate?", "expected": {"intent": "eligibility", "category": "DEF"}, "tags": ["eligibility"]}
+{"query": "Is PWD eligible for TFWS?", "expected": {"intent": "eligibility", "category": "PWD"}, "tags": ["eligibility"]}
+{"query": "Eligibility for ORPHAN category", "expected": {"intent": "eligibility", "category": "ORPHAN"}, "tags": ["eligibility"]}
+{"query": "Compare COEP vs VJTI for computer engineering", "expected": {"intent": "compare", "colleges": ["COEP", "VJTI"], "branch": "Computer Engineering"}, "tags": ["compare"]}
+{"query": "COEP vs VJTI", "expected": {"intent": "compare", "colleges": ["COEP", "VJTI"]}, "tags": ["compare"]}
+{"query": "Which is better, PICT or SPIT, for IT?", "expected": {"intent": "compare", "colleges": ["PICT", "SPIT"], "branch": "Information Technology"}, "tags": ["compare"]}
+{"query": "Compare VIT Vellore and BITS Pilani for CSE", "expected": {"intent": "compare", "colleges": ["VIT", "BITS"], "branch": "Computer Engineering"}, "tags": ["compare"]}
+{"query": "Compare COEP and PICT for mechanical", "expected": {"intent": "compare", "colleges": ["COEP", "PICT"], "branch": "Mechanical Engineering"}, "tags": ["compare"]}
+{"query": "VJTI vs SPIT for EXTC", "expected": {"intent": "compare", "colleges": ["VJTI", "SPIT"], "branch": "Electronics & Telecommunication"}, "tags": ["compare"]}
+{"query": "Which is better for civil, COEP or VJTI?", "expected": {"intent": "compare", "colleges": ["COEP", "VJTI"], "branch": "Civil Engineering"}, "tags": ["compare"]}
+{"query": "Compare MIT Pune and VIT Vellore for AI", "expected": {"intent": "compare", "colleges": ["MIT", "VIT"], "branch": "Artificial Intelligence & Data Science"}, "tags": ["compare"]}
+{"query": "hello there", "expected": {"intent": "unknown"}, "tags": ["unknown"]}
+{"query": "thanks", "expected": {"intent": "unknown"}, "tags": ["unknown"]}
+{"query": "what is the weather today", "expected": {"intent": "unknown"}, "tags": ["unknown"]}
+{"query": "who won the cricket match", "expected": {"intent": "unknown"}, "tags": ["unknown"]}
+{"query": "tell me a joke", "expected": {"intent": "unknown"}, "tags": ["unknown"]}
+{"query": "good morning", "expected": {"intent": "unknown"}, "tags": ["unknown"]}

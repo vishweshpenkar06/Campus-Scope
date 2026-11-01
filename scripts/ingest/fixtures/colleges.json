@@ -1,0 +1,138 @@
+[
+  {
+    "name": "IIT Bombay",
+    "location": "Mumbai"
+  },
+  {
+    "name": "IIT Delhi",
+    "location": "New Delhi"
+  },
+  {
+    "name": "IIT Madras",
+    "location": "Chennai"
+  },
+  {
+    "name": "IIT Kanpur",
+    "location": "Kanpur"
+  },
+  {
+    "name": "IIT Kharagpur",
+    "location": "Kharagpur"
+  },
+  {
+    "name": "BITS Pilani",
+    "location": "Pilani"
+  },
+  {
+    "name": "VIT Vellore",
+    "location": "Vellore"
+  },
+  {
+    "name": "Manipal Institute of Technology",
+    "location": "Manipal"
+  },
+  {
+    "name": "SRM Institute of Science and Technology",
+    "location": "Chennai"
+  },
+  {
+    "name": "Thapar Institute of Engineering",
+    "location": "Patiala"
+  },
+  {
+    "name": "DTU",
+    "location": "New Delhi"
+  },
+  {
+    "name": "NSUT",
+    "location": "New Delhi"
+  },
+  {
+    "name": "Jadavpur University",
+    "location": "Kolkata"
+  },
+  {
+    "name": "COEP Technological University",
+    "location": "Pune"
+  },
+  {
+    "name": "NIT Trichy",
+    "location": "Tiruchirappalli"
+  },
+  {
+    "name": "NIT Warangal",
+    "location": "Warangal"
+  },
+  {
+    "name": "NIT Surathkal",
+    "location": "Mangaluru"
+  },
+  {
+    "name": "IIIT Hyderabad",
+    "location": "Hyderabad"
+  },
+  {
+    "name": "Amrita Vishwa Vidyapeetham",
+    "location": "Coimbatore"
+  },
+  {
+    "name": "KIIT University",
+    "location": "Bhubaneswar"
+  },
+  {
+    "name": "PES University",
+    "location": "Bengaluru"
+  },
+  {
+    "name": "RV College of Engineering",
+    "location": "Bengaluru"
+  },
+  {
+    "name": "BMS College of Engineering",
+    "location": "Bengaluru"
+  },
+  {
+    "name": "LNM Institute of Information Technology",
+    "location": "Jaipur"
+  },
+  {
+    "name": "DAIICT",
+    "location": "Gandhinagar"
+  },
+  {
+    "name": "Nirma University",
+    "location": "Ahmedabad"
+  },
+  {
+    "name": "MIT World Peace University",
+    "location": "Pune"
+  },
+  {
+    "name": "Lovely Professional University",
+    "location": "Phagwara"
+  },
+  {
+    "name": "Chandigarh University",
+    "location": "Mohali"
+  },
+  {
+    "name": "SASTRA Deemed University",
+    "location": "Thanjavur"
+  },
+  {
+    "name": "Bharati Vidyapeeth",
+    "location": "Pune"
+  },
+  {
+    "name": "Graphic Era University",
+    "location": "Dehradun"
+  },
+  {
+    "name": "PES Modern College",
+    "location": "Pune"
+  },
+  {
+    "name": "Agnel Institute of Technology",
+    "location": "Navi Mumbai"
+  }
+]

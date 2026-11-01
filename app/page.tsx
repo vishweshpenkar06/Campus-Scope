@@ -10,6 +10,7 @@ import { OnboardingModal, getOnboardingState } from '@/components/onboarding-mod
 import { FilterBanner } from '@/components/filter-banner'
 import { AutoAllotment } from '@/components/auto-allotment'
 import { DeadlineBanner } from '@/components/deadline-banner'
+import { AskBox } from '@/components/ask/AskBox'
 import type { OnboardingState } from '@/lib/types'
 
 export default function Page() {
@@ -86,6 +87,22 @@ export default function Page() {
                 <Database className="size-4 text-primary" /> Live catalog · Neon backed
               </div>
             </aside>
+          </div>
+        </section>
+
+        <section id="ask" className="border-b border-foreground/10 px-5 py-16 lg:px-8">
+          <div className="mx-auto max-w-4xl">
+            <p className="eyebrow">Ask in your own words</p>
+            <h2 className="mt-3 font-serif text-3xl font-semibold tracking-tight sm:text-4xl">
+              A cited answer, not a guess.
+            </h2>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">
+              Percentile, category, branch, city, budget, dates — ask naturally. Slots stay editable,
+              and every number is attached to the cutoff row it came from.
+            </p>
+            <div className="mt-6">
+              <AskBox />
+            </div>
           </div>
         </section>
 

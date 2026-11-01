@@ -7,6 +7,7 @@ import { CompareProvider } from './compare-context'
 import { CompareTray } from './compare-tray'
 import { AuthButton } from './auth-button'
 import { NotificationBell } from './notification-bell'
+import { FeedbackButton } from './feedback/FeedbackButton'
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   return (
@@ -39,6 +40,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <Link href="/shortlist" className="px-3 py-2 text-muted-foreground transition hover:text-foreground">
                 My Shortlist
               </Link>
+              <Link href="/counsellors" className="px-3 py-2 text-muted-foreground transition hover:text-foreground">
+                Counsellors
+              </Link>
               <Link
                 href="/compare"
                 className="ml-2 inline-flex items-center gap-2 border border-foreground/15 px-3 py-2 font-semibold transition hover:border-primary hover:text-primary"
@@ -56,6 +60,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </header>
         {children}
         <CompareTray />
+        <FeedbackButton />
       </SessionProvider>
     </CompareProvider>
   )

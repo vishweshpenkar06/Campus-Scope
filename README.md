@@ -152,6 +152,39 @@ Most predictors are black boxes. This one ships its math.
 - Each response includes an **assumptions array** explaining exactly how the number was produced
 - `/api/predict/probability` goes further — a logistic model outputs **"% Allotment Chance in CAP Round 2"** style percentages per round, with a home-university vs other-than-home quota adjustment
 
+
+### Trusted Data, Not Just More Rows
+
+Every published cutoff, trend, seat-matrix, and placement row carries its own provenance:
+`sourceUrl`, `sourceName`, `sourceDate`, `verifiedAt`, `verifiedBy`, and `confidence`.
+
+- **Staging pipeline** — `pnpm ingest --source <id>` fetches an official source, normalizes
+  college/branch/category/round values, fuzzy-matches colleges, and writes `StagingRecord` rows.
+- **Human review** — `/admin/ingest` shows the incoming value next to the existing row. Nothing is
+  published until an admin approves it; rejection leaves the published table untouched.
+- **Visible trust** — profile cutoff tables and predictor results carry a Verified/Unverified badge
+  and a staleness warning after 180 days.
+- **No simulated drift** — the cron sync stages real source rows and returns `staged: 0` when no
+  source is configured. There is no `Math.random()` in any production data path.
+- **Backtested probability** — `pnpm backtest` emits Brier score, log loss, and a calibration table
+  to `docs/BACKTEST.md`; `PROBABILITY_MODEL_VERSION` travels with every probability response.
+
+The committed ingestion fixture is synthetic and labelled `fixture` — it tests the parser and
+95% match rate, and must never be published. Real ingestion requires the current official URL.
+
+### Ask in Your Own Words
+
+`/api/ask` accepts natural language, extracts slots (provider chain: CampusLM → Gemini → deterministic
+rules), and runs the existing deterministic engines. Results carry citations; the LLM never computes a
+cutoff or a probability. The UI makes the extracted slots editable and re-runs the same deterministic
+path. A 100-query eval is committed at `eval/ask/queries.jsonl` with results in `docs/ASK_EVAL.md`.
+
+### Counsellors, Leads, and Share Cards
+
+`/counsellors` lists independent counsellors; the profile form creates a `Lead` and emails it through
+Resend (console fallback without a key). `/admin/leads` is the pipeline. The chance-card endpoint
+renders a PNG with the college, cutoff, user percentile, and source state.
+
 ### Option Form Simulator
 
 Drag up to 100 preferences (Framer Motion `Reorder`). Live validation flags CET Cell rule violations — e.g. *"Preference #3 closes at 90.10 above this — you would likely be allotted there first and never reach this college."* One click runs a **probable seat allotment**: the first preference your percentile clears, walked against historical closing cutoffs.
@@ -220,7 +253,16 @@ All four are covered by `pnpm check` — assert-based suites, no test framework 
 ✅ Admin Analytics Dashboard (CSS Bars, No Chart Lib)
 ✅ Demo-Dataset Fallback Tagged `preview-demo`
 ✅ Global + Route Error Boundaries With Digests
-✅ 4 Self-Check Suites Via `pnpm check`
+✅ 4 Self-Check Suites Via `pnpm check` + 45 Vitest assertions
+✅ Provenance Fields + Verified/Unverified Badges + Freshness Warnings
+✅ Staging Ingestion Pipeline With Admin Approve/Reject
+✅ Deterministic Cron Sync (No Random Drift)
+✅ Versioned Probability Model + Brier/Calibration Backtest
+✅ Natural-Language Ask Endpoint With Citations + Rules Fallback
+✅ Counsellor Directory + Lead Pipeline + Chance-Card PNG
+✅ Sitemap, Robots, Programmatic College Pages, JSON-LD
+✅ CI Workflow + Playwright Smoke Specs
+✅ Feedback Capture For The Pilot
 
 ---
 
@@ -325,8 +367,10 @@ An **editorial research-desk direction**, built on CSS custom properties:
 
 4. **Set Up Database**
    ```bash
-   pnpm exec prisma db push   # create schema
-   pnpm run db:seed           # 34 colleges, 2700 cutoffs, trends, seats, forum, mentors
+   pnpm exec prisma migrate deploy   # fresh DB (or: pnpm db:push)
+   # existing DB created with db push:
+   #   pnpm db:push && pnpm backfill:provenance
+   pnpm run db:seed                  # 34 colleges, demo cutoffs/trends/seats, forum, mentors, counsellors
    ```
 
 5. **Start Development Server**
@@ -356,7 +400,14 @@ An **editorial research-desk direction**, built on CSS custom properties:
 | `GOOGLE_PLACES_API_KEY` | Campus photos, ratings, nearby landmarks |
 | `GOOGLE_MAPS_API_KEY` | Commute time estimates (Distance Matrix) |
 | `CRON_SECRET` | Bearer gate for `/api/cron/sync-cutoffs` |
-| `ADMIN_EMAILS` | Comma-separated allow-list for `/admin/analytics` |
+| `ADMIN_EMAILS` | Comma-separated allow-list for `/admin/*` |
+| `CAMPUSLM_URL` | Self-hosted CampusLM chat-completions base (first in the ask chain) |
+| `GEMINI_API_KEY` / `GEMINI_MODEL` | Gemini free-tier slot extraction (second in the chain) |
+| `RESEND_API_KEY` / `RESEND_FROM` | Lead email delivery (console fallback without it) |
+| `NEXT_PUBLIC_SITE_URL` | Canonical origin for sitemap/robots/share cards |
+| `DTE_CUTOFF_URL` / `INGEST_SOURCE` | Official source URL and source id for ingestion |
+| `CAMPUSLM_MODEL` / `CAMPUSLM_API_KEY` | Optional CampusLM model/auth |
+| `SENTRY_DSN` | Optional Sentry error/performance capture (package installed) |
 
 Graceful degradation is built in: no Places key hides photos/landmarks; no Maps key hides commute times; no Google OAuth hides the sign-in button while keeping every other feature usable.
 
@@ -430,7 +481,13 @@ Notable constraints: unique `(userId, collegeId)` on saves, unique `(collegeId, 
 ## Testing
 
 ```bash
-pnpm check        # run all self-check suites
+pnpm verify       # tsc + selfcheck + Vitest (required before every commit)
+pnpm build        # production build
+pnpm ingest --source fixture-2025 --file scripts/ingest/fixtures/dte-2025.json --dry-run
+pnpm backtest     # fixture calibration report
+pnpm backtest --db
+pnpm eval:ask     # 100-query slot/citation eval
+pnpm e2e          # Playwright (needs a seeded DATABASE_URL)
 ```
 
 Four assert-based suites cover the pure logic layer — no framework, no fixtures:
@@ -442,7 +499,13 @@ Four assert-based suites cover the pure logic layer — no framework, no fixture
 | `probability` | Higher-percentile dominance, round monotonicity, OTH-quota penalty, best-round selection at boundary |
 | `scholarships` | Income gating, category restrictions, EBC half-waiver above ₹2.5 LPA, best-waiver-no-stacking math |
 
-Integration verification additionally runs the full stack against Neon: route guards (401/403), cron gate, rate-limiter bursts, and seeded-data smoke tests.
+Vitest additionally covers provenance, normalization, fuzzy matching, the ingestion fixture
+(100 rows parsed, 95% matched), the probability model (12 tests), the rules parser, and a guard that
+fails if `Math.random` appears in `lib/cron-sync.ts` or `lib/data/**`.
+
+Integration verification runs the full stack against Postgres: route guards (401/403), admin review,
+cron gates, rate-limiter bursts, and seeded-data smoke tests. CI starts a Postgres service, applies
+`prisma db push`, seeds, and runs the three Playwright specs.
 
 ---
 
@@ -470,7 +533,14 @@ Integration verification additionally runs the full stack against Neon: route gu
 | GET | `/api/google-places` (+`photo`) | Campus data · key-safe media proxy |
 | GET | `/api/places/nearby` | Station/PG/mess landmark probes |
 | POST | `/api/analytics/event` | Public telemetry sink (rate-limited) |
-| GET | `/api/cron/sync-cutoffs` | Bearer-gated data pipeline (403 otherwise) |
+| POST | `/api/ask` | Natural-language query → deterministic answer + citations |
+| POST | `/api/leads` | Counsellor lead (rate-limited, Resend fallback) |
+| POST | `/api/feedback` | Pilot feedback capture |
+| GET | `/api/share-card/[collegeId]` | 1080×1350 PNG chance card |
+| GET | `/api/cron/sync-cutoffs` | Bearer-gated deterministic sync |
+| GET | `/api/cron/ingest` | Bearer-gated fetch → staging (no publish) |
+| PATCH | `/api/admin/staging/[id]` | Admin approve/reject staging row |
+| PATCH | `/api/admin/leads/[id]` | Admin lead status update |
 | * | `/api/auth/[...nextauth]` | Auth.js handlers |
 
 ---

@@ -6,6 +6,7 @@ const dmSans = DM_Sans({ subsets: ['latin'], variable: '--font-dm-sans' })
 const newsreader = Newsreader({ subsets: ['latin'], variable: '--font-newsreader' })
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://campusscope.vercel.app'),
   title: 'CampusScope — Make a better college shortlist',
   description: 'Research Indian engineering colleges with clear fees, programs, placements, reviews, comparison, and an explainable shortlist predictor.',
   icons: {

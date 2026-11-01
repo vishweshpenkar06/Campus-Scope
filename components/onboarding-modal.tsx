@@ -182,7 +182,9 @@ export function OnboardingModal({ onComplete }: { onComplete: (state: Onboarding
                   className="h-11 rounded-lg border border-input bg-background px-3 text-sm font-normal text-foreground outline-none focus:ring-2 focus:ring-ring"
                 >
                   <option>All Branches</option>
-                  <option>Computer Science & Engineering</option>
+                  <option>Computer Engineering</option>
+                  <option>Information Technology</option>
+                  <option>Electronics & Telecommunication</option>
                   <option>Electronics & Communication</option>
                   <option>Mechanical Engineering</option>
                   <option>Information Technology</option>

@@ -12,7 +12,7 @@ export async function GET(request: Request) {
 
   try {
     const result = await runCutoffSync(prisma)
-    logEvent('cron', 'sync-cutoffs', result.trendsUpdated + result.cutoffsUpdated + result.noticesCreated)
+    logEvent('cron', 'sync-cutoffs', result.staged + result.trendsUpdated + result.cutoffsUpdated + result.noticesCreated)
     return Response.json({ data: { ...result, ranAt: new Date().toISOString() } })
   } catch {
     return Response.json({ error: 'Sync failed' }, { status: 500 })

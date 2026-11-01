@@ -2,11 +2,12 @@ import { NextResponse } from 'next/server'
 import { z } from 'zod'
 import { prisma } from '@/lib/prisma'
 import { classify, computeScore, dedupeLatestRound } from '@/lib/predict-core'
+import { citationFor } from '@/lib/data/provenance'
 
 const inputSchema = z.object({
   percentile: z.coerce.number().min(0).max(100),
   category: z.string().trim().default('OPEN'),
-  branch: z.string().trim().default('Computer Science & Engineering'),
+  branch: z.string().trim().default('Computer Engineering'),
   exam: z.enum(['JEE', 'CET']).default('JEE'),
   budget: z.coerce.number().min(0).max(100).optional(),
   location: z.string().trim().max(80).optional().default(''),
@@ -60,7 +61,22 @@ export async function POST(request: Request) {
       branch: c.branch,
       capRound: c.capRound,
       classification: classify(percentile, c.percentile),
+      sourceName: c.sourceName,
+      sourceUrl: c.sourceUrl,
+      sourceDate: c.sourceDate,
+      verifiedAt: c.verifiedAt,
+      confidence: c.confidence,
     }))
+
+  const citations = [
+    ...new Map(
+      filtered.slice(0, 20).map((row) => {
+        const citation = citationFor(row)
+        return [`${citation.source}|${citation.url}|${citation.date}`, citation]
+      })
+    ).values(),
+  ]
+  const unverified = matchingColleges.filter((c) => !c.verifiedAt || !c.sourceUrl).length
 
   const summary = {
     safe: matchingColleges.filter((c) => c.classification === 'Safe').length,
@@ -78,10 +94,12 @@ export async function POST(request: Request) {
       band,
       summary,
       matchingColleges,
+      citations,
       assumptions: [
         `Based on ${exam} ${category} category cutoffs.`,
         `Branch filter: ${branch || 'All branches'}.`,
         'Each college shows its latest recorded round closing cutoff.',
+        `${unverified} of ${matchingColleges.length} rows are unverified or legacy data.`,
         `Safe = percentile ≥ cutoff + 2.0, Target = within ±2.0%, Reach = below cutoff −2.0%.`,
         'This is a directional signal, not an admission guarantee.',
       ],

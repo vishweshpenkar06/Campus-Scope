@@ -1,8 +1,16 @@
 import { z } from 'zod'
 import { prisma } from '@/lib/prisma'
 import { errorResponse } from '@/lib/validation'
-import { bestRoundOutcome, roundChances } from '@/lib/probability'
+import {
+  PROBABILITY_MODEL_VERSION,
+  bestRoundOutcome,
+  probabilityAssumptions,
+  roundChances,
+} from '@/lib/probability'
 import { allow, clientIp } from '@/lib/rate-limit'
+import { citationFor, isVerified } from '@/lib/data/provenance'
+
+export const dynamic = 'force-dynamic'
 
 const inputSchema = z.object({
   percentile: z.coerce.number().min(0).max(100),
@@ -37,6 +45,12 @@ export async function POST(request: Request) {
     return errorResponse('The probability engine is unavailable right now. Please try again.', 503)
   }
 
+  const sampleByKey = new Map<string, number>()
+  for (const row of rows) {
+    const key = `${row.collegeId}|${row.branch}`
+    sampleByKey.set(key, (sampleByKey.get(key) ?? 0) + 1)
+  }
+
   // latest year per college+branch only
   const seen = new Set<string>()
   const data = rows
@@ -48,6 +62,8 @@ export async function POST(request: Request) {
     })
     .slice(0, 30)
     .map((r) => {
+      const key = `${r.collegeId}|${r.branch}`
+      const sampleSize = sampleByKey.get(key) ?? 1
       const chances = roundChances(percentile, r, homeUniversity)
       const best = bestRoundOutcome(chances)
       return {
@@ -56,6 +72,9 @@ export async function POST(request: Request) {
         location: r.college.location,
         branch: r.branch,
         year: r.year,
+        verified: isVerified(r),
+        sampleSize,
+        citation: citationFor(r),
         rounds: {
           round1: Math.round(chances.round1 * 100),
           round2: Math.round(chances.round2 * 100),
@@ -68,12 +87,14 @@ export async function POST(request: Request) {
 
   return Response.json({
     data,
-    assumptions: [
-      `Logistic model on ${exam} ${category} closing cutoffs (latest recorded year).`,
-      homeUniversity
-        ? 'Home university quota applied.'
-        : `Other-than-home quota: effective percentile reduced by ${3} points.`,
-      'Directional estimate from historical trends, not an admission guarantee.',
-    ],
+    modelVersion: PROBABILITY_MODEL_VERSION,
+    sampleSize: rows.length,
+    unverified: data.filter((row) => !row.verified).length,
+    assumptions: probabilityAssumptions({
+      exam,
+      category,
+      homeUniversity,
+      sampleSize: rows.length,
+    }),
   })
 }

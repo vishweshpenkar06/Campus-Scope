@@ -17,10 +17,11 @@ type Inputs = {
 }
 
 const branchOptions = [
-  'Computer Science & Engineering',
+  'Computer Engineering',
+  'Information Technology',
+  'Electronics & Telecommunication',
   'Electronics & Communication',
   'Mechanical Engineering',
-  'Information Technology',
   'Electrical Engineering',
   'Civil Engineering',
 ]

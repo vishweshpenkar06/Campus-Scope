@@ -16,6 +16,9 @@ import { CampusMap } from './campus-map'
 import { SaveCollegeButton } from './save-college-button'
 import { MentorSlots } from './mentor-slots'
 import { ForumTab } from './forum-tab'
+import { SourceBadge } from './data/SourceBadge'
+import { FreshnessWarning } from './data/FreshnessWarning'
+import { ChanceCard } from './share/ChanceCard'
 import type { CollegeDetail as Detail, GooglePlaceData } from '@/lib/types'
 
 export function CollegeDetail({ id }: { id: string }) {
@@ -369,7 +372,10 @@ export function CollegeDetail({ id }: { id: string }) {
 
         {tab === 'cutoffs' &&
           (college.cutoffs.length ? (
-            <CutoffTable cutoffs={college.cutoffs} />
+            <>
+              <CutoffTable cutoffs={college.cutoffs} />
+              <ChanceCard collegeId={college.id} collegeName={college.name} cutoffs={college.cutoffs} />
+            </>
           ) : (
             <Empty text="No cutoff data available" />
           ))}
@@ -540,25 +546,37 @@ function CutoffTable({ cutoffs }: { cutoffs: Detail['cutoffs'] }) {
       </div>
 
       {filtered.length ? (
-        <div className="overflow-x-auto rounded-xl border border-border">
-          <table className="w-full text-left">
-            <thead className="bg-muted">
-              <tr>
-                <th className="p-4 text-sm font-medium text-muted-foreground">Branch</th>
-                <th className="p-4 text-sm font-medium text-muted-foreground">Cutoff Percentile</th>
-                <th className="p-4 text-sm font-medium text-muted-foreground">Year</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map((c) => (
-                <tr key={c.id} className="border-t border-border">
-                  <td className="p-4 text-sm font-medium">{c.branch}</td>
-                  <td className="p-4 text-sm">{c.percentile.toFixed(2)}</td>
-                  <td className="p-4 text-sm text-muted-foreground">{c.year}</td>
+        <div className="grid gap-3">
+          <FreshnessWarning sourceDate={filtered[0]?.sourceDate} />
+          <div className="overflow-x-auto rounded-xl border border-border">
+            <table className="w-full text-left">
+              <thead className="bg-muted">
+                <tr>
+                  <th className="p-4 text-sm font-medium text-muted-foreground">Branch</th>
+                  <th className="p-4 text-sm font-medium text-muted-foreground">Cutoff Percentile</th>
+                  <th className="p-4 text-sm font-medium text-muted-foreground">Year</th>
+                  <th className="p-4 text-sm font-medium text-muted-foreground">Source</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filtered.map((c) => (
+                  <tr key={c.id} className="border-t border-border">
+                    <td className="p-4 text-sm font-medium">{c.branch}</td>
+                    <td className="p-4 text-sm">{c.percentile.toFixed(2)}</td>
+                    <td className="p-4 text-sm text-muted-foreground">{c.year}</td>
+                    <td className="p-4">
+                      <SourceBadge
+                        sourceName={c.sourceName}
+                        sourceUrl={c.sourceUrl}
+                        sourceDate={c.sourceDate}
+                        verifiedAt={c.verifiedAt}
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       ) : (
         <Empty text="No cutoffs match the selected filters" />

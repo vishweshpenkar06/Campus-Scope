@@ -37,7 +37,16 @@ export type CollegeDetail = Omit<CollegeCard, 'placements'> & {
   campusInsights?: CampusInsightRecord[]
 }
 
-export type CutoffRecord = {
+export type ProvenanceFields = {
+  sourceUrl?: string | null
+  sourceName?: string | null
+  sourceDate?: string | null
+  verifiedAt?: string | null
+  verifiedBy?: string | null
+  confidence?: number
+}
+
+export type CutoffRecord = ProvenanceFields & {
   id: number
   exam: string
   capRound: number
@@ -149,6 +158,12 @@ export type PredictorResult = {
     branch: string
     capRound: number
     classification: 'Safe' | 'Target' | 'Reach'
+    sourceName?: string | null
+    sourceUrl?: string | null
+    sourceDate?: string | null
+    verifiedAt?: string | null
+    confidence?: number
   }>
   assumptions: string[]
+  citations?: Array<{ source: string; url: string | null; date: string | null; verified: boolean; confidence: number }>
 }

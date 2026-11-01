@@ -58,7 +58,7 @@ const colleges = [
 const maharashtraLocations = new Set(['Mumbai', 'Pune', 'Navi Mumbai'])
 
 const branches = [
-  'Computer Science & Engineering',
+  'Computer Engineering',
   'Electronics & Communication',
   'Mechanical Engineering',
   'Information Technology',
@@ -68,7 +68,31 @@ const branches = [
 const categories = ['OPEN', 'OBC', 'SC', 'ST', 'TFWS']
 const exams = ['JEE', 'CET']
 
+// Demo rows are not official data. They are visibly legacy/unverified until a
+// real source is ingested and approved.
+const legacy = {
+  sourceName: 'legacy',
+  sourceUrl: null,
+  sourceDate: null,
+  verifiedAt: null,
+  verifiedBy: null,
+  confidence: 0.5,
+} as const
+
 async function main() {
+  await prisma.dataSource.upsert({
+    where: { name: 'legacy' },
+    update: { status: 'inactive' },
+    create: {
+      name: 'legacy',
+      url: 'https://campusscope.local/legacy',
+      license: 'Demo data — not official cutoff information',
+      status: 'inactive',
+    },
+  })
+  await prisma.lead.deleteMany()
+  await prisma.counsellorProfile.deleteMany()
+  await prisma.feedback.deleteMany()
   await prisma.campusInsight.deleteMany()
   await prisma.capRoundTrend.deleteMany()
   await prisma.seatMatrix.deleteMany()
@@ -113,6 +137,7 @@ async function main() {
         nirfRank: rating >= 4.4 ? 10 + ((index * 3) % 40) : 0,
         autonomous: index % 3 === 0,
         minorityConcessionPct: [30, 40, 20][index % 3],
+        ...legacy,
         courses: sparse
           ? undefined
           : {
@@ -126,8 +151,8 @@ async function main() {
           ? undefined
           : {
               create: [
-                { year: 2024, avgPackage: 8 + (index % 10) * 1.2, highestPackage: 24 + (index % 8) * 7, placementRate: 72 + (index % 25) },
-                { year: 2023, avgPackage: 7.5 + (index % 10) * 1.1, highestPackage: 20 + (index % 8) * 6, placementRate: 70 + (index % 25) },
+                { year: 2024, avgPackage: 8 + (index % 10) * 1.2, highestPackage: 24 + (index % 8) * 7, placementRate: 72 + (index % 25), ...legacy },
+                { year: 2023, avgPackage: 7.5 + (index % 10) * 1.1, highestPackage: 20 + (index % 8) * 6, placementRate: 70 + (index % 25), ...legacy },
               ],
             },
         reviews:
@@ -153,6 +178,61 @@ async function main() {
   await prisma.admissionDeadline.createMany({ data: generateDeadlines() })
   await seedSpotNotices()
   await seedMentorsAndForum()
+  await seedCounsellors()
+}
+
+async function seedCounsellors() {
+  const counsellors = [
+    {
+      name: 'Meera Joshi',
+      city: 'Pune',
+      languages: ['English', 'Marathi', 'Hindi'],
+      bio: 'Twelve CAP cycles helping Maharashtra students build realistic Safe/Target/Reach lists. Focus on TFWS, EBC, and Pune-vs-Mumbai trade-offs.',
+      priceRange: 'Free intro · ₹1,500/session',
+    },
+    {
+      name: 'Aditya Rao',
+      city: 'Mumbai',
+      languages: ['English', 'Hindi', 'Marathi'],
+      bio: 'Ex-admissions volunteer. Works with OBC and EWS families on document readiness, home-university quota, and spot-round decisions.',
+      priceRange: '₹1,000/session',
+    },
+    {
+      name: 'Fatima Shaikh',
+      city: 'Nagpur',
+      languages: ['English', 'Hindi', 'Urdu', 'Marathi'],
+      bio: 'Counsels first-generation aspirants across Vidarbha. Specialises in fee waivers, hostel budgets, and low-percentile backup plans.',
+      priceRange: 'Free for first-generation students',
+    },
+  ]
+
+  for (const [index, counsellor] of counsellors.entries()) {
+    const user = await prisma.user.upsert({
+      where: { email: `counsellor${index}@campusscope.test` },
+      update: { name: counsellor.name },
+      create: { email: `counsellor${index}@campusscope.test`, name: counsellor.name },
+    })
+    await prisma.counsellorProfile.upsert({
+      where: { userId: user.id },
+      update: {
+        displayName: counsellor.name,
+        city: counsellor.city,
+        languages: counsellor.languages,
+        verified: true,
+        bio: counsellor.bio,
+        priceRange: counsellor.priceRange,
+      },
+      create: {
+        userId: user.id,
+        displayName: counsellor.name,
+        city: counsellor.city,
+        languages: counsellor.languages,
+        verified: true,
+        bio: counsellor.bio,
+        priceRange: counsellor.priceRange,
+      },
+    })
+  }
 }
 
 // Mentors are demo alumni accounts; their slots/posts cascade away with college deletes so reseeding stays clean.
@@ -270,6 +350,7 @@ function generateCutoffs(collegeIndex: number, collegeId: number) {
             branch,
             percentile: Math.round(percentile * 100) / 100,
             year: 2024,
+            ...legacy,
           })
         }
       }
@@ -320,6 +401,7 @@ function generateTrends(collegeIndex: number, collegeId: number) {
           round2Cutoff: round2(Math.max(30, r1 - 1.8)),
           round3Cutoff: round2(Math.max(30, r1 - 3.1)),
           spotRoundCutoff: round2(Math.max(30, r1 - 4.4)),
+          ...legacy,
         })
       }
     }
@@ -359,6 +441,7 @@ function generateSeatMatrix(collegeIndex: number, collegeId: number) {
       stSeats: st,
       tfwsSeats: tfws,
       allIndiaSeats: total - open - obc - sc - st - tfws,
+      ...legacy,
     })
   }
   return rows

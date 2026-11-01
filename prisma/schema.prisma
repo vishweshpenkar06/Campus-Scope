@@ -8,43 +8,49 @@ datasource db {
 }
 
 model College {
-  id                   Int         @id @default(autoincrement())
-  name                 String
-  location             String
-  fees                 Int
-  rating               Float
-  overview             String
-  websiteUrl           String      @default("")
-  admissionUrl         String      @default("")
-  establishedYear      Int         @default(0)
-  campusSize           String      @default("")
-  accreditation        String      @default("")
-  hostelFees           Int         @default(0)
-  hostelAvailable      Boolean     @default(false)
-  facilities           String      @default("[]")
-  cautionDeposit       Int         @default(0)
-  eligibleScholarships String      @default("[]")
-  topRecruiters        String      @default("[]")
-  studentFacultyRatio  String      @default("")
-  nirfRank             Int         @default(0)
-  autonomous           Boolean     @default(false)
-  ebcConcessionPct     Int         @default(50)
-  tfwsConcessionPct    Int         @default(100)
-  scStConcessionPct    Int         @default(100)
-  minorityConcessionPct Int        @default(30)
-  createdAt            DateTime    @default(now())
-  courses              Course[]
-  placements           Placement[]
-  reviews              Review[]
-  cutoffs              Cutoff[]
-  capRoundTrends       CapRoundTrend[]
-  seatMatrices         SeatMatrix[]
-  campusInsights       CampusInsight[]
-  spotRoundNotices     SpotRoundNotice[]
-  peerRequests         PeerConnectRequest[]
-  savedBy              SavedCollege[]
-  mentorSlots          MentorSlot[]
-  forumPosts           ForumPost[]
+  id                    Int                  @id @default(autoincrement())
+  name                  String
+  location              String
+  fees                  Int
+  rating                Float
+  overview              String
+  websiteUrl            String               @default("")
+  admissionUrl          String               @default("")
+  establishedYear       Int                  @default(0)
+  campusSize            String               @default("")
+  accreditation         String               @default("")
+  hostelFees            Int                  @default(0)
+  hostelAvailable       Boolean              @default(false)
+  facilities            String               @default("[]")
+  cautionDeposit        Int                  @default(0)
+  eligibleScholarships  String               @default("[]")
+  topRecruiters         String               @default("[]")
+  studentFacultyRatio   String               @default("")
+  nirfRank              Int                  @default(0)
+  autonomous            Boolean              @default(false)
+  ebcConcessionPct      Int                  @default(50)
+  tfwsConcessionPct     Int                  @default(100)
+  scStConcessionPct     Int                  @default(100)
+  minorityConcessionPct Int                  @default(30)
+  sourceUrl             String?
+  sourceName            String?
+  sourceDate            DateTime?
+  verifiedAt            DateTime?
+  verifiedBy            String?
+  confidence            Float                @default(1.0)
+  createdAt             DateTime             @default(now())
+  courses               Course[]
+  placements            Placement[]
+  reviews               Review[]
+  cutoffs               Cutoff[]
+  capRoundTrends        CapRoundTrend[]
+  seatMatrices          SeatMatrix[]
+  campusInsights        CampusInsight[]
+  spotRoundNotices      SpotRoundNotice[]
+  peerRequests          PeerConnectRequest[]
+  savedBy               SavedCollege[]
+  mentorSlots           MentorSlot[]
+  forumPosts            ForumPost[]
 
   @@index([name])
   @@index([location])
@@ -54,26 +60,28 @@ model College {
 
 // Auth.js identity tables (JWT sessions; Account/Session kept for OAuth bookkeeping)
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  exam          String?
-  percentile    Float?
-  category      String    @default("OPEN")
-  accounts      Account[]
-  sessions      Session[]
-  savedColleges SavedCollege[]
-  applications  ApplicationTracker[]
-  peerRequests  PeerConnectRequest[]
-  spotApplications SpotApplication[]
-  notifications Notification[]
-  mentorSlots   MentorSlot[] @relation("MentorSlots")
-  slotBookings  Booking[]    @relation("SlotBookings")
-  forumPosts    ForumPost[]
-  forumComments ForumComment[]
-  forumVotes    ForumVote[]
+  id                String               @id @default(cuid())
+  name              String?
+  email             String?              @unique
+  emailVerified     DateTime?
+  image             String?
+  exam              String?
+  percentile        Float?
+  category          String               @default("OPEN")
+  accounts          Account[]
+  sessions          Session[]
+  savedColleges     SavedCollege[]
+  applications      ApplicationTracker[]
+  peerRequests      PeerConnectRequest[]
+  spotApplications  SpotApplication[]
+  notifications     Notification[]
+  mentorSlots       MentorSlot[]         @relation("MentorSlots")
+  slotBookings      Booking[]            @relation("SlotBookings")
+  forumPosts        ForumPost[]
+  forumComments     ForumComment[]
+  forumVotes        ForumVote[]
+  counsellorProfile CounsellorProfile?
+  leads             Lead[]
 }
 
 model Account {
@@ -88,7 +96,7 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
-  user              User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([provider, providerAccountId])
 }
@@ -108,6 +116,36 @@ model VerificationToken {
   expires    DateTime
 
   @@id([identifier, token])
+}
+
+// Official-source registry and the review queue. Nothing reaches published
+// cutoff/trend/seat tables until a human approves its staging record.
+model DataSource {
+  id        Int             @id @default(autoincrement())
+  name      String
+  url       String
+  license   String?
+  lastRunAt DateTime?
+  status    String          @default("active")
+  createdAt DateTime        @default(now())
+  records   StagingRecord[]
+
+  @@unique([name])
+}
+
+model StagingRecord {
+  id         Int        @id @default(autoincrement())
+  sourceId   Int
+  externalId String
+  rawJson    Json
+  status     String     @default("pending")
+  reason     String?
+  createdAt  DateTime   @default(now())
+  reviewedAt DateTime?
+  source     DataSource @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+
+  @@unique([sourceId, externalId])
+  @@index([status, createdAt])
 }
 
 model SavedCollege {
@@ -156,14 +194,14 @@ model PeerConnectRequest {
 }
 
 model SpotRoundNotice {
-  id                  Int      @id @default(autoincrement())
+  id                  Int               @id @default(autoincrement())
   collegeId           Int
   branch              String
   vacancyCount        Int
   applicationDeadline DateTime
-  noticePdfUrl        String   @default("")
-  publishedAt         DateTime @default(now())
-  college             College  @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  noticePdfUrl        String            @default("")
+  publishedAt         DateTime          @default(now())
+  college             College           @relation(fields: [collegeId], references: [id], onDelete: Cascade)
   applications        SpotApplication[]
 
   @@index([applicationDeadline])
@@ -171,14 +209,14 @@ model SpotRoundNotice {
 }
 
 model SpotApplication {
-  id          Int      @id @default(autoincrement())
+  id          Int             @id @default(autoincrement())
   userId      String
   noticeId    Int
-  status      String   @default("Applying")
+  status      String          @default("Applying")
   submittedAt DateTime?
-  createdAt   DateTime @default(now())
-  user        User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  notice      SpotRoundNotice  @relation(fields: [noticeId], references: [id], onDelete: Cascade)
+  createdAt   DateTime        @default(now())
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  notice      SpotRoundNotice @relation(fields: [noticeId], references: [id], onDelete: Cascade)
 
   @@unique([userId, noticeId])
 }
@@ -194,30 +232,30 @@ model Notification {
   dedupeKey String?
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([userId, read, createdAt])
   @@unique([userId, dedupeKey])
+  @@index([userId, read, createdAt])
 }
 
 model MentorSlot {
-  id           Int       @id @default(autoincrement())
-  mentorId     String
-  collegeId    Int
-  startTime    DateTime
-  durationMin  Int       @default(15)
-  status       String    @default("Open")
-  college      College   @relation(fields: [collegeId], references: [id], onDelete: Cascade)
-  mentor       User      @relation("MentorSlots", fields: [mentorId], references: [id], onDelete: Cascade)
-  bookings     Booking[]
+  id          Int       @id @default(autoincrement())
+  mentorId    String
+  collegeId   Int
+  startTime   DateTime
+  durationMin Int       @default(15)
+  status      String    @default("Open")
+  college     College   @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  mentor      User      @relation("MentorSlots", fields: [mentorId], references: [id], onDelete: Cascade)
+  bookings    Booking[]
 
   @@index([collegeId, status, startTime])
 }
 
 model Booking {
-  id          Int      @id @default(autoincrement())
-  slotId      Int      @unique
+  id          Int        @id @default(autoincrement())
+  slotId      Int        @unique
   candidateId String
-  status      String   @default("Confirmed")
-  createdAt   DateTime @default(now())
+  status      String     @default("Confirmed")
+  createdAt   DateTime   @default(now())
   slot        MentorSlot @relation(fields: [slotId], references: [id], onDelete: Cascade)
   candidate   User       @relation("SlotBookings", fields: [candidateId], references: [id], onDelete: Cascade)
 
@@ -225,45 +263,45 @@ model Booking {
 }
 
 model ForumPost {
-  id        Int            @id @default(autoincrement())
-  collegeId Int
-  userId    String
-  title     String
-  content   String
-  upvotes   Int            @default(0)
-  isSeniorAnswer Boolean   @default(false)
-  createdAt DateTime       @default(now())
-  college   College        @relation(fields: [collegeId], references: [id], onDelete: Cascade)
-  author    User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  comments  ForumComment[]
-  voters    ForumVote[]
+  id             Int            @id @default(autoincrement())
+  collegeId      Int
+  userId         String
+  title          String
+  content        String
+  upvotes        Int            @default(0)
+  isSeniorAnswer Boolean        @default(false)
+  createdAt      DateTime       @default(now())
+  college        College        @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  author         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  comments       ForumComment[]
+  voters         ForumVote[]
 
   @@index([collegeId, createdAt])
   @@index([collegeId, upvotes])
 }
 
 model ForumComment {
-  id        Int       @id @default(autoincrement())
-  postId    Int
-  userId    String
-  content   String
-  isSeniorAnswer Boolean @default(false)
-  createdAt DateTime  @default(now())
-  post      ForumPost @relation(fields: [postId], references: [id], onDelete: Cascade)
-  author    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  voters    ForumVote[]
+  id             Int         @id @default(autoincrement())
+  postId         Int
+  userId         String
+  content        String
+  isSeniorAnswer Boolean     @default(false)
+  createdAt      DateTime    @default(now())
+  post           ForumPost   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  voters         ForumVote[]
 
   @@index([postId, createdAt])
 }
 
 // ponytail: single vote table for posts and comments (nullable opposite side) instead of two tables
 model ForumVote {
-  id        Int          @id @default(autoincrement())
+  id        Int           @id @default(autoincrement())
   userId    String
   postId    Int?
   commentId Int?
-  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  post      ForumPost?   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post      ForumPost?    @relation(fields: [postId], references: [id], onDelete: Cascade)
   comment   ForumComment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
 
   @@unique([userId, postId])
@@ -294,13 +332,19 @@ model Course {
 }
 
 model Placement {
-  id             Int     @id @default(autoincrement())
+  id             Int       @id @default(autoincrement())
   collegeId      Int
   year           Int
   avgPackage     Float
   highestPackage Float
   placementRate  Float
-  college        College @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  sourceUrl      String?
+  sourceName     String?
+  sourceDate     DateTime?
+  verifiedAt     DateTime?
+  verifiedBy     String?
+  confidence     Float     @default(1.0)
+  college        College   @relation(fields: [collegeId], references: [id], onDelete: Cascade)
 
   @@index([collegeId, year])
 }
@@ -318,7 +362,7 @@ model Review {
 }
 
 model Cutoff {
-  id         Int      @id @default(autoincrement())
+  id         Int       @id @default(autoincrement())
   collegeId  Int
   exam       String
   capRound   Int
@@ -326,16 +370,23 @@ model Cutoff {
   branch     String
   percentile Float
   year       Int
-  college    College @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  sourceUrl  String?
+  sourceName String?
+  sourceDate DateTime?
+  verifiedAt DateTime?
+  verifiedBy String?
+  confidence Float     @default(1.0)
+  college    College   @relation(fields: [collegeId], references: [id], onDelete: Cascade)
 
-  @@index([collegeId, exam, year])
+  @@index([collegeId, branch, exam, year, category])
   @@index([exam, category, branch])
   @@index([percentile])
+  @@index([verifiedAt])
 }
 
 // ponytail: College.fees doubles as annual tuitionFee and hostelFees as hostelFee — no duplicate columns.
 model CapRoundTrend {
-  id              Int     @id @default(autoincrement())
+  id              Int       @id @default(autoincrement())
   collegeId       Int
   year            Int
   exam            String
@@ -345,14 +396,21 @@ model CapRoundTrend {
   round2Cutoff    Float
   round3Cutoff    Float
   spotRoundCutoff Float?
-  college         College @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  sourceUrl       String?
+  sourceName      String?
+  sourceDate      DateTime?
+  verifiedAt      DateTime?
+  verifiedBy      String?
+  confidence      Float     @default(1.0)
+  college         College   @relation(fields: [collegeId], references: [id], onDelete: Cascade)
 
   @@unique([collegeId, year, exam, category, branch])
   @@index([exam, category, branch])
+  @@index([collegeId, branch, year])
 }
 
 model SeatMatrix {
-  id            Int     @id @default(autoincrement())
+  id            Int       @id @default(autoincrement())
   collegeId     Int
   branch        String
   totalSeats    Int
@@ -362,7 +420,13 @@ model SeatMatrix {
   stSeats       Int
   tfwsSeats     Int
   allIndiaSeats Int
-  college       College @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  sourceUrl     String?
+  sourceName    String?
+  sourceDate    DateTime?
+  verifiedAt    DateTime?
+  verifiedBy    String?
+  confidence    Float     @default(1.0)
+  college       College   @relation(fields: [collegeId], references: [id], onDelete: Cascade)
 
   @@unique([collegeId, branch])
 }
@@ -390,4 +454,50 @@ model AdmissionDeadline {
   officialLink String   @default("")
 
   @@index([eventDate])
+}
+
+// Growth loop: directory of human counsellors and the leads students send them.
+model CounsellorProfile {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  displayName String
+  city        String
+  languages   String[]
+  verified    Boolean  @default(false)
+  bio         String
+  priceRange  String?
+  createdAt   DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  leads       Lead[]
+
+  @@index([city, verified])
+}
+
+model Lead {
+  id           String             @id @default(cuid())
+  studentId    String?
+  counsellorId String?
+  name         String
+  phone        String
+  percentile   Float?
+  category     String?
+  message      String
+  status       String             @default("new")
+  createdAt    DateTime           @default(now())
+  student      User?              @relation(fields: [studentId], references: [id], onDelete: SetNull)
+  counsellor   CounsellorProfile? @relation(fields: [counsellorId], references: [id], onDelete: SetNull)
+
+  @@index([status, createdAt])
+  @@index([counsellorId, createdAt])
+}
+
+model Feedback {
+  id        Int      @id @default(autoincrement())
+  page      String   @default("")
+  rating    Int?
+  message   String
+  email     String?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
 }

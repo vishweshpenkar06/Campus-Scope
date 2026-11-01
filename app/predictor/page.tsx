@@ -1,5 +1,6 @@
 import { AppShell } from '@/components/app-shell'
 import { Predictor } from '@/components/predictor'
+import { AskBox } from '@/components/ask/AskBox'
 
 export default function Page() {
   return (
@@ -14,6 +15,9 @@ export default function Page() {
             Enter your rank and budget to see how your starting point lines up with the catalog.
             The result is directional—use it to begin research, never as an admissions guarantee.
           </p>
+        </div>
+        <div className="mb-12">
+          <AskBox />
         </div>
         <Predictor />
       </main>

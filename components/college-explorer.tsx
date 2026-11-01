@@ -144,7 +144,9 @@ export function CollegeExplorer() {
               className="h-11 w-full rounded-lg border border-input bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
             >
               <option value="">All branches</option>
-              <option>Computer Science & Engineering</option>
+              <option>Computer Engineering</option>
+              <option>Information Technology</option>
+              <option>Electronics & Telecommunication</option>
               <option>Electronics & Communication</option>
               <option>Mechanical Engineering</option>
               <option>Information Technology</option>

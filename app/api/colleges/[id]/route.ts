@@ -23,7 +23,9 @@ export async function GET(_: Request, { params }: { params: Promise<{ id: string
     })
 
     if (!college) return errorResponse('College not found', 404)
-    return Response.json(college)
+    return Response.json(college, {
+      headers: { 'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=60' },
+    })
   } catch (error) {
     const { id } = await params
     const parsedId = collegeIdSchema.safeParse(id)
