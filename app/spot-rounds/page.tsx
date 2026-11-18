@@ -23,11 +23,15 @@ export default function SpotRoundsPage() {
   const [mine, setMine] = useState<Record<number, string>>({})
   const [signedIn, setSignedIn] = useState<boolean | null>(null)
   const [branch, setBranch] = useState('')
+  const [now, setNow] = useState<number | null>(null)
 
   useEffect(() => {
     fetch(`/api/spot-notices${branch ? `?branch=${encodeURIComponent(branch)}` : ''}`)
       .then((r) => r.json())
-      .then((body) => setNotices(body.data))
+      .then((body) => {
+        setNotices(body.data)
+        setNow(Date.now())
+      })
       .catch(() => setNotices([]))
   }, [branch])
 
@@ -97,7 +101,7 @@ export default function SpotRoundsPage() {
         ) : (
           <div className="mt-8 grid gap-3">
             {notices.map((notice) => {
-              const daysLeft = Math.ceil((new Date(notice.applicationDeadline).getTime() - Date.now()) / 86400000)
+              const daysLeft = now === null ? null : Math.ceil((new Date(notice.applicationDeadline).getTime() - now) / 86400000)
               return (
                 <article key={notice.id} className="flex flex-wrap items-center gap-4 rounded-xl border border-border bg-card p-4">
                   <div className="min-w-0 flex-1">
@@ -111,8 +115,8 @@ export default function SpotRoundsPage() {
                     <p className="text-xs text-muted-foreground">vacant seats</p>
                   </div>
                   <div className="w-32 text-right">
-                    <p className={`text-sm font-semibold ${daysLeft <= 7 ? 'text-destructive' : ''}`}>
-                      {daysLeft}d left
+                    <p className={`text-sm font-semibold ${daysLeft !== null && daysLeft <= 7 ? 'text-destructive' : ''}`}>
+                      {daysLeft === null ? '—' : `${daysLeft}d left`}
                     </p>
                     <p className="text-xs text-muted-foreground">
                       apply by {new Date(notice.applicationDeadline).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}

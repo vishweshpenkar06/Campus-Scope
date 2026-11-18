@@ -1,9 +1,17 @@
 name: ci
 on: [push, pull_request]
 
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   verify:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -12,11 +20,16 @@ jobs:
           node-version: 20
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
       - run: pnpm verify
+      - run: pnpm ingest --source fixture-2025 --dry-run
+      - run: pnpm eval:ask
+      - run: pnpm backtest
       - run: pnpm build
 
   e2e:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     services:
       postgres:
         image: postgres:16
@@ -34,6 +47,7 @@ jobs:
       DATABASE_URL: postgresql://postgres:postgres@localhost:5432/campusscope
       AUTH_SECRET: ci-only-secret
       ADMIN_EMAILS: admin@campusscope.test
+      PLAYWRIGHT_WEB_COMMAND: pnpm exec next start -p 3100
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -42,7 +56,8 @@ jobs:
           node-version: 20
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm db:push
+      - run: pnpm db:migrate
       - run: pnpm seed
+      - run: pnpm build
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm e2e

@@ -1,10 +1,13 @@
 import { z } from 'zod'
 import { prisma } from '@/lib/prisma'
+
+const PUBLIC_CACHE = { 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=30' }
+
 import { logEvent } from '@/lib/telemetry'
 import { errorResponse } from '@/lib/validation'
 
 const querySchema = z.object({
-  exam: z.enum(['JEE', 'CET']).default('JEE'),
+  exam: z.enum(['JEE', 'CET']).default('CET'),
   category: z.string().trim().min(1).max(20).default('OPEN'),
 })
 
@@ -40,8 +43,8 @@ export async function GET(request: Request) {
         year: r.year,
       }))
 
-    return Response.json({ data })
+    return Response.json({ data }, { headers: PUBLIC_CACHE })
   } catch {
-    return Response.json({ data: [], source: 'unavailable' })
+    return Response.json({ data: [], source: 'unavailable' }, { headers: PUBLIC_CACHE })
   }
 }

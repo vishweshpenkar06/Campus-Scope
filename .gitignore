@@ -2,7 +2,20 @@
 .env
 .env*.local
 
-# Common ignores
+# Dependencies and builds
 node_modules
 .next/
+out/
+*.tsbuildinfo
+
+# Tests
+test-results/
+playwright-report/
+
+# Local tooling
+.serena/
+.taste-skill/
+
+# OS
 .DS_Store
+.cache/

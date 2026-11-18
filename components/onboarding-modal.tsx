@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { GraduationCap, ArrowRight, ArrowLeft, X, Loader2 } from 'lucide-react'
 import type { OnboardingState } from '@/lib/types'
+import { BRANCHES } from '@/lib/branches'
 
 const STORAGE_KEY = 'campusscope-onboarding'
 
@@ -98,7 +99,7 @@ export function OnboardingModal({ onComplete }: { onComplete: (state: Onboarding
                 <div>
                   <div className="font-semibold">JEE Main</div>
                   <div className="mt-1 text-sm text-muted-foreground">
-                    All India — NITs, IIITs, CFTIs, private colleges
+                    All-India seats in Maharashtra institutes — JEE Main
                   </div>
                 </div>
                 <ArrowRight className="ml-auto size-4 text-muted-foreground" />
@@ -182,14 +183,9 @@ export function OnboardingModal({ onComplete }: { onComplete: (state: Onboarding
                   className="h-11 rounded-lg border border-input bg-background px-3 text-sm font-normal text-foreground outline-none focus:ring-2 focus:ring-ring"
                 >
                   <option>All Branches</option>
-                  <option>Computer Engineering</option>
-                  <option>Information Technology</option>
-                  <option>Electronics & Telecommunication</option>
-                  <option>Electronics & Communication</option>
-                  <option>Mechanical Engineering</option>
-                  <option>Information Technology</option>
-                  <option>Electrical Engineering</option>
-                  <option>Civil Engineering</option>
+                  {BRANCHES.map((branchName) => (
+                    <option key={branchName}>{branchName}</option>
+                  ))}
                 </select>
               </label>
 

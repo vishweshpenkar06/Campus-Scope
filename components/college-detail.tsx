@@ -1,7 +1,8 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { MapPin, Star, GitCompareArrows, RotateCcw, Home, ExternalLink, Phone } from 'lucide-react'
+import { useCallback, useEffect, useState } from 'react'
+import Image from 'next/image'
+import { MapPin, Star, GitCompareArrows, RotateCcw, Home, ExternalLink, Phone, X } from 'lucide-react'
 import { useCompare } from './compare-context'
 import { formatINR, formatPackage, formatRating, formatROI, parseFacilities } from '@/lib/format'
 import { RoiBadge } from './roi-badge'
@@ -11,11 +12,8 @@ import { CommuteChecker } from './commute-checker'
 import { CapRoundTrends } from './cap-round-trends'
 import { SeatMatrix } from './seat-matrix'
 import { CampusInsights } from './campus-insights'
-import { AskSenior } from './ask-senior'
 import { CampusMap } from './campus-map'
 import { SaveCollegeButton } from './save-college-button'
-import { MentorSlots } from './mentor-slots'
-import { ForumTab } from './forum-tab'
 import { SourceBadge } from './data/SourceBadge'
 import { FreshnessWarning } from './data/FreshnessWarning'
 import { ChanceCard } from './share/ChanceCard'
@@ -28,8 +26,9 @@ export function CollegeDetail({ id }: { id: string }) {
   const [googleData, setGoogleData] = useState<GooglePlaceData | null>(null)
   const { items, toggle } = useCompare()
 
-  const load = () =>
-    fetch(`/api/colleges/${id}`)
+  const load = useCallback(
+    () =>
+      fetch(`/api/colleges/${id}`)
       .then(async (r) => {
         if (r.status === 404) throw new Error('not-found')
         if (!r.ok) throw new Error()
@@ -44,11 +43,13 @@ export function CollegeDetail({ id }: { id: string }) {
           })
           .catch(() => {})
       })
-      .catch(() => setError(true))
+      .catch(() => setError(true)),
+    [id]
+  )
 
   useEffect(() => {
     load()
-  }, [id])
+  }, [load])
 
   if (error)
     return (
@@ -85,13 +86,12 @@ export function CollegeDetail({ id }: { id: string }) {
 
   const tabs = [
     { id: 'overview', label: 'Overview' },
-    { id: 'courses', label: `Courses (${college.courses.length})` },
-    { id: 'placements', label: `Placements (${college.placements.length})` },
+    ...(college.courses.length ? [{ id: 'courses', label: `Courses (${college.courses.length})` }] : []),
+    ...(college.placements.length ? [{ id: 'placements', label: `Placements (${college.placements.length})` }] : []),
     { id: 'cutoffs', label: `Cutoffs (${college.cutoffs.length})` },
     ...(college.capRoundTrends?.length ? [{ id: 'trends', label: 'CAP Trends' }] : []),
     ...(college.seatMatrices?.length ? [{ id: 'seats', label: 'Seat Matrix' }] : []),
-    { id: 'reviews', label: `Reviews (${college.reviews.length})` },
-    { id: 'forum', label: 'Q&A Forum' },
+    ...(college.reviews.length ? [{ id: 'reviews', label: `Reviews (${college.reviews.length})` }] : []),
     ...(college.campusInsights?.length ? [{ id: 'insights', label: 'Senior Talk' }] : []),
     { id: 'campus', label: 'Campus & Travel' },
     ...(googleData ? [{ id: 'google', label: `Google (${googleData.totalReviews.toLocaleString()} reviews)` }] : []),
@@ -100,11 +100,14 @@ export function CollegeDetail({ id }: { id: string }) {
   return (
     <main className="mx-auto max-w-7xl px-5 py-10 pb-28">
       {googleData?.photos?.[0] && (
-        <div className="mb-8 overflow-hidden rounded-xl bg-muted">
-          <img
+        <div className="relative mb-8 h-64 overflow-hidden rounded-xl bg-muted md:h-80">
+          <Image
             src={googleData.photos[0]}
             alt={college.name}
-            className="h-64 w-full object-cover md:h-80"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
             onError={(e) => {
               e.currentTarget.style.display = 'none'
             }}
@@ -140,6 +143,14 @@ export function CollegeDetail({ id }: { id: string }) {
               </span>
             )}
           </div>
+
+          {college.instituteCode && (
+            <div className="mt-4 max-w-2xl rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-xs leading-5 text-emerald-800">
+              <strong>Official DTE data.</strong> Institute code {college.instituteCode}. Cutoffs are
+              verified from public Maharashtra CAP PDFs (2023–2026). Fees, placements, and reviews
+              are not yet verified for this institute.
+            </div>
+          )}
 
           <div className="mt-4 flex flex-wrap gap-3">
             {college.websiteUrl && (
@@ -209,7 +220,7 @@ export function CollegeDetail({ id }: { id: string }) {
 
       <div id="print-summary" className="mt-8 flex flex-wrap gap-3">
         <div className="hidden w-full print:block">
-          <h1 className="font-serif text-3xl font-bold">{college.name}</h1>
+          <h2 className="font-serif text-3xl font-bold">{college.name}</h2>
           <p className="mt-1 text-sm text-muted-foreground">
             {college.location}
             {college.accreditation ? ` · ${college.accreditation}` : ''}
@@ -217,15 +228,19 @@ export function CollegeDetail({ id }: { id: string }) {
             {' · campusscope'}
           </p>
         </div>
-        <div className="rounded-lg border border-border bg-card px-4 py-2 text-sm">
-          <Star className="mr-1 inline size-4 fill-amber-500 text-amber-500" />
-          {formatRating(college.rating)} / 5
-        </div>
-        <div className="rounded-lg border border-border bg-card px-4 py-2 text-sm">
-          {formatINR(college.fees)} / year
-        </div>
+        {college.rating > 0 && (
+          <div className="rounded-lg border border-border bg-card px-4 py-2 text-sm">
+            <Star className="mr-1 inline size-4 fill-amber-500 text-amber-500" />
+            {formatRating(college.rating)} / 5
+          </div>
+        )}
+        {college.fees > 0 && (
+          <div className="rounded-lg border border-border bg-card px-4 py-2 text-sm">
+            {formatINR(college.fees)} / year
+          </div>
+        )}
         {latestPlacement && (
-          <RoiBadge avgPackageInr={latestPlacement.avgPackage} fees={college.fees} hostelFees={college.hostelAvailable ? college.hostelFees : 0} />
+          <RoiBadge avgPackageInr={latestPlacement.avgPackage * 100000} fees={college.fees} hostelFees={college.hostelAvailable ? college.hostelFees : 0} />
         )}
         {college.nirfRank ? (
           <div className="rounded-lg border border-border bg-card px-4 py-2 text-sm">
@@ -248,12 +263,16 @@ export function CollegeDetail({ id }: { id: string }) {
             Hostel: {formatINR(college.hostelFees)}/yr
           </div>
         )}
-        <div className="rounded-lg border border-border bg-card px-4 py-2 text-sm">
-          {college.courses.length} courses
-        </div>
-        <div className="rounded-lg border border-border bg-card px-4 py-2 text-sm">
-          {college.reviews.length} reviews
-        </div>
+        {college.courses.length > 0 && (
+          <div className="rounded-lg border border-border bg-card px-4 py-2 text-sm">
+            {college.courses.length} {college.courses.length === 1 ? 'course' : 'courses'}
+          </div>
+        )}
+        {college.reviews.length > 0 && (
+          <div className="rounded-lg border border-border bg-card px-4 py-2 text-sm">
+            {college.reviews.length} {college.reviews.length === 1 ? 'review' : 'reviews'}
+          </div>
+        )}
       </div>
 
       {facilities.length > 0 && (
@@ -289,22 +308,27 @@ export function CollegeDetail({ id }: { id: string }) {
         {tab === 'overview' && (
           <div className="grid gap-6">
             <p className="max-w-3xl text-base leading-7 text-muted-foreground">{college.overview}</p>
-            <FinancialCard
-              fees={college.fees}
-              hostelFees={college.hostelFees}
-              hostelAvailable={college.hostelAvailable}
-              cautionDeposit={college.cautionDeposit}
-              eligibleScholarships={college.eligibleScholarships}
-              policy={{
-                ebcConcessionPct: college.ebcConcessionPct ?? 50,
-                tfwsConcessionPct: college.tfwsConcessionPct ?? 100,
-                scStConcessionPct: college.scStConcessionPct ?? 100,
-                minorityConcessionPct: college.minorityConcessionPct ?? 30,
-              }}
-            />
+            {college.fees > 0 ? (
+              <FinancialCard
+                fees={college.fees}
+                hostelFees={college.hostelFees}
+                hostelAvailable={college.hostelAvailable}
+                cautionDeposit={college.cautionDeposit}
+                eligibleScholarships={college.eligibleScholarships}
+                policy={{
+                  ebcConcessionPct: college.ebcConcessionPct ?? 50,
+                  tfwsConcessionPct: college.tfwsConcessionPct ?? 100,
+                  scStConcessionPct: college.scStConcessionPct ?? 100,
+                  minorityConcessionPct: college.minorityConcessionPct ?? 30,
+                }}
+              />
+            ) : (
+              <div className="rounded-xl border border-dashed border-border p-5 text-sm text-muted-foreground">
+                Tuition, hostel, and scholarship data are not verified for this institute yet.
+                Use the official fee brochure before budgeting.
+              </div>
+            )}
             <CommuteChecker collegeName={college.name} location={college.location} />
-            <AskSenior collegeId={college.id} branches={college.courses.map((c) => c.name)} />
-            <MentorSlots collegeId={college.id} />
           </div>
         )}
 
@@ -373,7 +397,7 @@ export function CollegeDetail({ id }: { id: string }) {
         {tab === 'cutoffs' &&
           (college.cutoffs.length ? (
             <>
-              <CutoffTable cutoffs={college.cutoffs} />
+              <CutoffTable cutoffs={college.cutoffs} collegeId={college.id} />
               <ChanceCard collegeId={college.id} collegeName={college.name} cutoffs={college.cutoffs} />
             </>
           ) : (
@@ -392,7 +416,6 @@ export function CollegeDetail({ id }: { id: string }) {
 
         {tab === 'campus' && <CampusMap collegeName={college.name} location={college.location} />}
 
-        {tab === 'forum' && <ForumTab collegeId={college.id} />}
 
         {tab === 'reviews' &&
           (college.reviews.length ? (
@@ -440,12 +463,13 @@ function GoogleReviewsSection({ googleData }: { googleData: GooglePlaceData }) {
           <h3 className="mb-4 text-lg font-semibold">Campus Photos</h3>
           <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
             {googleData.photos.map((photo, i) => (
-              <div key={i} className="aspect-video overflow-hidden rounded-lg bg-muted">
-                <img
+              <div key={i} className="relative aspect-video overflow-hidden rounded-lg bg-muted">
+                <Image
                   src={photo}
                   alt={`Campus photo ${i + 1}`}
-                  className="h-full w-full object-cover transition hover:scale-105"
-                  loading="lazy"
+                  fill
+                  sizes="(max-width: 768px) 50vw, 33vw"
+                  className="object-cover transition hover:scale-105"
                 />
               </div>
             ))}
@@ -461,9 +485,11 @@ function GoogleReviewsSection({ googleData }: { googleData: GooglePlaceData }) {
               <div key={i} className="rounded-xl border border-border p-5">
                 <div className="flex items-start gap-3">
                   {review.avatar ? (
-                    <img
+                    <Image
                       src={review.avatar}
                       alt={review.author}
+                      width={40}
+                      height={40}
                       className="size-10 rounded-full"
                     />
                   ) : (
@@ -498,52 +524,148 @@ function GoogleReviewsSection({ googleData }: { googleData: GooglePlaceData }) {
   )
 }
 
-function CutoffTable({ cutoffs }: { cutoffs: Detail['cutoffs'] }) {
-  const [exam, setExam] = useState<string>(cutoffs[0]?.exam || 'JEE')
-  const [round, setRound] = useState<number>(cutoffs[0]?.capRound || 1)
-  const [category, setCategory] = useState<string>(cutoffs[0]?.category || 'OPEN')
-
-  const filtered = cutoffs.filter(
-    (c) => c.exam === exam && c.capRound === round && c.category === category
-  )
-
+function CutoffTable({ cutoffs, collegeId }: { cutoffs: Detail['cutoffs']; collegeId: number }) {
   const exams = [...new Set(cutoffs.map((c) => c.exam))]
-  const rounds = [...new Set(cutoffs.map((c) => c.capRound))].sort()
-  const categories = [...new Set(cutoffs.map((c) => c.category))]
+  const defaultExam = exams.includes('CET') ? 'CET' : (exams[0] ?? 'CET')
+  const yearsFor = (selectedExam: string) =>
+    [...new Set(cutoffs.filter((c) => c.exam === selectedExam).map((c) => c.year))].sort((a, b) => b - a)
+  const defaultYear = yearsFor(defaultExam)[0] ?? new Date().getFullYear()
+  const roundsFor = (selectedExam: string, selectedYear: number) =>
+    [...new Set(cutoffs.filter((c) => c.exam === selectedExam && c.year === selectedYear).map((c) => c.capRound))].sort((a, b) => b - a)
+  const categoryFor = (selectedExam: string, selectedYear: number) => {
+    const available = [...new Set(cutoffs.filter((c) => c.exam === selectedExam && c.year === selectedYear).map((c) => c.category))]
+    return available.includes('OPEN') ? 'OPEN' : (available[0] ?? 'OPEN')
+  }
+
+  const [exam, setExam] = useState(defaultExam)
+  const [year, setYear] = useState(defaultYear)
+  const [round, setRound] = useState<number>(roundsFor(defaultExam, defaultYear)[0] ?? 1)
+  const [category, setCategory] = useState<string>(categoryFor(defaultExam, defaultYear))
+  const [level, setLevel] = useState('All')
+  const [reportOpen, setReportOpen] = useState(false)
+  const [reportMessage, setReportMessage] = useState('')
+  const [reportState, setReportState] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
+
+  const years = yearsFor(exam)
+  const rounds = roundsFor(exam, year)
+  const categories = [...new Set(cutoffs.filter((c) => c.exam === exam && c.year === year).map((c) => c.category))].sort()
+  const levels = [...new Set(cutoffs.filter((c) => c.exam === exam && c.year === year && c.level).map((c) => c.level))].sort() as string[]
+
+  function changeExam(nextExam: string) {
+    const nextYear = yearsFor(nextExam)[0] ?? year
+    setExam(nextExam)
+    setYear(nextYear)
+    setRound(roundsFor(nextExam, nextYear)[0] ?? 1)
+    setCategory(categoryFor(nextExam, nextYear))
+    setLevel('All')
+  }
+
+  function changeYear(nextYear: number) {
+    setYear(nextYear)
+    setRound(roundsFor(exam, nextYear)[0] ?? 1)
+    setCategory(categoryFor(exam, nextYear))
+    setLevel('All')
+  }
+
+  const filtered = cutoffs
+    .filter((c) => c.year === year && c.exam === exam && c.capRound === round && c.category === category)
+    .filter((c) => level === 'All' || c.level === level)
+    .sort((a, b) => a.branch.localeCompare(b.branch) || b.percentile - a.percentile)
 
   return (
     <div>
-      <div className="mb-4 flex flex-wrap gap-3">
-        <select
-          value={exam}
-          onChange={(e) => setExam(e.target.value)}
-          className="rounded-lg border border-input bg-background px-3 py-2 text-sm"
-        >
-          {exams.map((e) => (
-            <option key={e}>{e}</option>
-          ))}
+      <div className="mb-3 flex flex-wrap gap-2">
+        <select value={exam} onChange={(e) => changeExam(e.target.value)} aria-label="Exam" className="rounded-lg border border-input bg-background px-3 py-2 text-sm">
+          {exams.map((e) => <option key={e}>{e}</option>)}
         </select>
-        <select
-          value={round}
-          onChange={(e) => setRound(Number(e.target.value))}
-          className="rounded-lg border border-input bg-background px-3 py-2 text-sm"
-        >
-          {rounds.map((r) => (
-            <option key={r} value={r}>
-              Round {r}
-            </option>
-          ))}
+        <select value={year} onChange={(e) => changeYear(Number(e.target.value))} aria-label="Year" className="rounded-lg border border-input bg-background px-3 py-2 text-sm">
+          {years.map((y) => <option key={y} value={y}>{y}</option>)}
         </select>
-        <select
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          className="rounded-lg border border-input bg-background px-3 py-2 text-sm"
-        >
-          {categories.map((c) => (
-            <option key={c}>{c}</option>
-          ))}
+        <select value={round} onChange={(e) => setRound(Number(e.target.value))} aria-label="CAP round" className="rounded-lg border border-input bg-background px-3 py-2 text-sm">
+          {rounds.map((r) => <option key={r} value={r}>Round {r}</option>)}
         </select>
+        <select value={category} onChange={(e) => setCategory(e.target.value)} aria-label="Category" className="rounded-lg border border-input bg-background px-3 py-2 text-sm">
+          {categories.map((c) => <option key={c}>{c}</option>)}
+        </select>
+        <select value={level} onChange={(e) => setLevel(e.target.value)} aria-label="Seat level" className="rounded-lg border border-input bg-background px-3 py-2 text-sm">
+          <option value="All">All seat levels</option>
+          {levels.map((l) => <option key={l}>{l}</option>)}
+        </select>
+        <span className="inline-flex items-center rounded-full border border-border bg-muted px-3 py-1.5 text-xs font-medium text-muted-foreground">
+          {filtered.length} row{filtered.length === 1 ? '' : 's'}
+        </span>
+        <button
+          type="button"
+          onClick={() => setReportOpen(true)}
+          className="inline-flex items-center rounded-lg border border-border px-3 py-1.5 text-xs font-semibold text-muted-foreground transition hover:border-primary hover:text-primary"
+        >
+          Report an error
+        </button>
       </div>
+
+      {reportOpen && (
+        <div className="fixed inset-0 z-50 grid place-items-center bg-black/40 p-4" role="dialog" aria-modal="true" aria-labelledby="correction-title">
+          <div className="w-full max-w-md rounded-xl border border-border bg-card p-5 shadow-xl">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <h3 id="correction-title" className="font-serif text-xl font-semibold">Report a data error</h3>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  {year} · Round {round} · {category} · {level === 'All' ? 'all levels' : level}
+                </p>
+              </div>
+              <button onClick={() => setReportOpen(false)} aria-label="Close correction form" className="rounded p-1 hover:bg-muted">
+                <X className="size-4" />
+              </button>
+            </div>
+            {reportState === 'sent' ? (
+              <p className="mt-4 rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-800">
+                Thanks — the report is in the review queue. If the source confirms the issue, the row
+                will be corrected or hidden.
+              </p>
+            ) : (
+              <form
+                onSubmit={async (event) => {
+                  event.preventDefault()
+                  setReportState('sending')
+                  try {
+                    const response = await fetch('/api/corrections', {
+                      method: 'POST',
+                      headers: { 'content-type': 'application/json' },
+                      body: JSON.stringify({
+                        collegeId,
+                        message: `[${year} R${round} ${category} ${level}] ${reportMessage}`,
+                      }),
+                    })
+                    if (!response.ok) throw new Error()
+                    setReportState('sent')
+                  } catch {
+                    setReportState('error')
+                  }
+                }}
+                className="mt-4 grid gap-3"
+              >
+                <label className="grid gap-1 text-xs font-semibold">
+                  What is wrong?
+                  <textarea
+                    required
+                    minLength={10}
+                    maxLength={1000}
+                    rows={4}
+                    value={reportMessage}
+                    onChange={(event) => setReportMessage(event.target.value)}
+                    placeholder="e.g. The 2026 Round 4 OPEN cutoff should be 98.21, not 98.12."
+                    className="rounded-lg border border-input bg-background px-3 py-2 text-sm font-normal outline-none focus:ring-2 focus:ring-ring"
+                  />
+                </label>
+                {reportState === 'error' && <p className="text-sm text-red-700">Could not submit. Try again.</p>}
+                <button disabled={reportState === 'sending'} className="h-10 rounded-lg bg-primary px-4 text-sm font-semibold text-primary-foreground disabled:opacity-60">
+                  {reportState === 'sending' ? 'Sending…' : 'Submit report'}
+                </button>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
 
       {filtered.length ? (
         <div className="grid gap-3">
@@ -553,30 +675,39 @@ function CutoffTable({ cutoffs }: { cutoffs: Detail['cutoffs'] }) {
               <thead className="bg-muted">
                 <tr>
                   <th className="p-4 text-sm font-medium text-muted-foreground">Branch</th>
-                  <th className="p-4 text-sm font-medium text-muted-foreground">Cutoff Percentile</th>
-                  <th className="p-4 text-sm font-medium text-muted-foreground">Year</th>
+                  <th className="p-4 text-sm font-medium text-muted-foreground">Category</th>
+                  <th className="p-4 text-sm font-medium text-muted-foreground">Level</th>
+                  <th className="p-4 text-sm font-medium text-muted-foreground">Cutoff %</th>
+                  <th className="p-4 text-sm font-medium text-muted-foreground">Rank</th>
+                  <th className="p-4 text-sm font-medium text-muted-foreground">Stage</th>
                   <th className="p-4 text-sm font-medium text-muted-foreground">Source</th>
                 </tr>
               </thead>
               <tbody>
-                {filtered.map((c) => (
+                {filtered.slice(0, 300).map((c) => (
                   <tr key={c.id} className="border-t border-border">
-                    <td className="p-4 text-sm font-medium">{c.branch}</td>
-                    <td className="p-4 text-sm">{c.percentile.toFixed(2)}</td>
-                    <td className="p-4 text-sm text-muted-foreground">{c.year}</td>
+                    <td className="p-4 text-sm">
+                      <span className="font-medium">{c.branch}</span>
+                      {c.branchCode && <span className="ml-2 font-mono text-[10px] text-muted-foreground">{c.branchCode}</span>}
+                    </td>
+                    <td className="p-4 text-sm">
+                      <span className="font-medium">{c.category}</span>
+                      {c.categoryCode && <span className="ml-2 text-[10px] text-muted-foreground">{c.categoryCode}</span>}
+                    </td>
+                    <td className="p-4 text-sm text-muted-foreground">{c.level ?? '—'}</td>
+                    <td className="p-4 text-sm font-semibold tabular-nums">{c.percentile.toFixed(2)}</td>
+                    <td className="p-4 text-sm tabular-nums">{c.rank ?? '—'}</td>
+                    <td className="p-4 text-sm text-muted-foreground">{c.stage ?? '—'}</td>
                     <td className="p-4">
-                      <SourceBadge
-                        sourceName={c.sourceName}
-                        sourceUrl={c.sourceUrl}
-                        sourceDate={c.sourceDate}
-                        verifiedAt={c.verifiedAt}
-                      />
+                      <SourceBadge sourceName={c.sourceName} sourceUrl={c.sourceUrl} sourceDate={c.sourceDate} verifiedAt={c.verifiedAt} />
+                      {c.sourcePage && <span className="ml-2 text-[10px] text-muted-foreground">p.{c.sourcePage}</span>}
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
+          {filtered.length > 300 && <p className="text-xs text-muted-foreground">Showing first 300 of {filtered.length} rows. Narrow the filters for the rest.</p>}
         </div>
       ) : (
         <Empty text="No cutoffs match the selected filters" />

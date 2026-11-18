@@ -4,7 +4,15 @@ import { logEvent } from '@/lib/telemetry'
 import { Prisma } from '@prisma/client'
 import { demoColleges } from '@/lib/demo-data'
 
+const PUBLIC_CACHE = { 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=30' }
+
+
+const PREVIEW = process.env.NODE_ENV !== 'production'
+
 export async function GET(request: Request) {
+  if (!process.env.DATABASE_URL) {
+    return PREVIEW ? demoList(request) : errorResponse('The catalog is temporarily unavailable.', 503)
+  }
   try {
     const { searchParams } = new URL(request.url)
     const parsed = collegeQuerySchema.safeParse(Object.fromEntries(searchParams.entries()))
@@ -19,6 +27,7 @@ export async function GET(request: Request) {
             OR: [
               { name: { contains: q, mode: 'insensitive' } },
               { location: { contains: q, mode: 'insensitive' } },
+              { instituteCode: { contains: q } },
             ],
           }
         : {}),
@@ -34,9 +43,16 @@ export async function GET(request: Request) {
       ...(minRating !== undefined ? { rating: { gte: minRating } } : {}),
       ...(branch
         ? {
-            courses: {
-              some: { name: { contains: branch, mode: 'insensitive' } },
-            },
+            // Real institutes have official cutoff branches; seeded demo rows
+            // may only have courses, so accept either.
+            AND: [
+              {
+                OR: [
+                  { cutoffs: { some: { branch: { contains: branch, mode: 'insensitive' } } } },
+                  { courses: { some: { name: { contains: branch, mode: 'insensitive' } } } },
+                ],
+              },
+            ],
           }
         : {}),
     }
@@ -47,22 +63,25 @@ export async function GET(request: Request) {
       prisma.college.count({ where }),
       prisma.college.findMany({
         where,
-        orderBy: [{ rating: 'desc' }, { name: 'asc' }],
+        orderBy: [{ rating: 'desc' }, { cutoffs: { _count: 'desc' } }, { name: 'asc' }],
         skip: (page - 1) * pageSize,
         take: pageSize,
         include: {
-          _count: { select: { courses: true, reviews: true } },
+          _count: { select: { courses: true, reviews: true, cutoffs: true } },
           placements: { orderBy: { year: 'desc' }, take: 1, select: { avgPackage: true, year: true } },
         },
       }),
     ])
 
-    return Response.json({
-      data,
-      meta: { total, page, pageSize, totalPages: Math.ceil(total / pageSize) },
-    })
+    return Response.json(
+      {
+        data,
+        meta: { total, page, pageSize, totalPages: Math.ceil(total / pageSize) },
+      },
+      { headers: PUBLIC_CACHE }
+    )
   } catch {
-    return Response.json(await demoList(request))
+    return PREVIEW ? demoList(request) : errorResponse('The catalog is temporarily unavailable.', 503)
   }
 }
 
@@ -105,6 +124,6 @@ async function demoList(request: Request) {
       },
       source: 'preview-demo',
     },
-    { status: 200 }
+    { status: 200, headers: PUBLIC_CACHE }
   )
 }

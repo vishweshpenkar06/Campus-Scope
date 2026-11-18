@@ -8,9 +8,9 @@ export function ShareActions({ college }: { college: Detail }) {
   const latest = college.placements[0]
   const summary = [
     `🎓 ${college.name}, ${college.location}`,
-    `💰 Fees: ${formatINR(college.fees)}/yr`,
-    latest ? `📦 Avg package: ${formatPackage(latest.avgPackage)}` : null,
-    `⭐ Rating: ${college.rating.toFixed(1)}/5`,
+    college.fees > 0 ? `💰 Fees: ${formatINR(college.fees)}/yr` : null,
+    latest && latest.avgPackage > 0 ? `📦 Avg package: ${formatPackage(latest.avgPackage)}` : null,
+    college.rating > 0 ? `⭐ Rating: ${college.rating.toFixed(1)}/5` : null,
     `View full profile: ${typeof window !== 'undefined' ? window.location.href : ''}`,
   ]
     .filter(Boolean)

@@ -80,6 +80,12 @@ const legacy = {
 } as const
 
 async function main() {
+  if (process.env.NODE_ENV === 'production' && process.env.ALLOW_DESTRUCTIVE_SEED !== '1') {
+    throw new Error(
+      'Refusing to seed a production database. Set ALLOW_DESTRUCTIVE_SEED=1 only for a deliberate demo environment.'
+    )
+  }
+
   await prisma.dataSource.upsert({
     where: { name: 'legacy' },
     update: { status: 'inactive' },

@@ -9,21 +9,25 @@ export async function GET(request: Request) {
   const parsed = querySchema.safeParse({ collegeId: new URL(request.url).searchParams.get('collegeId') })
   if (!parsed.success) return errorResponse('Provide a college id', 400)
 
-  const data = await prisma.mentorSlot.findMany({
-    where: { collegeId: parsed.data.collegeId, status: 'Open', startTime: { gt: new Date() } },
-    orderBy: { startTime: 'asc' },
-    take: 20,
-    include: { mentor: { select: { name: true, image: true } } },
-  })
-  return Response.json({
-    data: data.map((s) => ({
-      id: s.id,
-      startTime: s.startTime,
-      durationMin: s.durationMin,
-      mentorName: s.mentor.name ?? 'Verified senior',
-      mentorImage: s.mentor.image,
-    })),
-  })
+  try {
+    const data = await prisma.mentorSlot.findMany({
+      where: { collegeId: parsed.data.collegeId, status: 'Open', startTime: { gt: new Date() } },
+      orderBy: { startTime: 'asc' },
+      take: 20,
+      include: { mentor: { select: { name: true, image: true } } },
+    })
+    return Response.json({
+      data: data.map((s) => ({
+        id: s.id,
+        startTime: s.startTime,
+        durationMin: s.durationMin,
+        mentorName: s.mentor.name ?? 'Verified senior',
+        mentorImage: s.mentor.image,
+      })),
+    })
+  } catch {
+    return Response.json({ data: [], source: 'preview-demo' })
+  }
 }
 
 const createSchema = z.object({
@@ -33,7 +37,7 @@ const createSchema = z.object({
 })
 
 export async function POST(request: Request) {
-  const session = await auth()
+  const session = await auth().catch(() => null)
   if (!session?.user?.id) return errorResponse('Sign in to offer mentoring slots', 401)
 
   const parsed = createSchema.safeParse(await request.json().catch(() => null))

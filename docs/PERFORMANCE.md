@@ -4,8 +4,8 @@
 
 - Next.js 16 (Turbopack) production build completes without a live database; data-backed routes
   render dynamically and degrade to the committed preview dataset where implemented.
-- API responses inherit `Cache-Control: public, s-maxage=60, stale-while-revalidate=30` from
-  `next.config.mjs`.
+- Public read APIs opt in to `Cache-Control: public, s-maxage=60, stale-while-revalidate=30`.
+  Authenticated, admin, auth, ask, and predict routes are `private, no-store`.
 - College profile reads are a single Prisma query with relation includes; the client fetches
   `/api/colleges/[id]` on mount.
 - Sitemap and programmatic college pages are dynamic so new rows appear without a rebuild.

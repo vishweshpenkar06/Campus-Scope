@@ -54,30 +54,30 @@ function CompareContent() {
 function CompareTable({ data }: { data: CompareResponse['data'] }) {
   type College = CollegeDetail
   const rows: [string, (c: College) => React.ReactNode][] = [
-    ['Annual fees', (c) => `${formatINR(c.fees)} / yr`],
+    ['Annual fees', (c) => (c.fees > 0 ? `${formatINR(c.fees)} / yr` : 'Not verified')],
     ['4-Yr ROI', (c) =>
-      c.placements[0] ? (
-        <RoiBadge compact avgPackageInr={c.placements[0].avgPackage} fees={c.fees} hostelFees={c.hostelAvailable ? c.hostelFees : 0} />
+      c.placements[0] && c.fees > 0 && c.placements[0].avgPackage > 0 ? (
+        <RoiBadge compact avgPackageInr={c.placements[0].avgPackage * 100000} fees={c.fees} hostelFees={c.hostelAvailable ? c.hostelFees : 0} />
       ) : (
-        'Not listed'
+        'Not verified'
       )],
-    ['Rating', (c) => `${c.rating.toFixed(1)} / 5`],
+    ['Rating', (c) => (c.rating > 0 ? `${c.rating.toFixed(1)} / 5` : 'Not verified')],
     ['NIRF rank', (c) => (c.nirfRank ? `#${c.nirfRank}` : 'Not ranked')],
     ['Autonomous status', (c) => (c.autonomous ? 'Autonomous' : 'Non-autonomous')],
     ['Student : faculty ratio', (c) => c.studentFacultyRatio || 'Not listed'],
     ['Campus size', (c) => c.campusSize || 'Not listed'],
     ['Latest average package', (c) =>
-      c.placements[0] ? formatPackage(c.placements[0].avgPackage) : 'Not listed'],
+      c.placements[0] && c.placements[0].avgPackage > 0 ? formatPackage(c.placements[0].avgPackage) : 'Not verified'],
     ['Highest package', (c) =>
-      c.placements[0] ? formatPackage(c.placements[0].highestPackage) : 'Not listed'],
+      c.placements[0] && c.placements[0].highestPackage > 0 ? formatPackage(c.placements[0].highestPackage) : 'Not verified'],
     ['Placement rate', (c) =>
-      c.placements[0] ? `${c.placements[0].placementRate}%` : 'Not listed'],
+      c.placements[0] && c.placements[0].placementRate > 0 ? `${c.placements[0].placementRate}%` : 'Not verified'],
     ['Top recruiters', (c) => {
       const recruiters = parseList(c.topRecruiters ?? '')
       return recruiters.length ? recruiters.join(', ') : 'Not listed'
     }],
     ['Hostel facilities', (c) =>
-      c.hostelAvailable ? `Available · ${formatINR(c.hostelFees)}/yr` : 'Not available'],
+      c.hostelAvailable ? (c.hostelFees > 0 ? `Available · ${formatINR(c.hostelFees)}/yr` : 'Available') : 'Not verified'],
     ['Caution deposit', (c) => (c.cautionDeposit ? formatINR(c.cautionDeposit) : 'Not listed')],
     ['Courses offered', (c) =>
       c.courses.length ? c.courses.map((cr) => cr.name).join(', ') : 'Not listed'],

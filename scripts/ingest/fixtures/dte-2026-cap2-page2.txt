@@ -1,0 +1,69 @@
+   D                                                                                                                    Government of Maharashtra
+   i                                                                                                         State Common Entrance Test Cell
+   r                                                                     Cut Off List for Maharashtra & Minority Seats of CAP Round - II for the Admission to the First Year of Four Year
+                                                                 Degree Courses In Engineering and Technology & Master of Engineering and Technology (Integrated 5 Years) for the Year 2026-27
+
+ 01002 - Government College of Engineering, Amravati
+
+0100237210 - Electronics and Telecommunication Engg
+ Status: Government Autonomous Home University : Autonomous Institute
+
+   State Level
+
+       Stage       GOPENS          GSCS           GSTS           GNT2S         GOBCS          GSEBCS         LOPENS              LSTS          LNT1S          LNT2S         LSEBCS       PWDOBCS        DEFOPENS          TFWS         DEFRSCS           EWS
+
+
+
+         I     20380          39602          106581         27384          21651          27580          24062             141965         48326          31582          42046          77524          72414          18927          85868          32529
+               (95.2061875)   (90.5659048)   (73.3487346)   (93.4649935)   (94.9303758)   (93.4464908)   (94.3412969)      (62.6016833)   (88.5259020)   (92.5267651)   (90.0621118)   (81.3089554)   (82.5792479)   (95.5511974)   (79.0728986)   (92.2609198)
+
+
+
+
+0100246610 - Instrumentation Engineering
+ Status: Government Autonomous Home University : Autonomous Institute
+
+   State Level
+
+       Stage       GOPENS          GSCS           GSTS          GOBCS          GSEBCS       PWDOPENS
+
+
+
+         I     20026          52918          166209         34870          40258
+               (95.3026007)   (87.3937627)   (52.8560653)   (91.7316874)   (90.4539834)
+
+
+       I-Non                                                                              34483
+       PWD                                                                                (91.8268053)
+
+
+
+0100261210 - Mechanical Engineering
+ Status: Government Autonomous Home University : Autonomous Institute
+
+   State Level
+
+       Stage       GOPENS          GSCS            GVJS         GOBCS          GSEBCS         LOPENS           LSTS             LOBCS         LSEBCS       PWDOBCS        DEFOPENS        DEFOBCS          TFWS        DEFRNT2S        ORPHANN           EWS
+
+
+
+         I     29840          52788          78502          32065          38110          40509          185970            42241          47125                         108117         149155         31876          186140                        39008
+               (92.9443952)   (87.4466038)   (81.0334862)   (92.4132948)   (90.9203835)   (90.3540690)   (43.7064846)      (90.0196524)   (88.8293119)                  (73.0844718)   (59.9509460)   (92.4767540)   (43.7064846)                  (90.7559146)
+
+
+       I-Non                                                                                                                                             30251
+       PWD                                                                                                                                               (92.8576339)
+
+
+        VII                                                                                                                                                                                                                         30250
+                                                                                                                                                                                                                                    (92.8576339)
+
+
+
+
+Legends:Start Character G-General, L-Ladies, End Character H-Home University, O-Other than Home University, S-State Level,
+ PWDR : PWD Common Reserved Seat, DEFR : Defense Common Reserved Seat.
+* Maharashtra State Seats - Cut Off Indicates State General Merit No.; Figures in bracket Indicates Merit Percentile.
+Legends for ChoiceCode : L - Regional Language, F - Female, T - TFWS, U - UnAided, K - Konkan ORPHANI - Institutional Orphan ORPHANN - Non Institutional Orphan
+
+                                                                                                1

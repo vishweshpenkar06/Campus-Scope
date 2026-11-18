@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { MessageSquare, X } from 'lucide-react'
 
 export function FeedbackButton() {
@@ -10,6 +10,15 @@ export function FeedbackButton() {
   const [email, setEmail] = useState('')
   const [state, setState] = useState<'idle' | 'sending' | 'sent'>('idle')
   const [error, setError] = useState('')
+
+  useEffect(() => {
+    if (!open) return
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setOpen(false)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [open])
 
   async function submit(event: React.FormEvent) {
     event.preventDefault()
@@ -40,17 +49,18 @@ export function FeedbackButton() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="fixed bottom-20 right-4 z-40 inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-2 text-xs font-semibold shadow-lg transition hover:border-primary hover:text-primary"
+        className="fixed bottom-20 right-4 z-40 inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-2.5 py-2 text-xs font-semibold shadow-lg transition hover:border-primary hover:text-primary sm:gap-2 sm:px-3"
       >
-        <MessageSquare className="size-4" /> Feedback
+        <MessageSquare className="size-4" />
+        <span className="sr-only sm:not-sr-only">Feedback</span>
       </button>
 
       {open && (
-        <div className="fixed inset-0 z-50 grid place-items-center bg-black/40 p-4" role="dialog" aria-modal="true" aria-label="Send feedback">
+        <div className="fixed inset-0 z-50 grid place-items-center bg-black/40 p-4" role="dialog" aria-modal="true" aria-labelledby="feedback-title">
           <div className="w-full max-w-md rounded-xl border border-border bg-card p-5 shadow-xl">
             <div className="flex items-start justify-between gap-3">
               <div>
-                <h2 className="font-serif text-xl font-semibold">What should we fix?</h2>
+                <h2 id="feedback-title" className="font-serif text-xl font-semibold">What should we fix?</h2>
                 <p className="mt-1 text-xs text-muted-foreground">
                   One thing that confused you or one number you could not trust.
                 </p>

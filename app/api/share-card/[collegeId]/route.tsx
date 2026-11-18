@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma'
 import { demoColleges } from '@/lib/demo-data'
 import { clearChance } from '@/lib/probability'
 import { logEvent } from '@/lib/telemetry'
+import { allow, clientIp } from '@/lib/rate-limit'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -11,6 +12,9 @@ export async function GET(
   request: Request,
   { params }: { params: Promise<{ collegeId: string }> }
 ) {
+  if (!(await allow(`share-card:${clientIp(request)}`, 30))) {
+    return Response.json({ error: 'Too many requests — try again in a minute.' }, { status: 429 })
+  }
   const id = Number((await params).collegeId)
   if (!Number.isInteger(id) || id <= 0) {
     return Response.json({ error: 'Invalid college' }, { status: 400 })
@@ -18,8 +22,8 @@ export async function GET(
 
   const url = new URL(request.url)
   const percentile = Number(url.searchParams.get('percentile'))
-  const branchParam = url.searchParams.get('branch') ?? ''
-  const category = url.searchParams.get('category') ?? 'OPEN'
+  const branchParam = (url.searchParams.get('branch') ?? '').slice(0, 80)
+  const category = (url.searchParams.get('category') ?? 'OPEN').slice(0, 20)
 
   let college: {
     name: string
@@ -69,6 +73,7 @@ export async function GET(
       }
     }
   } catch {
+    if (process.env.NODE_ENV === 'production') return Response.json({ error: 'College not found' }, { status: 404 })
     const fallback = demoColleges.find((item) => item.id === id)
     if (fallback) {
       college = {

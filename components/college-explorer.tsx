@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { RotateCcw, Search, SlidersHorizontal } from 'lucide-react'
 import { CollegeCard } from './college-card'
 import type { CollegeListResponse } from '@/lib/types'
+import { BRANCHES } from '@/lib/branches'
 
 type Filters = {
   q: string
@@ -76,7 +77,9 @@ export function CollegeExplorer() {
   }, [filters])
 
   useEffect(() => {
-    load()
+    // Debounce keystrokes; selects also settle before the request fires.
+    const timer = setTimeout(load, 250)
+    return () => clearTimeout(timer)
   }, [load])
 
   const activeCount = useMemo(
@@ -144,14 +147,9 @@ export function CollegeExplorer() {
               className="h-11 w-full rounded-lg border border-input bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
             >
               <option value="">All branches</option>
-              <option>Computer Engineering</option>
-              <option>Information Technology</option>
-              <option>Electronics & Telecommunication</option>
-              <option>Electronics & Communication</option>
-              <option>Mechanical Engineering</option>
-              <option>Information Technology</option>
-              <option>Electrical Engineering</option>
-              <option>Civil Engineering</option>
+              {BRANCHES.map((branch) => (
+                <option key={branch}>{branch}</option>
+              ))}
             </select>
           </label>
           <label>
@@ -202,7 +200,7 @@ export function CollegeExplorer() {
       <div className="mt-8 flex items-end justify-between">
         <div>
           <p className="text-sm font-semibold text-primary">Explore the shortlist</p>
-          <h1 className="mt-1 text-3xl font-bold tracking-tight">Find your next campus</h1>
+          <h2 className="mt-1 text-3xl font-bold tracking-tight">Find your next campus</h2>
         </div>
         {data && (
           <div className="text-right">
@@ -226,7 +224,7 @@ export function CollegeExplorer() {
           </button>
         </div>
       ) : loading ? (
-        <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div aria-busy="true" aria-label="Loading colleges" className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 6 }).map((_, index) => (
             <div key={index} className="h-64 animate-pulse rounded-xl bg-muted" />
           ))}

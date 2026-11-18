@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowUpRight, GitCompareArrows, Star, Home, Wifi, Building2 } from 'lucide-react'
 import { formatINR, formatRating, parseFacilities } from '@/lib/format'
 import { RoiBadge } from './roi-badge'
@@ -28,11 +29,12 @@ export function CollegeCard({ college }: { college: College }) {
     <article className="group overflow-hidden rounded-xl border border-border bg-card shadow-sm transition hover:shadow-md">
       <div className="relative h-40 bg-muted">
         {googleData?.photos?.[0] ? (
-          <img
+          <Image
             src={googleData.photos[0]}
             alt={college.name}
-            className="h-full w-full object-cover"
-            loading="lazy"
+            fill
+            sizes="(max-width: 768px) 100vw, 33vw"
+            className="object-cover"
             onError={(e) => {
               e.currentTarget.style.display = 'none'
               e.currentTarget.parentElement?.querySelector('.fallback-icon')?.classList.remove('hidden')
@@ -62,6 +64,11 @@ export function CollegeCard({ college }: { college: College }) {
           <span>{college.location}</span>
           <span className="size-1 bg-primary" aria-hidden="true" />
           <span>Engineering</span>
+          {college.instituteCode && (
+            <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">
+              DTE {college.instituteCode}
+            </span>
+          )}
         </div>
 
         <Link href={`/college/${college.id}`} className="group/title inline-flex items-start gap-2">
@@ -93,21 +100,36 @@ export function CollegeCard({ college }: { college: College }) {
 
         <div className="mt-4 flex items-center justify-between border-t border-border pt-4">
           <div>
-            <p className="text-xs text-muted-foreground">Annual fees from</p>
-            <p className="text-sm font-semibold">{formatINR(college.fees)}</p>
-            <div className="mt-1">
-              <RoiBadge
-                compact
-                avgPackageInr={college.placements?.[0]?.avgPackage}
-                fees={college.fees}
-                hostelFees={college.hostelAvailable ? college.hostelFees : 0}
-              />
+            {college.fees > 0 ? (
+              <>
+                <p className="text-xs text-muted-foreground">Annual fees</p>
+                <p className="text-sm font-semibold">{formatINR(college.fees)}</p>
+                <div className="mt-1">
+                  <RoiBadge
+                    compact
+                    avgPackageInr={(college.placements?.[0]?.avgPackage ?? 0) * 100000}
+                    fees={college.fees}
+                    hostelFees={college.hostelAvailable ? college.hostelFees : 0}
+                  />
+                </div>
+              </>
+            ) : college.instituteCode ? (
+              <>
+                <p className="text-xs text-muted-foreground">Official cutoff data</p>
+                <p className="text-sm font-semibold text-emerald-700">
+                  {college._count?.cutoffs ? `${college._count.cutoffs.toLocaleString('en-IN')} rows` : 'Verified source'}
+                </p>
+              </>
+            ) : (
+              <p className="text-xs font-semibold text-amber-700">Fees not verified</p>
+            )}
+          </div>
+          {college.rating > 0 && (
+            <div className="flex items-center gap-1.5 text-sm">
+              <Star className="size-3.5 fill-amber-500 text-amber-500" />
+              {formatRating(college.rating)}
             </div>
-          </div>
-          <div className="flex items-center gap-1.5 text-sm">
-            <Star className="size-3.5 fill-amber-500 text-amber-500" />
-            {formatRating(college.rating)}
-          </div>
+          )}
           <button
             onClick={(e) => {
               e.preventDefault()

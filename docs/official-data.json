@@ -1,0 +1,350 @@
+{
+  "results": [
+    {
+      "source": "2026-cap1-jee",
+      "pages": 144,
+      "parsed": 999,
+      "warnings": 0,
+      "ingest": {
+        "sourceUrl": "https://cappublicdocs2026.blob.core.windows.net/documents/2026ENGG_CAP1_AI_CutOff.pdf",
+        "sourceDocumentId": 98,
+        "rowsParsed": 999,
+        "rowsImported": 999,
+        "rowsSkipped": 0,
+        "colleges": 173
+      }
+    },
+    {
+      "source": "2026-cap2-jee",
+      "pages": 126,
+      "parsed": 999,
+      "warnings": 0,
+      "ingest": {
+        "sourceUrl": "https://cappublicdocs2026.blob.core.windows.net/documents/2026ENGG_CAP2_AI_CutOff.pdf",
+        "sourceDocumentId": 99,
+        "rowsParsed": 999,
+        "rowsImported": 999,
+        "rowsSkipped": 0,
+        "colleges": 190
+      }
+    },
+    {
+      "source": "2026-cap3-jee",
+      "pages": 106,
+      "parsed": 999,
+      "warnings": 0,
+      "ingest": {
+        "sourceUrl": "https://cappublicdocs2026.blob.core.windows.net/documents/2026ENGG_CAP3_AI_CutOff.pdf",
+        "sourceDocumentId": 97,
+        "rowsParsed": 999,
+        "rowsImported": 999,
+        "rowsSkipped": 0,
+        "colleges": 226
+      }
+    },
+    {
+      "source": "2026-cap4-jee",
+      "pages": 96,
+      "parsed": 999,
+      "warnings": 0,
+      "ingest": {
+        "sourceUrl": "https://cappublicdocs2026.blob.core.windows.net/documents/2026ENGG_CAP4_AI_CutOff.pdf",
+        "sourceDocumentId": 101,
+        "rowsParsed": 999,
+        "rowsImported": 999,
+        "rowsSkipped": 0,
+        "colleges": 243
+      }
+    },
+    {
+      "source": "2025-cap1-jee",
+      "pages": 138,
+      "parsed": 999,
+      "warnings": 0,
+      "ingest": {
+        "sourceUrl": "https://fe2026.mahacet.org/2025/2025ENGG_CAP1_AI_CutOff.pdf",
+        "sourceDocumentId": 102,
+        "rowsParsed": 999,
+        "rowsImported": 999,
+        "rowsSkipped": 0,
+        "colleges": 174
+      }
+    },
+    {
+      "source": "2025-cap2-jee",
+      "pages": 125,
+      "parsed": 991,
+      "warnings": 0,
+      "ingest": {
+        "sourceUrl": "https://fe2026.mahacet.org/2025/2025ENGG_CAP2_AI_CutOff.pdf",
+        "sourceDocumentId": 103,
+        "rowsParsed": 991,
+        "rowsImported": 991,
+        "rowsSkipped": 0,
+        "colleges": 194
+      }
+    },
+    {
+      "source": "2025-cap3-jee",
+      "pages": 104,
+      "parsed": 999,
+      "warnings": 0,
+      "ingest": {
+        "sourceUrl": "https://fe2026.mahacet.org/2025/2025ENGG_CAP3_AI_CutOff.pdf",
+        "sourceDocumentId": 104,
+        "rowsParsed": 999,
+        "rowsImported": 999,
+        "rowsSkipped": 0,
+        "colleges": 232
+      }
+    },
+    {
+      "source": "2025-cap4-jee",
+      "pages": 97,
+      "parsed": 996,
+      "warnings": 0,
+      "ingest": {
+        "sourceUrl": "https://fe2026.mahacet.org/2025/2025ENGG_CAP4_AI_CutOff.pdf",
+        "sourceDocumentId": 105,
+        "rowsParsed": 996,
+        "rowsImported": 996,
+        "rowsSkipped": 0,
+        "colleges": 235
+      }
+    },
+    {
+      "source": "2024-cap1-jee",
+      "pages": 129,
+      "parsed": 999,
+      "warnings": 0,
+      "ingest": {
+        "sourceUrl": "https://fe2026.mahacet.org/2024/2024ENGG_CAP1_AI_CutOff.pdf",
+        "sourceDocumentId": 106,
+        "rowsParsed": 999,
+        "rowsImported": 999,
+        "rowsSkipped": 0,
+        "colleges": 178
+      }
+    },
+    {
+      "source": "2024-cap2-jee",
+      "pages": 117,
+      "parsed": 993,
+      "warnings": 0,
+      "ingest": {
+        "sourceUrl": "https://fe2026.mahacet.org/2024/2024ENGG_CAP2_AI_CutOff.pdf",
+        "sourceDocumentId": 107,
+        "rowsParsed": 993,
+        "rowsImported": 993,
+        "rowsSkipped": 0,
+        "colleges": 204
+      }
+    },
+    {
+      "source": "2024-cap3-jee",
+      "pages": 100,
+      "parsed": 996,
+      "warnings": 0,
+      "ingest": {
+        "sourceUrl": "https://fe2026.mahacet.org/2024/2024ENGG_CAP3_AI_CutOff.pdf",
+        "sourceDocumentId": 108,
+        "rowsParsed": 996,
+        "rowsImported": 996,
+        "rowsSkipped": 0,
+        "colleges": 231
+      }
+    },
+    {
+      "source": "2023-cap1-jee",
+      "pages": 100,
+      "parsed": 999,
+      "warnings": 0,
+      "ingest": {
+        "sourceUrl": "https://fe2026.mahacet.org/2023/2023ENGG_CAP1_AI_CutOff.pdf",
+        "sourceDocumentId": 109,
+        "rowsParsed": 999,
+        "rowsImported": 999,
+        "rowsSkipped": 0,
+        "colleges": 270
+      }
+    },
+    {
+      "source": "2023-cap2-jee",
+      "pages": 97,
+      "parsed": 999,
+      "warnings": 0,
+      "ingest": {
+        "sourceUrl": "https://fe2026.mahacet.org/2023/2023ENGG_CAP2_AI_CutOff.pdf",
+        "sourceDocumentId": 110,
+        "rowsParsed": 999,
+        "rowsImported": 998,
+        "rowsSkipped": 1,
+        "colleges": 263
+      }
+    },
+    {
+      "source": "2023-cap3-jee",
+      "pages": 93,
+      "parsed": 999,
+      "warnings": 0,
+      "ingest": {
+        "sourceUrl": "https://fe2026.mahacet.org/2023/2023ENGG_CAP3_AI_CutOff.pdf",
+        "sourceDocumentId": 111,
+        "rowsParsed": 999,
+        "rowsImported": 998,
+        "rowsSkipped": 1,
+        "colleges": 274
+      }
+    }
+  ],
+  "report": {
+    "generatedAt": "2026-11-18T17:48:24.417Z",
+    "cutoffs": 353853,
+    "colleges": 402,
+    "documents": 28,
+    "trends": 61123,
+    "rowsMissingSourceOrOutOfRange": 0,
+    "duplicateGroups": 252,
+    "duplicateExtraRows": 301,
+    "byYear": [
+      {
+        "year": 2026,
+        "capRound": 1,
+        "rows": 36967
+      },
+      {
+        "year": 2026,
+        "capRound": 2,
+        "rows": 35283
+      },
+      {
+        "year": 2026,
+        "capRound": 3,
+        "rows": 20714
+      },
+      {
+        "year": 2026,
+        "capRound": 4,
+        "rows": 15636
+      },
+      {
+        "year": 2025,
+        "capRound": 1,
+        "rows": 35394
+      },
+      {
+        "year": 2025,
+        "capRound": 2,
+        "rows": 34344
+      },
+      {
+        "year": 2025,
+        "capRound": 3,
+        "rows": 18868
+      },
+      {
+        "year": 2025,
+        "capRound": 4,
+        "rows": 14617
+      },
+      {
+        "year": 2024,
+        "capRound": 1,
+        "rows": 32651
+      },
+      {
+        "year": 2024,
+        "capRound": 2,
+        "rows": 31646
+      },
+      {
+        "year": 2024,
+        "capRound": 3,
+        "rows": 17562
+      },
+      {
+        "year": 2023,
+        "capRound": 1,
+        "rows": 24886
+      },
+      {
+        "year": 2023,
+        "capRound": 2,
+        "rows": 21977
+      },
+      {
+        "year": 2023,
+        "capRound": 3,
+        "rows": 13308
+      }
+    ],
+    "byCategory": [
+      {
+        "category": "OPEN",
+        "rows": 92367
+      },
+      {
+        "category": "VJ/NT",
+        "rows": 54645
+      },
+      {
+        "category": "OBC",
+        "rows": 45271
+      },
+      {
+        "category": "SC",
+        "rows": 36973
+      },
+      {
+        "category": "SEBC",
+        "rows": 26994
+      },
+      {
+        "category": "ST",
+        "rows": 23544
+      },
+      {
+        "category": "DEF",
+        "rows": 19493
+      },
+      {
+        "category": "PWD",
+        "rows": 16663
+      },
+      {
+        "category": "TFWS",
+        "rows": 15668
+      },
+      {
+        "category": "EWS",
+        "rows": 13433
+      },
+      {
+        "category": "ORPHAN",
+        "rows": 5075
+      },
+      {
+        "category": "MINORITY",
+        "rows": 3727
+      }
+    ],
+    "byLevel": [
+      {
+        "level": "All India",
+        "rows": 13964
+      },
+      {
+        "level": "Home University",
+        "rows": 124781
+      },
+      {
+        "level": "Other than Home University",
+        "rows": 79632
+      },
+      {
+        "level": "State Level",
+        "rows": 135476
+      }
+    ]
+  }
+}

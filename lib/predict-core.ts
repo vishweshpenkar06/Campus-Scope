@@ -3,6 +3,7 @@ export type CutoffRow = {
   branch: string
   capRound: number
   percentile: number
+  year?: number
 }
 
 export type ClassifiedCollege = {
@@ -37,10 +38,15 @@ export function dedupeLatestRound<T extends CutoffRow>(rows: T[]): T[] {
   for (const row of rows) {
     const key = `${row.collegeId}|${row.branch}`
     const current = best.get(key)
+    const rowYear = row.year ?? 0
+    const currentYear = current?.year ?? 0
     if (
       !current ||
-      row.capRound > current.capRound ||
-      (row.capRound === current.capRound && row.percentile < current.percentile)
+      rowYear > currentYear ||
+      (rowYear === currentYear && row.capRound > current.capRound) ||
+      (rowYear === currentYear &&
+        row.capRound === current.capRound &&
+        row.percentile < current.percentile)
     ) {
       best.set(key, row)
     }

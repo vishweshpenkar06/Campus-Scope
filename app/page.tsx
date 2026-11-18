@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
 import { ArrowDown, ArrowRight, Database } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { AppShell } from '@/components/app-shell'
@@ -11,19 +12,29 @@ import { FilterBanner } from '@/components/filter-banner'
 import { AutoAllotment } from '@/components/auto-allotment'
 import { DeadlineBanner } from '@/components/deadline-banner'
 import { AskBox } from '@/components/ask/AskBox'
+import { StatsStrip } from '@/components/stats-strip'
 import type { OnboardingState } from '@/lib/types'
+
+const DataOrb = dynamic(() => import('@/components/data-orb').then((module) => module.DataOrb), {
+  ssr: false,
+  loading: () => (
+    <div className="mx-auto aspect-square w-full max-w-[560px] rounded-full border border-white/10" aria-hidden="true" />
+  ),
+})
 
 export default function Page() {
   const [onboarding, setOnboarding] = useState<OnboardingState | null>(null)
   const [showModal, setShowModal] = useState(false)
 
   useEffect(() => {
+    /* eslint-disable react-hooks/set-state-in-effect -- localStorage is only readable after mount */
     const existing = getOnboardingState()
     if (existing?.exam && existing?.percentile) {
       setOnboarding(existing)
     } else {
       setShowModal(true)
     }
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, [])
 
   function handleOnboardingComplete(state: OnboardingState) {
@@ -56,15 +67,15 @@ export default function Page() {
                 Choose a college with your eyes open.
               </h1>
               <p className="mt-7 max-w-2xl text-lg leading-8 text-muted-foreground">
-                CampusScope brings the details that matter—fees, courses, placements, and student
-                perspective—into one calm place to do your research.
+                CampusScope turns official Maharashtra CAP cutoff PDFs into a cited shortlist, an
+                explainable predictor, and a practice option form—one calm place to do your research.
               </p>
               <div className="mt-9 flex flex-wrap gap-3">
                 <Link
-                  href="#recommendations"
+                  href={hasResults ? '#recommendations' : '#explore'}
                   className="inline-flex items-center gap-2 bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground"
                 >
-                  {hasResults ? 'See your matches' : 'Start with the directory'}{' '}
+                  {hasResults ? 'See your matches' : 'Browse the directory'}{' '}
                   <ArrowDown className="size-4" />
                 </Link>
                 <Link
@@ -89,6 +100,43 @@ export default function Page() {
             </aside>
           </div>
         </section>
+
+        <section className="border-b border-foreground/10 bg-[#0b1a30] text-[#f7f3ec]">
+          <div className="mx-auto grid max-w-7xl gap-8 px-5 py-12 lg:grid-cols-[.9fr_1.1fr] lg:items-center lg:px-8 lg:py-16">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[.18em] text-[#9db8d2]">The dataset, in motion</p>
+              <h2 className="mt-3 font-serif text-4xl font-semibold tracking-tight sm:text-5xl">
+                353,853 rows. One calm surface.
+              </h2>
+              <p className="mt-4 max-w-xl text-sm leading-7 text-[#b9c9dc]">
+                Every point here is an official cutoff row, linked to the DTE PDF and page it came
+                from. Rotate the constellation, then open the methodology to see exactly how the
+                data is parsed, verified, and kept honest.
+              </p>
+              <dl className="mt-7 grid max-w-lg grid-cols-3 gap-3">
+                {[
+                  ['4 years', 'coverage'],
+                  ['R1–R4', 'CAP rounds'],
+                  ['0', 'unsourced rows'],
+                ].map(([value, label]) => (
+                  <div key={label} className="border border-white/15 px-3 py-3">
+                    <dt className="font-serif text-2xl font-semibold">{value}</dt>
+                    <dd className="mt-0.5 text-[11px] uppercase tracking-[.12em] text-[#9db8d2]">{label}</dd>
+                  </div>
+                ))}
+              </dl>
+              <Link
+                href="/methodology"
+                className="mt-7 inline-flex items-center gap-2 border border-white/25 px-4 py-2.5 text-sm font-semibold text-[#f7f3ec] transition hover:border-[#f2b35c] hover:text-[#f2b35c]"
+              >
+                See the data methodology
+              </Link>
+            </div>
+            <DataOrb />
+          </div>
+        </section>
+
+        <StatsStrip />
 
         <section id="ask" className="border-b border-foreground/10 px-5 py-16 lg:px-8">
           <div className="mx-auto max-w-4xl">

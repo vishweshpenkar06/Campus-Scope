@@ -17,16 +17,38 @@
 
 <br>
 
-**Search colleges. Read the real cutoffs. Simulate your CAP rounds.**
+**Search colleges. Read real MHT-CET + JEE cutoffs. Simulate your CAP rounds.**
 **Get percentile-matched recommendations, seat matrices, financial breakdowns, and senior insights — all from one database-backed catalog.**
 
 <br>
 
-**[Get Started](#-getting-started)** · **[Architecture](#-architecture)** · **[Features](#-features)** · **[API](#-api-endpoints)** · **[Deploy](#-deploy)** · **[Contributing](docs/CONTRIBUTING.md)** · **[Security](docs/SECURITY.md)** · **[Issues](https://github.com/vishweshpenkar06/Campus-Scope/issues)**
+**[Get Started](#-getting-started)** · **[Architecture](#-architecture)** · **[Features](#-features)** · **[API](#-api-endpoints)** · **[Deploy](#-deploy)** · **[Case Study](docs/CASE-STUDY.md)** · **[Resume Copy](docs/RESUME.md)** · **[Data Methodology](docs/OFFICIAL-DATA.md)** · **[Launch Status](docs/LAUNCH-STATUS.md)** · **[Contributing](docs/CONTRIBUTING.md)** · **[Security](docs/SECURITY.md)** · **[Issues](https://github.com/vishweshpenkar06/Campus-Scope/issues)**
 
 </div>
 
 ---
+
+## Screenshots
+
+| Home | Predictor |
+|---|---|
+| ![Home](docs/screenshots/home.png) | ![Predictor](docs/screenshots/predictor.png) |
+
+| Explore | Source-backed cutoffs |
+|---|---|
+| ![Explore](docs/screenshots/explore.png) | ![Cutoffs](docs/screenshots/cutoffs.png) |
+
+| CAP trends | Seat matrix |
+|---|---|
+| ![Trends](docs/screenshots/trends.png) | ![Seat matrix](docs/screenshots/seats.png) |
+
+| 3D data constellation | Cited Ask |
+|---|---|
+| ![3D data constellation](docs/screenshots/data-orb.png) | ![Ask](docs/screenshots/ask.png) |
+
+| Data methodology | Mobile |
+|---|---|
+| ![Methodology](docs/screenshots/methodology.png) | ![Mobile](docs/screenshots/home-mobile.png) |
 
 <br>
 
@@ -83,7 +105,7 @@ Candidate Input (Exam · Percentile · Category · Branch)
 │  fee-range/rating/branch filters, pagination          │
 ├──────────────────────────────────────────────────────┤
 │  Step 3: Prediction Core (lib/predict-core.ts)        │
-│  Matches percentiles against 2,700+ real Cutoff rows  │
+│  Matches percentiles against 353k+ official Cutoff rows │
 │  Safe ≥ cutoff+2.0 · Target ±2.0 · Reach below        │
 │  Latest-round dedupe → one honest row per college     │
 ├──────────────────────────────────────────────────────┤
@@ -158,7 +180,7 @@ Most predictors are black boxes. This one ships its math.
 Every published cutoff, trend, seat-matrix, and placement row carries its own provenance:
 `sourceUrl`, `sourceName`, `sourceDate`, `verifiedAt`, `verifiedBy`, and `confidence`.
 
-- **Staging pipeline** — `pnpm ingest --source <id>` fetches an official source, normalizes
+- **Staging pipeline** — `pnpm ingest:dte` fetches official CET and JEE CAP cutoffs, normalizes
   college/branch/category/round values, fuzzy-matches colleges, and writes `StagingRecord` rows.
 - **Human review** — `/admin/ingest` shows the incoming value next to the existing row. Nothing is
   published until an admin approves it; rejection leaves the published table untouched.
@@ -171,6 +193,12 @@ Every published cutoff, trend, seat-matrix, and placement row carries its own pr
 
 The committed ingestion fixture is synthetic and labelled `fixture` — it tests the parser and
 95% match rate, and must never be published. Real ingestion requires the current official URL.
+
+### A 3D Data Constellation
+
+The home page includes a lazy-loaded Three.js data globe. It pauses when offscreen, disposes its
+WebGL resources, and renders a static frame for `prefers-reduced-motion` users. It is decorative;
+the accessible copy and metrics carry the meaning.
 
 ### Ask in Your Own Words
 
@@ -234,7 +262,7 @@ All four are covered by `pnpm check` — assert-based suites, no test framework 
 ✅ Seat Matrix Quota Bars Per Branch
 ✅ Financial Breakdown + Interactive Scholarship Calculator
 ✅ ROI Index Across Cards, Profiles, Comparison
-✅ Safe/Target/Reach Predictor Against Real Cutoff Records
+✅ MHT-CET + JEE All-India Predictor Against Official Cutoff Records
 ✅ Logistic Probability Engine With Per-Round Percentages
 ✅ Home vs Other-than-Home University Quota Handling
 ✅ Drag-and-Drop Option Form Simulator (≤100 Choices)
@@ -253,11 +281,12 @@ All four are covered by `pnpm check` — assert-based suites, no test framework 
 ✅ Admin Analytics Dashboard (CSS Bars, No Chart Lib)
 ✅ Demo-Dataset Fallback Tagged `preview-demo`
 ✅ Global + Route Error Boundaries With Digests
-✅ 4 Self-Check Suites Via `pnpm check` + 45 Vitest assertions
+✅ 4 Self-Check Suites Via `pnpm check` + 63 Vitest assertions
 ✅ Provenance Fields + Verified/Unverified Badges + Freshness Warnings
 ✅ Staging Ingestion Pipeline With Admin Approve/Reject
 ✅ Deterministic Cron Sync (No Random Drift)
 ✅ Versioned Probability Model + Brier/Calibration Backtest
+✅ Lazy-Loaded 3D Data Constellation (Three.js, Reduced-Motion Safe)
 ✅ Natural-Language Ask Endpoint With Citations + Rules Fallback
 ✅ Counsellor Directory + Lead Pipeline + Chance-Card PNG
 ✅ Sitemap, Robots, Programmatic College Pages, JSON-LD
@@ -368,9 +397,10 @@ An **editorial research-desk direction**, built on CSS custom properties:
 4. **Set Up Database**
    ```bash
    pnpm exec prisma migrate deploy   # fresh DB (or: pnpm db:push)
-   # existing DB created with db push:
-   #   pnpm db:push && pnpm backfill:provenance
-   pnpm run db:seed                  # 34 colleges, demo cutoffs/trends/seats, forum, mentors, counsellors
+   # Official data (requires poppler-utils: pdftotext + pdfinfo):
+   pnpm ingest:dte                   # 2023–2026 CAP PDFs -> ~353k sourced cutoff rows
+   # Demo-only alternative:
+   #   pnpm seed
    ```
 
 5. **Start Development Server**
@@ -482,6 +512,10 @@ Notable constraints: unique `(userId, collegeId)` on saves, unique `(collegeId, 
 
 ```bash
 pnpm verify       # tsc + selfcheck + Vitest (required before every commit)
+pnpm lint         # ESLint 9 flat config
+pnpm ingest:dte   # official DTE cutoffs 2023–2026 (needs pdftotext + pdfinfo)
+pnpm ingest:seats # official 2026 seat matrix (~2,262 branch rows)
+pnpm ingest:dte --source 2026-cap3-mh --dry-run
 pnpm build        # production build
 pnpm ingest --source fixture-2025 --file scripts/ingest/fixtures/dte-2025.json --dry-run
 pnpm backtest     # fixture calibration report
@@ -505,7 +539,7 @@ fails if `Math.random` appears in `lib/cron-sync.ts` or `lib/data/**`.
 
 Integration verification runs the full stack against Postgres: route guards (401/403), admin review,
 cron gates, rate-limiter bursts, and seeded-data smoke tests. CI starts a Postgres service, applies
-`prisma db push`, seeds, and runs the three Playwright specs.
+`prisma db push`, seeds, and runs the four Playwright specs.
 
 ---
 
@@ -536,18 +570,23 @@ cron gates, rate-limiter bursts, and seeded-data smoke tests. CI starts a Postgr
 | POST | `/api/ask` | Natural-language query → deterministic answer + citations |
 | POST | `/api/leads` | Counsellor lead (rate-limited, Resend fallback) |
 | POST | `/api/feedback` | Pilot feedback capture |
+| GET | `/api/stats` | Public coverage counters |
+| POST | `/api/corrections` | Report a sourced-data error |
 | GET | `/api/share-card/[collegeId]` | 1080×1350 PNG chance card |
 | GET | `/api/cron/sync-cutoffs` | Bearer-gated deterministic sync |
 | GET | `/api/cron/ingest` | Bearer-gated fetch → staging (no publish) |
 | PATCH | `/api/admin/staging/[id]` | Admin approve/reject staging row |
 | PATCH | `/api/admin/leads/[id]` | Admin lead status update |
+| PATCH | `/api/admin/corrections/[id]` | Admin correction status update |
 | * | `/api/auth/[...nextauth]` | Auth.js handlers |
 
 ---
 
 ## Deploy
 
-Any Node.js 18+ host works — Railway, Render, Cloudflare, Fly.io, or containerized anywhere.
+Vercel + Neon is the supported path. Follow **[docs/DEPLOY-CHECKLIST.md](docs/DEPLOY-CHECKLIST.md)**
+for database migration, environment variables, Google OAuth redirects, cron, and post-deploy smoke
+tests. Free-key setup: [docs/FREE-KEYS.md](docs/FREE-KEYS.md). Any Node.js 20+ host works — Railway, Render, Cloudflare, Fly.io, or containerized anywhere.
 
 ```bash
 pnpm install

@@ -1,6 +1,13 @@
 import { AppShell } from '@/components/app-shell'
+import type { Metadata } from 'next'
 import { Predictor } from '@/components/predictor'
 import { AskBox } from '@/components/ask/AskBox'
+
+export const metadata: Metadata = {
+  title: 'College predictor — CampusScope',
+  description:
+    'Check Safe / Target / Reach engineering colleges against sourced Maharashtra cutoffs, with model assumptions and citations.',
+}
 
 export default function Page() {
   return (

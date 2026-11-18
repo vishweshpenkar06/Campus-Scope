@@ -1,7 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useSession, signIn, signOut } from 'next-auth/react'
+import Link from 'next/link'
+import { useSession, signOut } from 'next-auth/react'
 import { LogIn, LogOut } from 'lucide-react'
 
 export function AuthButton() {
@@ -33,12 +34,12 @@ export function AuthButton() {
       </button>
     </span>
   ) : (
-    <button
-      onClick={() => signIn('google')}
+    <Link
+      href="/signin"
       className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
     >
       <LogIn className="size-4" />
       Sign in
-    </button>
+    </Link>
   )
 }

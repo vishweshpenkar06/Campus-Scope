@@ -21,7 +21,9 @@ export async function GET(request: Request) {
   }
 
   try {
-    const source = resolveSource(sourceId, url.searchParams.get('url') ?? undefined)
+    // Only the server-side registry/env may choose the URL. Do not accept an
+    // arbitrary URL in the cron request (SSRF).
+    const source = resolveSource(sourceId)
     const fetched = await fetchSource(source.url)
     const format = detectFormat(fetched.contentType, source.url)
     const records = await extractRecords({ bytes: fetched.bytes, format })

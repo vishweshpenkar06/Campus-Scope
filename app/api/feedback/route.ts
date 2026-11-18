@@ -13,7 +13,7 @@ const schema = z.object({
 })
 
 export async function POST(request: Request) {
-  if (!allow(`feedback:${clientIp(request)}`, 5)) {
+  if (!(await allow(`feedback:${clientIp(request)}`, 5))) {
     return Response.json({ error: 'Too many submissions — try again in a minute.' }, { status: 429 })
   }
   const parsed = schema.safeParse(await request.json().catch(() => null))

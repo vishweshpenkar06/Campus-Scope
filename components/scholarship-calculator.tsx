@@ -45,7 +45,6 @@ export function ScholarshipCalculator({
 
       {open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm" onClick={() => setOpen(false)}>
-          {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
           <div
             role="dialog"
             aria-label="Scholarship calculator"

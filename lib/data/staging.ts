@@ -40,12 +40,19 @@ export type StagingPayload = {
 export async function stageRecords(prisma: PrismaClient, input: StageInput): Promise<StageResult> {
   const source = await prisma.dataSource.upsert({
     where: { name: input.sourceName },
-    update: { url: input.sourceUrl, license: input.license ?? undefined, lastRunAt: new Date() },
+    update: {
+      url: input.sourceUrl,
+      license: input.license ?? undefined,
+      lastRunAt: new Date(),
+      ...(input.sourceName.startsWith('fixture') ? { status: 'inactive' } : {}),
+    },
     create: {
       name: input.sourceName,
       url: input.sourceUrl,
       license: input.license,
       lastRunAt: new Date(),
+      // Fixture sources must never be picked up by the cron sync.
+      status: input.sourceName.startsWith('fixture') ? 'inactive' : 'active',
     },
   })
 

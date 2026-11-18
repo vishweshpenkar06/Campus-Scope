@@ -157,6 +157,15 @@
 @layer base {
   * { @apply border-border outline-ring/50; }
   html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
   body { @apply bg-background text-foreground; font-feature-settings: 'ss01' 1, 'cv11' 1; }
   ::selection { background: oklch(0.78 0.09 190); color: oklch(0.16 0.03 250); }
 }

@@ -1,6 +1,8 @@
 import { prisma } from '@/lib/prisma'
 import { compareIdsSchema, errorResponse } from '@/lib/validation'
 
+const PUBLIC_CACHE = { 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=30' }
+
 export async function GET(request: Request) {
   try {
     const ids = new URL(request.url).searchParams.get('ids')?.split(',') ?? []
@@ -10,6 +12,6 @@ export async function GET(request: Request) {
     const found = new Set(colleges.map((college) => college.id))
     const missing = parsed.data.filter((id) => !found.has(id))
     if (missing.length) return errorResponse('Some colleges were not found', 400, { missingIds: missing })
-    return Response.json({ data: parsed.data.map((id) => colleges.find((college) => college.id === id)) })
+    return Response.json({ data: parsed.data.map((id) => colleges.find((college) => college.id === id)) }, { headers: PUBLIC_CACHE })
   } catch { return errorResponse('Unable to compare colleges', 500) }
 }

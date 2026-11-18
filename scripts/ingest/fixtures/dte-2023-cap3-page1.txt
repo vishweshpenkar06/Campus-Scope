@@ -1,0 +1,85 @@
+   D                                                                                                                               Government of Maharashtra
+   i                                                                                                                           State Common Entrance Test Cell
+   r                                         Cut Off List for Maharashtra & Minority Seats of CAP Round - III for the Admission to the First Year Under Graduate Technical Courses in Engineering and Technology (4 Years) &
+                                                                                            Master of Engineering and Technology (Integrated 5 Years) Admissions A.Y. 2023-24
+
+ 1002 - Government College of Engineering, Amravati
+
+100219110 - Civil Engineering
+ Status: Government Autonomous
+
+   State Level
+
+       Stage      GOPENS         GOBCS             LOPENS           LSTS          TFWS        DEFROBCS             ORPHAN
+
+
+
+         I     41293          42935             20303                         44323          129672
+               (82.5401330)   (82.1650299)      (91.7656790)                  (81.2344165)   (20.3198986)
+
+
+         II                                                    66083
+                                                               (70.6180504)
+
+
+        VII                                                                                                     45169
+                                                                                                                (81.0090469)
+
+
+
+100224210 - Computer Science and Engineering
+ Status: Government Autonomous
+
+   State Level
+
+       Stage      GOPENS           GVJS              EWS
+
+
+
+         I     5640           23177             10798
+               (97.8185350)   (90.6234798)      (95.7719768)
+
+
+
+
+100224610 - Information Technology
+ Status: Government Autonomous
+
+   State Level
+
+       Stage      GOPENS          GSCS              GNT3S
+
+
+
+         I     7015           17291             25898
+               (97.2746725)   (93.1024197)      (89.4065093)
+
+
+
+
+100229310 - Electrical Engineering
+ Status: Government Autonomous
+
+   State Level
+
+       Stage       GSCS          LOPENS              LSTS          LNT3S       PWDOPENS          TFWS                EWS
+
+
+
+         I     43807          23573             139232         110694                        27067              39749
+               (81.4853713)   (90.4938272)      (7.5516424)    (39.9066862)                  (88.9154021)       (83.3890161)
+
+
+       I-Non                                                                  16325
+       PWD                                                                    (93.5213570)
+
+
+
+
+Legends:Start Character G-General, L-Ladies, End Character H-Home University, O-Other than Home University, S-State Level
+* Maharashtra State Seats - Cut Off Indicates State General Merit No. ; Figures in bracket Indicates MHT-CET PCM Percentile
+
+
+
+
+                                                                                                            1

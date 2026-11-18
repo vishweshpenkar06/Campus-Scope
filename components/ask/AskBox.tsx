@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { ArrowRight, Loader2, Sparkles } from 'lucide-react'
 import type { AdmissionQuery } from '@/lib/ai/query'
@@ -37,7 +37,7 @@ type AskResponse = {
 }
 
 const EXAMPLES = [
-  '85 percentile CS Mumbai',
+  '85 percentile CS Pune',
   'Compare COEP vs VJTI for computer engineering',
   'Last date for CAP round 3',
   'Fees under 1.5 lakh',
@@ -48,6 +48,17 @@ export function AskBox({ compact = false }: { compact?: boolean }) {
   const [result, setResult] = useState<AskResponse | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const resultRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!result) return
+    if (window.matchMedia('(max-width: 767px)').matches) {
+      resultRef.current?.scrollIntoView({
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+        block: 'start',
+      })
+    }
+  }, [result])
 
   async function ask(text: string, slots?: AdmissionQuery) {
     if (text.trim().length < 3) return
@@ -88,7 +99,7 @@ export function AskBox({ compact = false }: { compact?: boolean }) {
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             maxLength={500}
-            placeholder="e.g. 88 percentile OBC, computer engineering in Pune"
+            placeholder="e.g. 88 percentile OBC, CS in Pune"
             className="h-11 flex-1 rounded-lg border border-input bg-background px-3 text-sm outline-none placeholder:text-muted-foreground focus:ring-2 focus:ring-ring"
           />
           <button
@@ -124,7 +135,7 @@ export function AskBox({ compact = false }: { compact?: boolean }) {
       )}
 
       {result && (
-        <div className="mt-5 grid gap-4 border-t border-border pt-4">
+        <div ref={resultRef} aria-live="polite" className="mt-5 grid scroll-mt-4 gap-4 border-t border-border pt-4">
           <UnderstoodChips
             query={result.understood}
             onChange={(slots) => ask(query, slots)}

@@ -18,8 +18,8 @@ export const demoColleges = [
       {
         id: 101,
         year: 2024,
-        avgPackage: 3600000,
-        highestPackage: 12000000,
+        avgPackage: 36,
+        highestPackage: 120,
         placementRate: 92,
       },
     ],
@@ -53,8 +53,8 @@ export const demoColleges = [
       {
         id: 201,
         year: 2024,
-        avgPackage: 1890000,
-        highestPackage: 6000000,
+        avgPackage: 18.9,
+        highestPackage: 60,
         placementRate: 88,
       },
     ],
@@ -94,8 +94,8 @@ export const demoColleges = [
       {
         id: 301,
         year: 2024,
-        avgPackage: 890000,
-        highestPackage: 4400000,
+        avgPackage: 8.9,
+        highestPackage: 44,
         placementRate: 82,
       },
     ],

@@ -1,6 +1,9 @@
 import { z } from 'zod'
 import { prisma } from '@/lib/prisma'
 
+const PUBLIC_CACHE = { 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=30' }
+
+
 const querySchema = z.object({
   branch: z.string().trim().max(120).optional(),
 })
@@ -19,9 +22,9 @@ export async function GET(request: Request) {
       take: 50,
       include: { college: { select: { id: true, name: true, location: true } } },
     })
-    return Response.json({ data })
+    return Response.json({ data }, { headers: PUBLIC_CACHE })
   } catch {
     // feed degrades silently — same policy as the deadline banner
-    return Response.json({ data: [], source: 'unavailable' })
+    return Response.json({ data: [], source: 'unavailable' }, { headers: PUBLIC_CACHE })
   }
 }

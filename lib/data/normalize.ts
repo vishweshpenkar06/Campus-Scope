@@ -13,6 +13,7 @@ export const CATEGORIES = [
   'PWD',
   'DEF',
   'ORPHAN',
+  'MINORITY',
   'JKM',
 ] as const
 
@@ -56,6 +57,10 @@ const BRANCH_SYNONYMS: Record<string, string> = {
   IT: 'Information Technology',
   'ELECTRONICS AND TELECOMMUNICATION': 'Electronics & Telecommunication',
   'ELECTRONICS & TELECOMMUNICATION': 'Electronics & Telecommunication',
+  'ELECTRONICS AND TELECOMMUNICATION ENGG': 'Electronics & Telecommunication',
+  'ELECTRONICS & TELECOMMUNICATION ENGG': 'Electronics & Telecommunication',
+  'ELECTRONICS AND COMPUTER ENGINEERING': 'Electronics & Computer Engineering',
+  'ELECTRONICS & COMPUTER ENGINEERING': 'Electronics & Computer Engineering',
   'ELECTRONICS AND COMMUNICATION': 'Electronics & Communication',
   'ELECTRONICS & COMMUNICATION': 'Electronics & Communication',
   ECE: 'Electronics & Communication',
@@ -72,6 +77,11 @@ const BRANCH_SYNONYMS: Record<string, string> = {
   'ARTIFICIAL INTELLIGENCE': 'Artificial Intelligence & Data Science',
   'AI AND DATA SCIENCE': 'Artificial Intelligence & Data Science',
   'AI & DATA SCIENCE': 'Artificial Intelligence & Data Science',
+  'ARTIFICIAL INTELLIGENCE AND DATA SCIENCE': 'Artificial Intelligence & Data Science',
+  'ARTIFICIAL INTELLIGENCE & DATA SCIENCE': 'Artificial Intelligence & Data Science',
+  'ARTIFICIAL INTELLIGENCE (AI) AND DATA SCIENCE': 'Artificial Intelligence & Data Science',
+  'ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING': 'Artificial Intelligence & Machine Learning',
+  'ARTIFICIAL INTELLIGENCE & MACHINE LEARNING': 'Artificial Intelligence & Machine Learning',
   AIDS: 'Artificial Intelligence & Data Science',
 }
 

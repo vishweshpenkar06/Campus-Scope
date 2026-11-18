@@ -21,6 +21,12 @@ const deduped = dedupeLatestRound(rows)
 assert.equal(deduped.length, 2)
 assert.equal(deduped[0].capRound, 3)
 assert.equal(deduped[0].percentile, 91.5)
+// newer year always outranks a later round from an older year
+const yearRows = [
+  { collegeId: 1, branch: 'CS', capRound: 3, percentile: 88, year: 2024 },
+  { collegeId: 1, branch: 'CS', capRound: 1, percentile: 95, year: 2026 },
+]
+assert.equal(dedupeLatestRound(yearRows)[0].year, 2026)
 
 // computeScore: no matches → no misleading bonus points
 assert.deepEqual(computeScore({ safe: 0, target: 0, reach: 0 }, 0, 50, 'Pune'), 0)

@@ -15,11 +15,15 @@ const categoryColors: Record<string, string> = {
 
 export function DeadlineBanner() {
   const [deadlines, setDeadlines] = useState<DeadlineRecord[]>([])
+  const [now, setNow] = useState<number | null>(null)
 
   useEffect(() => {
     fetch('/api/deadlines')
       .then((r) => r.json())
-      .then((body) => setDeadlines(body.data ?? []))
+      .then((body) => {
+        setDeadlines(body.data ?? [])
+        setNow(Date.now())
+      })
       .catch(() => {})
   }, [])
 
@@ -35,7 +39,7 @@ export function DeadlineBanner() {
         <div className="flex min-w-0 flex-1 items-center gap-3 overflow-x-auto pb-0.5">
           {deadlines.map((event, index) => {
             const date = new Date(event.eventDate)
-            const daysAway = Math.ceil((date.getTime() - Date.now()) / 86400000)
+            const daysAway = now === null ? null : Math.ceil((date.getTime() - now) / 86400000)
             return (
               <Link
                 key={event.id}
@@ -50,7 +54,7 @@ export function DeadlineBanner() {
                 <span className="text-sm font-medium">{event.title}</span>
                 <span className="whitespace-nowrap text-xs text-muted-foreground">
                   {date.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
-                  {daysAway <= 30 && (
+                  {daysAway !== null && daysAway <= 30 && (
                     <strong className="ml-1 text-destructive">· {daysAway}d left</strong>
                   )}
                 </span>

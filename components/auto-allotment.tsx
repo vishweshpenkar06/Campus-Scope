@@ -25,6 +25,7 @@ export function AutoAllotment({ onboarding }: { onboarding: OnboardingState }) {
 
   useEffect(() => {
     if (!onboarding.exam || !onboarding.percentile) {
+      /* eslint-disable-next-line react-hooks/set-state-in-effect -- no request to make */
       setLoading(false)
       return
     }

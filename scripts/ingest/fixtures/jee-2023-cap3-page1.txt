@@ -1,0 +1,50 @@
+                                                                                     Government of Maharashtra
+                                                                            State Common Entrance Test Cell
+                               Cut Off List for All India Seats of CAP Round - III for the Admission to the First Year Under Graduate Technical Courses in Engineering
+                                          and Technology (4 Years) & Master of Engineering and Technology (Integrated 5 Years) Admissions A.Y. 2023-24
+
+
+
+Sr. No         All India           Choice Code                                    Institute Name                                                                  Exam(JEE/
+                                                                                                                                        Course Name                                  Type       Seat Type
+                Merit                                                                                                                                             MHT-CET)
+ 1          319 (99.2779416)        600624510     6006 - COEP Technological University                                              Computer Engineering            JEE(Main)        AI to AI      AI
+
+
+ 2          562 (98.9047097)        600637210     6006 - COEP Technological University                                                  Electronics and             JEE(Main)        AI to AI      AI
+                                                                                                                                   Telecommunication Engg
+ 3          642 (98.7868142)        600626610     6006 - COEP Technological University                                               Robotics and Artificial        JEE(Main)        AI to AI      AI
+                                                                                                                                         Intelligence
+ 4          733 (98.6576473)        627124510     6271 - Pune Institute of Computer Technology, Dhankavdi, Pune                     Computer Engineering            JEE(Main)        AI to AI      AI
+
+
+ 5          762 (98.6103531)        321524210     3215 - Bhartiya Vidya Bhavan's Sardar Patel Institute of Technology , Andheri,    Computer Science and            JEE(Main)        AI to AI      AI
+                                                  Mumbai                                                                                Engineering
+ 6          825 (98.5315511)        321524510     3215 - Bhartiya Vidya Bhavan's Sardar Patel Institute of Technology , Andheri,    Computer Engineering            JEE(Main)        AI to AI      AI
+                                                  Mumbai
+ 7          843 (98.5166391)        600629310     6006 - COEP Technological University                                               Electrical Engineering         JEE(Main)        AI to AI      AI
+
+
+ 8          939 (98.3719243)        627126310     6271 - Pune Institute of Computer Technology, Dhankavdi, Pune                    Artificial Intelligence (AI)     JEE(Main)        AI to AI      AI
+                                                                                                                                       and Data Science
+ 9          967 (98.3487845)        627124610     6271 - Pune Institute of Computer Technology, Dhankavdi, Pune                     Information Technology          JEE(Main)        AI to AI      AI
+
+
+ 10         983 (98.3226020)        319924510     3199 - Shri Vile Parle Kelvani Mandal's Dwarkadas J. Sanghvi College of           Computer Engineering            JEE(Main)        AI to AI      AI
+                                                  Engineering, Vile Parle,Mumbai
+ 11        1129 (98.1414349)        319926310     3199 - Shri Vile Parle Kelvani Mandal's Dwarkadas J. Sanghvi College of          Artificial Intelligence (AI)     JEE(Main)        AI to AI      AI
+                                                  Engineering, Vile Parle,Mumbai                                                       and Data Science
+ 12        1138 (98.1300256)        627184410     6271 - Pune Institute of Computer Technology, Dhankavdi, Pune                    Electronics and Computer         JEE(Main)        AI to AI      AI
+                                                                                                                                          Engineering
+ 13        1213 (98.0127906)        319924610     3199 - Shri Vile Parle Kelvani Mandal's Dwarkadas J. Sanghvi College of           Information Technology          JEE(Main)        AI to AI      AI
+                                                  Engineering, Vile Parle,Mumbai
+ 14        1221 (98.0075208)        319991210     3199 - Shri Vile Parle Kelvani Mandal's Dwarkadas J. Sanghvi College of           Computer Science and            JEE(Main)        AI to AI      AI
+                                                  Engineering, Vile Parle,Mumbai                                                   Engineering(Data Science)
+
+
+      Cut Off Indicates All India Merit No.; Figures in bracket Indicates JEE(Main) Score/MHT-CET Percentile.; AI to AI-All India Seats Allotted to All India Candidature Candidates.
+
+
+
+                                                                                                                                                                              Page 1 of 93
+

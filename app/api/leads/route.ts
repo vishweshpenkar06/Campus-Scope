@@ -19,7 +19,7 @@ const schema = z.object({
 })
 
 export async function POST(request: Request) {
-  if (!allow(`leads:${clientIp(request)}`, 5)) {
+  if (!(await allow(`leads:${clientIp(request)}`, 5))) {
     return Response.json({ error: 'Too many requests — try again in a minute.' }, { status: 429 })
   }
 

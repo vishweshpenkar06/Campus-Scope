@@ -5,12 +5,13 @@ import Link from 'next/link'
 import { ArrowRight, CircleHelp, RotateCcw, Shield, Target, TrendingUp } from 'lucide-react'
 import type { PredictorResult } from '@/lib/types'
 import { SourceBadge } from '@/components/data/SourceBadge'
+import { BRANCHES } from '@/lib/branches'
 
 export function Predictor({ defaultExam }: { defaultExam?: 'JEE' | 'CET' }) {
   const [percentile, setPercentile] = useState('')
   const [category, setCategory] = useState('OPEN')
   const [branch, setBranch] = useState('Computer Engineering')
-  const [exam, setExam] = useState<'JEE' | 'CET'>(defaultExam || 'JEE')
+  const [exam, setExam] = useState<'JEE' | 'CET'>(defaultExam || 'CET')
   const [budget, setBudget] = useState('')
   const [location, setLocation] = useState('')
   const [result, setResult] = useState<PredictorResult | null>(null)
@@ -98,13 +99,9 @@ export function Predictor({ defaultExam }: { defaultExam?: 'JEE' | 'CET' }) {
             onChange={(e) => setBranch(e.target.value)}
             className="h-11 rounded-lg border border-input bg-background px-3 text-sm font-normal text-foreground outline-none focus:ring-2 focus:ring-ring"
           >
-            <option>Computer Engineering</option>
-            <option>Information Technology</option>
-            <option>Electronics & Telecommunication</option>
-            <option>Electronics & Communication</option>
-            <option>Mechanical Engineering</option>
-            <option>Electrical Engineering</option>
-            <option>Civil Engineering</option>
+            {BRANCHES.map((branchName) => (
+              <option key={branchName}>{branchName}</option>
+            ))}
           </select>
         </label>
 

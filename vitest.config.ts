@@ -6,6 +6,6 @@ export default defineConfig({
     alias: { '@': resolve(process.cwd()) },
   },
   test: {
-    include: ['lib/**/*.test.ts'],
+    include: ['lib/**/*.test.ts', 'scripts/**/*.test.ts'],
   },
 })

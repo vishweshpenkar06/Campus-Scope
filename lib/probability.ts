@@ -78,6 +78,9 @@ export function probabilityAssumptions(input: {
   return [
     `Model ${PROBABILITY_MODEL_VERSION}: logistic curve fitted to historical closing cutoffs, not an allotment simulation.`,
     `Inputs: ${input.exam} · ${input.category} · ${input.homeUniversity ? 'home university quota' : 'other-than-home quota'}.`,
+    input.exam === 'JEE'
+      ? 'JEE rows cover All-India seats in Maharashtra institutes from DTE CAP documents.'
+      : 'MHT-CET rows cover State, Home University, and Other-than-Home levels.',
     input.homeUniversity
       ? 'Home university quota applied.'
       : `Other-than-home quota: effective percentile reduced by ${OTHER_THAN_HOME_PENALTY} points.`,

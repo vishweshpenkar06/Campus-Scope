@@ -171,18 +171,22 @@ export default async function ProgrammaticCollegePage({
         <section className="mt-8 grid gap-4 sm:grid-cols-3">
           <div className="rounded-xl border border-border bg-card p-4">
             <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Annual tuition</p>
-            <p className="mt-1 font-serif text-2xl font-semibold">{formatINR(college.fees)}</p>
+            <p className="mt-1 font-serif text-2xl font-semibold">
+              {college.fees > 0 ? formatINR(college.fees) : 'Not verified'}
+            </p>
           </div>
           <div className="rounded-xl border border-border bg-card p-4">
             <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Latest placement</p>
             <p className="mt-1 font-serif text-2xl font-semibold">
-              {latestPlacement ? `${formatINR(Math.round(latestPlacement.avgPackage * 100000))}/yr` : 'Not recorded'}
+              {latestPlacement && latestPlacement.avgPackage > 0
+                ? `${formatINR(Math.round(latestPlacement.avgPackage * 100000))}/yr`
+                : 'Not verified'}
             </p>
           </div>
           <div className="rounded-xl border border-border bg-card p-4">
             <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Placement rate</p>
             <p className="mt-1 font-serif text-2xl font-semibold">
-              {latestPlacement ? `${latestPlacement.placementRate}%` : 'Not recorded'}
+              {latestPlacement && latestPlacement.placementRate > 0 ? `${latestPlacement.placementRate}%` : 'Not verified'}
             </p>
           </div>
         </section>

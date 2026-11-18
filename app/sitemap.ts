@@ -2,6 +2,7 @@ import type { MetadataRoute } from 'next'
 import { prisma } from '@/lib/prisma'
 import { demoColleges } from '@/lib/demo-data'
 import { SITE_URL, collegeSlug } from '@/lib/seo'
+import { BRANCHES } from '@/lib/branches'
 
 const STATIC_PATHS = [
   '',
@@ -14,20 +15,13 @@ const STATIC_PATHS = [
   '/spot-rounds',
   '/shortlist',
   '/counsellors',
+  '/methodology',
+  '/about',
+  '/privacy',
+  '/terms',
 ]
 
 const CATEGORIES = ['OPEN', 'OBC', 'SC', 'ST']
-
-const BRANCHES = [
-  'Computer Engineering',
-  'Information Technology',
-  'Electronics & Telecommunication',
-  'Electronics & Communication',
-  'Mechanical Engineering',
-  'Civil Engineering',
-  'Electrical Engineering',
-  'Artificial Intelligence & Data Science',
-]
 
 export const dynamic = 'force-dynamic'
 

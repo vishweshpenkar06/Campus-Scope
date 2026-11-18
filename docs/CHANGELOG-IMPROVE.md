@@ -115,9 +115,96 @@ see `docs/PERFORMANCE.md`.
 Acceptance note: 50 students / 20 shortlists / 100 asks / 5 leads require a deployed pilot and real
 users; the instrumentation is in place but the numbers cannot be produced in this environment.
 
+## Polish pass
+
+- Fixed the preview-directory bug: `/api/colleges` returned `{}` because the demo fallback wrapped an
+  existing `Response` in `Response.json`. Explore now renders demo cards instead of skeletons.
+- Preview/no-DB mode is quiet: college list/detail/locations skip Prisma, mentors slots return an
+  empty feed, Auth.js returns `null` session / `{}` providers, and admin auth fails closed. A crawl of
+  every page returns no 500s and no auth console errors.
+- Mobile navigation added (hamburger + full link list + Compare); desktop nav moved to `xl` so it
+  never crowds a tablet. Home CTA now targets `#explore` when no recommendations exist.
+- Accessibility: skip link, single `h1` per page, `aria-expanded`/`aria-controls` on the menu,
+  `aria-live` Ask results, labelled feedback dialog with Escape close, reduced-motion CSS and
+  reduced-motion-aware scrolling.
+- Feedback launcher becomes icon-only on mobile; footer added with trust language and official CET
+  Cell link.
+- Centralized canonical `BRANCHES`, removing duplicate options in the explorer/onboarding.
+- Fixed placement units: `Placement.avgPackage` is lakhs, demo data now matches seed, ROI callers
+  convert to INR, and the SEO page no longer prints `₹3600000L/yr`.
+- Explore search debounced 250 ms; dead `h1` in the explorer changed to `h2`.
+- Migrated `middleware.ts` to Next 16 `proxy.ts`; global API limit raised to 120/min, auth exempt,
+  and 429s return JSON with `Retry-After`.
+- Replaced the removed `next lint` command with ESLint 9 flat config; `pnpm lint` now passes with
+  0 errors and 0 warnings. Dynamic Google Places photos use `next/image`.
+- Removed a redundant `Cache-Control` header for `/_next/static` that triggered a Next.js build
+  warning; Next already ships immutable caching for hashed assets.
+
+## Official data milestone
+
+Replaced the seeded demo cutoffs with a real DTE Maharashtra pipeline:
+
+- Downloaded 14 official CAP cutoff PDFs (2023–2026, rounds 1–4 where published).
+- Built a flexible parser for 2023/2024/2025/2026 PDF layouts, including `I-Non PWD`, `I-Non Defence`,
+  minority `MH` rows, gender (`G`/`L`), level (`H`/`O`/`S`), wrapped headers, and special categories.
+- Imported **353,853 cutoff rows**, **402 DTE institutes**, **28 source documents**, and **61,123
+  derived trend rows** with source URL, page, document hash, and verification timestamp.
+- Added `SourceDocument`, `instituteCode`, `branchCode`, `categoryCode`, `rank`, `stage`, `level`,
+  and `seatType`; removed fuzzy college matching in favor of official institute codes.
+- Added `pnpm ingest:dte`, `--dry-run`, `--source`, `--skip-download`, and `docs/OFFICIAL-DATA.md`.
+- Data QA: 0 rows missing source/out of range; duplicates down to 134 after level/section fixes.
+- Added a 2026 seat-matrix parser: 2,262 branch rows with OPEN/OBC/SC/ST/TFWS and All-India seats.
+- Added a lazy-loaded Three.js data constellation to the home page; it pauses offscreen, disposes WebGL
+  resources, and renders a static frame for reduced-motion users.
+- Added `/methodology` trust center, `/about`, `/privacy`, `/terms`, and a visible "Official DTE data"
+  banner. Fees/placements/reviews are hidden or marked unverified until sourced.
+- Predictor now returns a balanced Safe/Target/Reach mix; Ask does the same and no longer claims a
+  reach is the "strongest" option.
+- Added a public correction workflow: "Report an error" on the cutoff table, `/api/corrections`,
+  and `/admin/corrections` with a review status queue.
+- Added Upstash-backed rate limiting with an in-memory fallback and tests.
+- Added live coverage stats (rows, institutes, years, PDFs) to the homepage and `/methodology`; the
+  home page now presents 353,853 rows across 4 years and 28 source PDFs.
+- Added `/about`, `/privacy`, and `/terms` beta pages, plus a trust banner on official profiles.
+- Official profiles hide unverified fees/placements/reviews instead of showing ₹0 / 0.0.
+- Search now matches DTE institute codes; branch filters use official cutoff branches.
+- Rebuilt the backtest against the official dataset; added a year-over-year cutoff carry-forward
+  metric (MAE/RMSE/bias/coverage) alongside Brier/log-loss calibration.
+
+## Deployment readiness
+
+Verified against a real local PostgreSQL 16 instance (podman), not just fixtures:
+
+- `prisma migrate deploy` applied the initial migration to a fresh DB; `prisma migrate status` reports
+  up to date and `migrate diff` against the schema is empty.
+- `pnpm seed` created 34 colleges, 2,700 cutoff rows, 1,010 trends, seat matrices, placements,
+  mentors/forum, and 3 counsellors. Legacy provenance is `legacy` / `0.5` / unverified.
+- Ingestion staged 100 fixture rows; a matched row was approved through `applyStagingRecord` and
+  wrote a verified cutoff with provenance; a rejected row only changed its staging status.
+- `/api/predict`, `/api/predict/probability`, `/api/ask`, `/api/leads`, `/api/feedback`, `/api/health`,
+  and the share-card PNG were exercised against the seeded DB.
+- `pnpm backtest --db` completed against 1,010 trend rows (fixture report kept in docs).
+- Production `next build` + `next start` passed all 4 Playwright specs against the seeded DB.
+
+Hardening added:
+
+- CSP widened for Google images/maps/Sentry, HSTS, `object-src 'none'`, base/form restrictions;
+  `unsafe-eval` is development-only.
+- Auth.js `trustHost`; `/api/health?deep=1` checks DB reachability.
+- Removed the blanket public `Cache-Control` on all APIs. Authenticated/admin/auth/ask/predict routes
+  are `private, no-store`; public read routes opt in to 60s s-maxage explicitly.
+- Rate limits on predict/share-card; ingestion refuses private hosts/SSRF targets and the cron route
+  no longer accepts a caller-supplied URL.
+- `postinstall: prisma generate`, seed refuses production unless explicitly overridden.
+- CI now runs lint, verify, fixture ingestion, ask eval, backtest, build, `migrate deploy`, seed, and
+  Playwright against a production build.
+- Added OG image, predictor/explore metadata, and `docs/DEPLOY-CHECKLIST.md`.
+
 ## Final verification
 
-- `pnpm verify`: 45 tests + 4 selfcheck suites, green.
+- `pnpm verify`: 63 tests + 4 selfcheck suites, green.
+- `pnpm e2e`: 4/4 against a production build with a seeded PostgreSQL.
+- `pnpm lint`: 0 errors, 0 warnings.
 - `pnpm build`: green, including the new admin, ask, leads, feedback, share-card, counsellor,
   programmatic-college, sitemap, and robots routes.
 - `pnpm ingest --dry-run`: 100 parsed / 95 matched.

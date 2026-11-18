@@ -16,13 +16,13 @@ const inputSchema = z.object({
   percentile: z.coerce.number().min(0).max(100),
   category: z.string().trim().min(1).max(20).default('OPEN'),
   branch: z.string().trim().max(120).optional(),
-  exam: z.enum(['JEE', 'CET']).default('JEE'),
+  exam: z.enum(['JEE', 'CET']).default('CET'),
   homeUniversity: z.coerce.boolean().default(true),
 })
 
 export async function POST(request: Request) {
   // heavy DB query endpoint — keep the free tier friendly
-  if (!allow(`probability:${clientIp(request)}`, 30)) {
+  if (!(await allow(`probability:${clientIp(request)}`, 30))) {
     return errorResponse('Too many requests — try again in a minute.', 429)
   }
   const parsed = inputSchema.safeParse(await request.json().catch(() => null))

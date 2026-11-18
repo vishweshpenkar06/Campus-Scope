@@ -1,5 +1,6 @@
 export type CollegeCard = {
   id: number
+  instituteCode?: string | null
   name: string
   location: string
   fees: number
@@ -24,7 +25,7 @@ export type CollegeCard = {
   scStConcessionPct?: number
   minorityConcessionPct?: number
   placements?: { avgPackage: number; year: number }[]
-  _count?: { courses: number; reviews: number }
+  _count?: { courses: number; reviews: number; cutoffs?: number }
 }
 
 export type CollegeDetail = Omit<CollegeCard, 'placements'> & {
@@ -51,12 +52,19 @@ export type CutoffRecord = ProvenanceFields & {
   exam: string
   capRound: number
   category: string
+  categoryCode?: string | null
   branch: string
+  branchCode?: string | null
   percentile: number
+  rank?: number | null
+  stage?: string | null
+  level?: string | null
+  seatType?: string | null
+  sourcePage?: number | null
   year: number
 }
 
-export type CapRoundTrendRecord = {
+export type CapRoundTrendRecord = ProvenanceFields & {
   id: number
   year: number
   exam: string
@@ -68,7 +76,7 @@ export type CapRoundTrendRecord = {
   spotRoundCutoff: number | null
 }
 
-export type SeatMatrixRecord = {
+export type SeatMatrixRecord = ProvenanceFields & {
   id: number
   branch: string
   totalSeats: number

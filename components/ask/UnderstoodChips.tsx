@@ -3,17 +3,7 @@
 import { useState } from 'react'
 import { Pencil, X } from 'lucide-react'
 import type { AdmissionQuery } from '@/lib/ai/query'
-
-const BRANCHES = [
-  'Computer Engineering',
-  'Information Technology',
-  'Electronics & Telecommunication',
-  'Electronics & Communication',
-  'Mechanical Engineering',
-  'Civil Engineering',
-  'Electrical Engineering',
-  'Artificial Intelligence & Data Science',
-]
+import { BRANCHES } from '@/lib/branches'
 
 const CATEGORIES = ['OPEN', 'OBC', 'SC', 'ST', 'EWS', 'TFWS', 'VJ/NT', 'SEBC', 'PWD', 'DEF', 'ORPHAN', 'JKM']
 

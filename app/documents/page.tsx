@@ -60,6 +60,7 @@ export default function DocumentsPage() {
   const [nextDeadline, setNextDeadline] = useState<DeadlineRecord | null>(null)
 
   useEffect(() => {
+    /* eslint-disable react-hooks/set-state-in-effect -- localStorage/financial year hydrate after mount */
     // computed post-mount so SSR/client markup matches (financial-year text changes yearly)
     const now = new Date()
     const startYear = now.getMonth() >= 3 ? now.getFullYear() : now.getFullYear() - 1
@@ -73,6 +74,7 @@ export default function DocumentsPage() {
         if (saved.checked) setChecked(saved.checked)
       }
     } catch {}
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, [])
 
   useEffect(() => {

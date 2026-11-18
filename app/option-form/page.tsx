@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { AppShell } from '@/components/app-shell'
 import { ArrowDown, ArrowUp, FileDown, Loader2, Printer, X } from 'lucide-react'
 import type { PredictorResult } from '@/lib/types'
+import { BRANCHES } from '@/lib/branches'
 
 type Preference = PredictorResult['matchingColleges'][number]
 
@@ -16,15 +17,7 @@ type Inputs = {
   budget: string
 }
 
-const branchOptions = [
-  'Computer Engineering',
-  'Information Technology',
-  'Electronics & Telecommunication',
-  'Electronics & Communication',
-  'Mechanical Engineering',
-  'Electrical Engineering',
-  'Civil Engineering',
-]
+const branchOptions = BRANCHES
 
 const STORAGE_KEY = 'campusscope-option-form'
 const bandStyles: Record<string, string> = {
@@ -40,7 +33,7 @@ function csvEscape(value: unknown) {
 
 export default function OptionFormPage() {
   const [inputs, setInputs] = useState<Inputs>({
-    exam: 'JEE',
+    exam: 'CET',
     percentile: '',
     category: 'OPEN',
     branches: [],
@@ -51,10 +44,12 @@ export default function OptionFormPage() {
   const [error, setError] = useState('')
 
   useEffect(() => {
+    /* eslint-disable react-hooks/set-state-in-effect -- restore saved preferences after mount */
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (raw) setPreferences(JSON.parse(raw))
     } catch {}
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, [])
 
   useEffect(() => {
@@ -266,7 +261,7 @@ export default function OptionFormPage() {
 
                 <ol data-print-root className="grid gap-2">
                   <li className="hidden w-full print:block">
-                    <h1 className="font-serif text-2xl font-bold">CAP Option Form — CampusScope</h1>
+                    <h2 className="font-serif text-2xl font-bold">CAP Option Form — CampusScope</h2>
                     <p className="text-sm text-muted-foreground">{summaryLine} · generated {new Date().toLocaleDateString('en-IN')}</p>
                   </li>
                   {preferences.map((p, index) => (

@@ -9,6 +9,7 @@ datasource db {
 
 model College {
   id                    Int                  @id @default(autoincrement())
+  instituteCode         String?              @unique
   name                  String
   location              String
   fees                  Int
@@ -43,6 +44,7 @@ model College {
   placements            Placement[]
   reviews               Review[]
   cutoffs               Cutoff[]
+  correctionRequests    CorrectionRequest[]
   capRoundTrends        CapRoundTrend[]
   seatMatrices          SeatMatrix[]
   campusInsights        CampusInsight[]
@@ -362,26 +364,69 @@ model Review {
 }
 
 model Cutoff {
-  id         Int       @id @default(autoincrement())
-  collegeId  Int
-  exam       String
-  capRound   Int
-  category   String
-  branch     String
-  percentile Float
-  year       Int
-  sourceUrl  String?
-  sourceName String?
-  sourceDate DateTime?
-  verifiedAt DateTime?
-  verifiedBy String?
-  confidence Float     @default(1.0)
-  college    College   @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  id               Int             @id @default(autoincrement())
+  collegeId        Int
+  exam             String
+  capRound         Int
+  category         String
+  categoryCode     String?
+  branch           String
+  branchCode       String?
+  percentile       Float
+  rank             Int?
+  stage            String?
+  level            String?
+  seatType         String?
+  year             Int
+  sourcePage       Int?
+  sourceDocumentId Int?
+  sourceUrl        String?
+  sourceName       String?
+  sourceDate       DateTime?
+  verifiedAt       DateTime?
+  verifiedBy       String?
+  confidence       Float           @default(1.0)
+  college          College         @relation(fields: [collegeId], references: [id], onDelete: Cascade)
+  sourceDocument   SourceDocument? @relation(fields: [sourceDocumentId], references: [id], onDelete: SetNull)
+  corrections      CorrectionRequest[]
 
   @@index([collegeId, branch, exam, year, category])
   @@index([exam, category, branch])
   @@index([percentile])
   @@index([verifiedAt])
+  @@index([sourceDocumentId])
+  @@index([collegeId, year, capRound])
+}
+
+model CorrectionRequest {
+  id        Int      @id @default(autoincrement())
+  collegeId Int?
+  cutoffId  Int?
+  message   String
+  status    String   @default("new")
+  createdAt DateTime @default(now())
+  college   College? @relation(fields: [collegeId], references: [id], onDelete: SetNull)
+  cutoff    Cutoff?  @relation(fields: [cutoffId], references: [id], onDelete: SetNull)
+
+  @@index([status, createdAt])
+}
+
+model SourceDocument {
+  id           Int       @id @default(autoincrement())
+  url          String    @unique
+  title        String
+  year         Int
+  capRound     Int
+  seatType     String    @default("Maharashtra")
+  sha256       String
+  pageCount    Int?
+  rowsImported Int       @default(0)
+  fetchedAt    DateTime  @default(now())
+  publishedAt  DateTime?
+  createdAt    DateTime  @default(now())
+  cutoffs      Cutoff[]
+
+  @@index([year, capRound])
 }
 
 // ponytail: College.fees doubles as annual tuitionFee and hostelFees as hostelFee — no duplicate columns.

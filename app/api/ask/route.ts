@@ -31,7 +31,7 @@ const DISCLAIMER =
   'Directional guidance from recorded cutoff rows, not an admission guarantee. Verify every number on the official CET Cell portal before applying.'
 
 export async function POST(request: Request) {
-  if (!allow(`ask:${clientIp(request)}`, 20)) {
+  if (!(await allow(`ask:${clientIp(request)}`, 20))) {
     return Response.json({ error: 'Too many questions — try again in a minute.' }, { status: 429 })
   }
 
@@ -116,25 +116,45 @@ async function answerPredict(query: AdmissionQuery) {
     return true
   })
 
-  const results = filtered
-    .map((row) => {
-      const chance = clearChance(effective, row.percentile)
-      return {
-        collegeId: row.college.id,
-        college: row.college.name,
-        location: row.college.location,
-        branch: row.branch,
-        cutoff: row.percentile,
-        year: row.year,
-        capRound: row.capRound,
-        chance: Math.round(chance * 1000) / 1000,
-        classification: classify(query.percentile!, row.percentile),
-        verified: Boolean(row.verifiedAt && row.sourceUrl),
-        citation: citationFor(row),
+  const scored = filtered.map((row) => {
+    const chance = clearChance(effective, row.percentile)
+    const classification = classify(query.percentile!, row.percentile)
+    return {
+      collegeId: row.college.id,
+      college: row.college.name,
+      location: row.college.location,
+      branch: row.branch,
+      cutoff: row.percentile,
+      year: row.year,
+      capRound: row.capRound,
+      chance: Math.round(chance * 1000) / 1000,
+      classification,
+      distance: Math.abs(row.percentile - query.percentile!),
+      verified: Boolean(row.verifiedAt && row.sourceUrl),
+      citation: citationFor(row),
+    }
+  })
+
+  const picked: typeof scored = []
+  const add = (items: typeof scored) => {
+    for (const item of items) {
+      if (picked.length >= 8) return
+      if (!picked.some((existing) => existing.collegeId === item.collegeId && existing.branch === item.branch)) {
+        picked.push(item)
       }
-    })
-    .sort((a, b) => b.chance - a.chance)
-    .slice(0, 8)
+    }
+  }
+  // Show the most useful mix: target first, then safe, then closest reaches.
+  for (const bucket of ['Target', 'Safe', 'Reach'] as const) {
+    add(
+      scored
+        .filter((item) => item.classification === bucket)
+        .sort((a, b) => a.distance - b.distance)
+        .slice(0, 4)
+    )
+  }
+  add(scored.sort((a, b) => a.distance - b.distance))
+  const results = picked.slice(0, 8)
 
   const citations = uniqueCitations(results.map((result) => result.citation))
   if (!citations.length) citations.push(...OFFICIAL_CITATIONS)
@@ -148,10 +168,13 @@ async function answerPredict(query: AdmissionQuery) {
     }
   }
 
-  const best = results[0]
   const safe = results.filter((result) => result.classification === 'Safe').length
+  const target = results.filter((result) => result.classification === 'Target').length
+  const reach = results.filter((result) => result.classification === 'Reach').length
   const unverified = results.filter((result) => !result.verified).length
-  const answer = `With ${query.percentile} percentile (${exam} · ${category}), the strongest recorded option is ${best.college} for ${best.branch}, closing at ${best.cutoff} in round ${best.capRound} ${best.year}. ${safe} of the ${results.length} listed rows read as Safe, ${results.length - safe} as Target/Reach.${unverified ? ` ${unverified} row(s) are legacy/unverified — check the citation badge.` : ''}`
+  const best = results.find((result) => result.classification !== 'Reach') ?? results[0]
+  const bestLabel = best.classification === 'Reach' ? 'closest recorded option' : 'best realistic option'
+  const answer = `With ${query.percentile} percentile (${exam} · ${category}), I found ${safe} Safe, ${target} Target, and ${reach} Reach row(s). The ${bestLabel} is ${best.college} for ${best.branch}, closing at ${best.cutoff} in round ${best.capRound} ${best.year}.${best.classification === 'Reach' ? ' Widen the branch, city, or budget to find safer options.' : ''}${unverified ? ` ${unverified} row(s) are unverified — check the citation badge.` : ''}`
 
   return {
     answer,
@@ -289,6 +312,9 @@ function answerUnknown(query: AdmissionQuery) {
 function assumptionsFor(query: AdmissionQuery, homeUniversity: boolean) {
   return [
     `Exam: ${query.exam ?? 'MHT-CET (default)'}.`,
+    query.exam === 'JEE'
+      ? 'JEE rows cover All-India seats in Maharashtra institutes from DTE CAP documents.'
+      : 'MHT-CET rows cover State, Home University, and Other-than-Home levels.',
     `Category: ${query.category ?? 'OPEN (default)'}.`,
     homeUniversity ? 'Home university quota assumed.' : 'Other-than-home quota applied (3-point penalty).',
     query.branch ? `Branch filter: ${query.branch}.` : 'All branches considered.',

@@ -1,5 +1,12 @@
+import type { Metadata } from 'next'
 import { AppShell } from '@/components/app-shell'
 import { CollegeExplorer } from '@/components/college-explorer'
+
+export const metadata: Metadata = {
+  title: 'Explore colleges — CampusScope',
+  description:
+    'Search Maharashtra engineering colleges by city, branch, fees, and rating. Every cutoff row carries its source.',
+}
 
 export default function Page() {
   return (

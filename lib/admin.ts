@@ -12,7 +12,7 @@ export function adminEmails(): string[] {
 export async function adminEmail(): Promise<string | null> {
   const admins = adminEmails()
   if (!admins.length) return null
-  const session = await auth()
+  const session = await auth().catch(() => null)
   const email = session?.user?.email?.toLowerCase() ?? ''
   return email && admins.includes(email) ? email : null
 }

@@ -47,7 +47,7 @@ async function loadRows(): Promise<{ rows: TrendRow[]; source: string }> {
         round3Cutoff: row.round3Cutoff,
         spotRoundCutoff: row.spotRoundCutoff,
       })),
-      source: 'production database (CapRoundTrend)',
+      source: 'database (CapRoundTrend)',
     }
   } finally {
     await prisma.$disconnect()
@@ -65,6 +65,36 @@ function candidates(row: TrendRow): number[] {
     row.round3Cutoff - 2,
   ]
   return [...new Set(values.filter((value) => value >= 0 && value <= 100).map((v) => Math.round(v * 100) / 100))]
+}
+
+function yearOverYearForecast(rows: TrendRow[]) {
+  const byKey = new Map<string, Map<number, number>>()
+  for (const row of rows) {
+    const key = `${row.collegeId}|${row.branch}|${row.category}|${row.exam}`
+    const years = byKey.get(key) ?? new Map<number, number>()
+    years.set(row.year, row.round3Cutoff)
+    byKey.set(key, years)
+  }
+  const errors: Array<{ key: string; predicted: number; actual: number; error: number }> = []
+  for (const [key, years] of byKey) {
+    const sorted = [...years.keys()].sort()
+    for (let index = 1; index < sorted.length; index++) {
+      const previous = years.get(sorted[index - 1])!
+      const actual = years.get(sorted[index])!
+      errors.push({ key, predicted: previous, actual, error: previous - actual })
+    }
+  }
+  if (!errors.length) return null
+  const mae = errors.reduce((sum, item) => sum + Math.abs(item.error), 0) / errors.length
+  const rmse = Math.sqrt(errors.reduce((sum, item) => sum + item.error ** 2, 0) / errors.length)
+  const bias = errors.reduce((sum, item) => sum + item.error, 0) / errors.length
+  return {
+    pairs: errors.length,
+    mae: round(mae, 3),
+    rmse: round(rmse, 3),
+    bias: round(bias, 3),
+    coverage: round(new Set(errors.map((item) => item.key)).size / byKey.size, 3),
+  }
 }
 
 function metrics(observations: Observation[]) {
@@ -126,6 +156,7 @@ async function main() {
   }
 
   const result = metrics(observations)
+  const forecast = yearOverYearForecast(rows)
   const payload = {
     generatedAt: new Date().toISOString(),
     modelVersion: PROBABILITY_MODEL_VERSION,
@@ -133,6 +164,7 @@ async function main() {
     rows: rows.length,
     observations: observations.length,
     synthetic: !db,
+    forecast,
     ...result,
   }
 
@@ -169,6 +201,18 @@ Generated ${payload.generatedAt.slice(0, 10)} · model \`${PROBABILITY_MODEL_VER
 
 Lower Brier and log loss are better. Accuracy is reported for completeness; calibration is the useful signal.
 
+${forecast ? `## Year-over-year cutoff carry-forward
+
+For each matching college/branch/category/exam, last year's Round 3 cutoff is used as the prediction for this year's Round 3 cutoff.
+
+| Metric | Value |
+|---|---:|
+| Matched year pairs | ${forecast.pairs} |
+| MAE | ${forecast.mae} percentile points |
+| RMSE | ${forecast.rmse} percentile points |
+| Bias | ${forecast.bias} percentile points |
+| Coverage | ${forecast.coverage} |` : ''}
+
 ## Calibration
 
 | Predicted bucket | n | Mean predicted | Observed rate |
@@ -180,9 +224,11 @@ ${table}
 - A trend row carries the three closing cutoffs, so the Round 3 cutoff is known when scoring. This
   measures whether the logistic curve turns the cutoff into a coherent probability, not whether the
   cutoff itself can be forecast from earlier information.
-- The default source is a committed synthetic fixture used to verify the pipeline. Rerun against the
-  production database for a real calibration report.
-- Candidate percentiles are sampled around the cutoffs; they are not a population of real applicants.
+- The year-over-year carry-forward is a naive baseline: it predicts this year's Round 3 cutoff from
+  last year's Round 3 cutoff. An MAE around 11 percentile points is a warning against marketing it
+  as a forecast.
+- This run used ${source}. Candidate percentiles are sampled around the cutoffs; they are not a
+  population of real applicants.
 
 ## Reproduce
 

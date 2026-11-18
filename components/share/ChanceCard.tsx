@@ -20,10 +20,12 @@ export function ChanceCard({
   const [branch, setBranch] = useState('')
 
   useEffect(() => {
+    /* eslint-disable react-hooks/set-state-in-effect -- prefill from the saved onboarding state */
     const state = getOnboardingState()
     if (state?.percentile) setPercentile(String(state.percentile))
     if (state?.category) setCategory(state.category)
     if (state?.branch && state.branch !== 'All Branches') setBranch(state.branch)
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, [])
 
   const branches = useMemo(() => [...new Set(cutoffs.map((cutoff) => cutoff.branch))], [cutoffs])

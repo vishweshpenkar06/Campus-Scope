@@ -1,0 +1,74 @@
+  D                                                                                                                                 Government of Maharashtra
+  i                                                                                                                         State Common Entrance Test Cell
+  r                                                                                Cut Off List for Maharashtra & Minority Seats of CAP Round I for Admission to First Year of Four Year
+                                                                      Degree Courses In Engineering and Technology & Master of Engineering and Technology (Integrated 5 Years) for the Year 2024-25
+
+01002 - Government College of Engineering, Amravati
+
+0100219110 - Civil Engineering
+Status: Government Autonomous Home University : Autonomous Institute
+
+  State Level
+
+      Stage      GOPENS          GSCS            GSTS           GVJS           GNT1S          GNT2S              GNT3S           GOBCS          GSEBCS         LOPENS           LSCS           LSTS           LVJS          LNT2S          LOBCS         LSEBCS       PWDOPENS       PWDOBCS        DEFOPENS        DEFOBCS          TFWS        PWDROBC        DEFRSEBC           EWS
+                                                                                                                                                                                                                                                                                                                                                    S               S
+
+
+       I      34240          62739          91124          54224           34281          41658              35923            42649          69130          35071          47557          89332          54046          80230          47396          112136         115494         153595         88930          124882         41891          155782         120638         90204
+              (88.5013511)   (77.8445199)   (65.8812284)   (81.2928705)    (88.4426131)   (85.7455441)       (87.8945473)     (85.3822102)   (75.3516004)   (88.1228442)   (83.6393990)   (66.8505265)   (81.3738935)   (70.8722936)   (83.6467428)   (55.2318816)   (53.7694785)   (27.6622718)   (67.0458361)   (47.9842799)   (85.5352459)   (25.6482713)   (50.6340761)   (66.1855163)
+
+
+
+
+0100224210 - Computer Science and Engineering
+Status: Government Autonomous Home University : Autonomous Institute
+
+  State Level
+
+      Stage      GOPENS          GSCS            GSTS           GVJS           GNT1S          GNT2S             GOBCS            GSEBCS         LOPENS           LSCS           LSTS          LNT1S          LNT3S          LOBCS         LSEBCS       PWDOPENS       PWDOBCS        DEFOPENS        DEFOBCS          TFWS         PWDRSCS       DEFROBCS         ORPHAN           EWS
+
+
+
+       I      7872           17571          56026          17052           16746          16443              8931             15942          9308           15485          45930          20457          23863          9823           15409          33711          49777          27598          36001          5518           46875          31634          40407          13851
+              (97.3911937)   (94.1713006)   (80.5896708)   (94.3331807)    (94.4433332)   (94.5541467)       (97.0436452)     (94.6903844)   (96.9066937)   (94.8376426)   (84.2430574)   (93.2139295)   (92.0214155)   (96.7545639)   (94.8397684)   (88.6037289)   (82.7778711)   (90.7773660)   (87.8152279)   (98.1177725)   (83.7529730)   (89.3071786)   (86.1764583)   (95.3932298)
+
+
+
+
+0100224610 - Information Technology
+Status: Government Autonomous Home University : Autonomous Institute
+
+  State Level
+
+      Stage      GOPENS          GSCS            GSTS           GVJS           GNT1S          GNT2S              GNT3S           GOBCS          GSEBCS         LOPENS           LSCS           LSTS          LNT2S          LOBCS         LSEBCS       PWDOPENS       PWDOBCS        DEFOPENS        DEFOBCS          TFWS         PWDRSCS       DEFRNT1S         ORPHAN           EWS
+
+
+
+       I      12001          22810          57428          22090           22548          18106              17692            12727          18460          11632          22774          62455          20674          12683          19600          84120          109674         33941          51336          9964           87457          37872          100069         18299
+              (96.0264086)   (92.4262209)   (80.0615027)   (92.6351162)    (92.5251996)   (93.9913601)       (94.1151780)     (95.8067495)   (93.8710080)   (96.1687682)   (92.4273158)   (78.1496564)   (93.1131822)   (95.8198477)   (93.4764585)   (69.2652564)   (57.0470967)   (88.5539410)   (82.1878954)   (96.7229568)   (67.6869909)   (87.1012785)   (61.6354671)   (93.9032684)
+
+
+
+
+0100229310 - Electrical Engineering
+Status: Government Autonomous Home University : Autonomous Institute
+
+  State Level
+
+      Stage      GOPENS          GSCS            GSTS           GVJS           GNT2S          GNT3S             GOBCS            GSEBCS         LOPENS           LSCS           LSTS           LVJS          LNT1S          LOBCS         LSEBCS       PWDOPENS       PWDOBCS        DEFOPENS        DEFOBCS          TFWS        DEFROBCS         ORPHAN           EWS
+
+
+
+       I      28736          42636          109844         40155           43440          64967              30164            47938          25978          50448          107619         43053          34017          30050          61280          126496         153875         48986          164128         27443          82621          80761          49718
+              (90.3847828)   (85.3822102)   (57.0470967)   (86.2190813)    (85.1704164)   (76.9332320)       (89.8747850)     (83.5369475)   (91.2954950)   (82.7086811)   (57.4142590)   (85.2662319)   (88.5172385)   (89.8755527)   (78.4507504)   (47.0113809)   (27.5123271)   (83.0327460)   (18.5574725)   (90.8058519)   (69.8003760)   (70.5215521)   (82.7820291)
+
+
+
+
+                                             Legends: Starting character G-General, L-Ladies, End character H-Home University, O-Other than Home University,S-State Level, AI- All India Seat.
+                                                      Maharashtra State Seats - Cut Off Indicates Maharashtra State General Merit No.; Figures in bracket Indicates Merit Percentile.
+
+
+
+
+                                                                                                         1

@@ -81,8 +81,13 @@ export default async function CounsellorsPage() {
             ))}
           </div>
         ) : (
-          <div className="mt-10 rounded-xl border border-dashed border-border p-12 text-center text-sm text-muted-foreground">
-            No counsellor profiles are published yet. Seed the database or check back after the pilot.
+          <div className="mt-10 rounded-xl border border-dashed border-border p-12 text-center">
+            <p className="font-semibold">No verified counsellor profiles yet.</p>
+            <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-muted-foreground">
+              CampusScope is onboarding a small, verified group of Maharashtra admissions counsellors.
+              We do not list unverified profiles. Use the feedback button if you want an introduction
+              or want to apply as a counsellor.
+            </p>
           </div>
         )}
       </main>

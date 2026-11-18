@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from 'react'
 import Link from 'next/link'
 import { AppShell } from '@/components/app-shell'
 import { AuthButton } from '@/components/auth-button'
-import { formatINR, formatRating } from '@/lib/format'
+import { formatINR, formatPackage, formatRating } from '@/lib/format'
 import { BookmarkCheck, Loader2, Trash2 } from 'lucide-react'
 
 type SavedItem = {
@@ -100,9 +100,11 @@ export default function ShortlistPage() {
                     {item.college.location} · {item.targetBranch} · {item.category}
                   </p>
                   <p className="mt-1 text-xs text-muted-foreground">
-                    {formatINR(item.college.fees)}/yr
-                    {' · '}★ {formatRating(item.college.rating)}
-                    {item.college.placements?.[0] ? ` · avg ${formatINR(item.college.placements[0].avgPackage)}` : ''}
+                    {item.college.fees > 0 ? `${formatINR(item.college.fees)}/yr` : 'Fees not verified'}
+                    {item.college.rating > 0 && <> · ★ {formatRating(item.college.rating)}</>}
+                    {item.college.placements?.[0] && item.college.placements[0].avgPackage > 0
+                      ? ` · avg ${formatPackage(item.college.placements[0].avgPackage)}`
+                      : ''}
                   </p>
                 </div>
                 <select

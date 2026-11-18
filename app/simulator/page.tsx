@@ -10,7 +10,7 @@ import { AlertTriangle, GripVertical, Loader2, Plus, X, Trophy } from 'lucide-re
 const MAX_CHOICES = 100
 
 export default function SimulatorPage() {
-  const [exam, setExam] = useState<'JEE' | 'CET'>('JEE')
+  const [exam, setExam] = useState<'JEE' | 'CET'>('CET')
   const [category, setCategory] = useState('OPEN')
   const [percentile, setPercentile] = useState('')
   const [choices, setChoices] = useState<SimulatorChoice[]>([])
@@ -18,6 +18,7 @@ export default function SimulatorPage() {
   const [error, setError] = useState('')
 
   useEffect(() => {
+    /* eslint-disable-next-line react-hooks/set-state-in-effect -- reset while a new pool loads */
     setPool(null)
     fetch(`/api/simulator?exam=${exam}&category=${encodeURIComponent(category)}`)
       .then(async (r) => {
