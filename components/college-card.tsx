@@ -28,27 +28,21 @@ export function CollegeCard({ college }: { college: College }) {
   return (
     <article className="group overflow-hidden rounded-xl border border-border bg-card shadow-sm transition hover:shadow-md">
       <div className="relative h-40 bg-muted">
-        {googleData?.photos?.[0] ? (
+        <div className="flex h-full items-center justify-center">
+          <Building2 className="size-12 text-muted-foreground/30" />
+        </div>
+        {(college.photoUrl || googleData?.photos?.[0]) && (
           <Image
-            src={googleData.photos[0]}
-            alt={college.name}
+            src={(college.photoUrl || googleData?.photos?.[0])!}
+            alt={`${college.name} campus`}
             fill
             sizes="(max-width: 768px) 100vw, 33vw"
+            quality={70}
             className="object-cover"
-            onError={(e) => {
-              e.currentTarget.style.display = 'none'
-              e.currentTarget.parentElement?.querySelector('.fallback-icon')?.classList.remove('hidden')
+            onError={(event) => {
+              event.currentTarget.style.display = 'none'
             }}
           />
-        ) : (
-          <div className="flex h-full items-center justify-center">
-            <Building2 className="size-12 text-muted-foreground/30 fallback-icon" />
-          </div>
-        )}
-        {googleData?.photos?.[0] && (
-          <div className="hidden absolute inset-0 flex items-center justify-center bg-muted">
-            <Building2 className="size-12 text-muted-foreground/30" />
-          </div>
         )}
         {googleData?.rating && (
           <div className="absolute right-3 top-3 flex items-center gap-1 rounded-full bg-black/70 px-2 py-1 text-xs font-semibold text-white backdrop-blur-sm">
@@ -56,6 +50,17 @@ export function CollegeCard({ college }: { college: College }) {
             {googleData.rating.toFixed(1)}
             <span className="text-white/60">({googleData.totalReviews.toLocaleString()})</span>
           </div>
+        )}
+        {college.photoUrl && college.photoCredit && (
+          <a
+            href={college.photoSourceUrl ?? college.photoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="absolute bottom-2 left-2 max-w-[85%] truncate rounded bg-black/65 px-2 py-1 text-[9px] font-medium text-white/90 hover:bg-black/80"
+            title={`Photo: ${college.photoCredit} · ${college.photoLicense ?? 'Wikimedia Commons'}`}
+          >
+            {college.photoIllustrative ? 'Illustrative · ' : ''}Photo: {college.photoCredit} · {college.photoLicense ?? 'Wikimedia'}
+          </a>
         )}
       </div>
 

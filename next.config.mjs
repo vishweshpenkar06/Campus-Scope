@@ -6,7 +6,7 @@ const csp = [
   "default-src 'self'",
   `script-src ${scriptSrc}`,
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https://places.googleapis.com https://*.googleapis.com https://*.gstatic.com https://*.googleusercontent.com",
+  "img-src 'self' data: blob: https://places.googleapis.com https://*.googleapis.com https://*.gstatic.com https://*.googleusercontent.com https://upload.wikimedia.org https://thumb.wikimedia.org",
   "font-src 'self' data:",
   "connect-src 'self' https://*.sentry.io https://accounts.google.com",
   "frame-src https://www.google.com https://maps.google.com",
@@ -32,6 +32,8 @@ const nextConfig = {
     remotePatterns: [
       { protocol: 'https', hostname: 'places.googleapis.com' },
       { protocol: 'https', hostname: 'lh3.googleusercontent.com' },
+      { protocol: 'https', hostname: 'upload.wikimedia.org' },
+      { protocol: 'https', hostname: 'thumb.wikimedia.org' },
     ],
   },
   async headers() {

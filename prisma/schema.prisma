@@ -39,6 +39,11 @@ model College {
   verifiedAt            DateTime?
   verifiedBy            String?
   confidence            Float                @default(1.0)
+  photoUrl              String?
+  photoCredit           String?
+  photoLicense          String?
+  photoSourceUrl        String?
+  photoIllustrative     Boolean              @default(false)
   createdAt             DateTime             @default(now())
   courses               Course[]
   placements            Placement[]

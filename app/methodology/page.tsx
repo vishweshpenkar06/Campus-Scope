@@ -152,6 +152,7 @@ export default async function MethodologyPage() {
             <ul className="mt-3 grid gap-2 text-sm leading-6 text-muted-foreground">
               <li>Cutoff percentile, rank, round, stage, level, category code, and page.</li>
               <li>Institute code and official institute name from the same PDF.</li>
+              <li>16 source-verified Wikimedia campus photos; other colleges use a labelled illustrative campus image.</li>
               <li>Source URL, document hash, import timestamp, and parser version.</li>
             </ul>
           </div>

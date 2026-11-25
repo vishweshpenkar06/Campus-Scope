@@ -20,6 +20,11 @@ export type CollegeCard = {
   studentFacultyRatio?: string
   nirfRank?: number
   autonomous?: boolean
+  photoUrl?: string | null
+  photoCredit?: string | null
+  photoLicense?: string | null
+  photoSourceUrl?: string | null
+  photoIllustrative?: boolean | null
   ebcConcessionPct?: number
   tfwsConcessionPct?: number
   scStConcessionPct?: number

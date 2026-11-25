@@ -99,19 +99,30 @@ export function CollegeDetail({ id }: { id: string }) {
 
   return (
     <main className="mx-auto max-w-7xl px-5 py-10 pb-28">
-      {googleData?.photos?.[0] && (
+      {(college.photoUrl || googleData?.photos?.[0]) && (
         <div className="relative mb-8 h-64 overflow-hidden rounded-xl bg-muted md:h-80">
           <Image
-            src={googleData.photos[0]}
-            alt={college.name}
+            src={(college.photoUrl || googleData?.photos?.[0])!}
+            alt={`${college.name} campus`}
             fill
             priority
-            sizes="100vw"
+            sizes="(max-width: 768px) 100vw, 1200px"
+            quality={72}
             className="object-cover"
             onError={(e) => {
               e.currentTarget.style.display = 'none'
             }}
           />
+          {college.photoUrl && college.photoCredit && (
+            <a
+              href={college.photoSourceUrl ?? college.photoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="absolute bottom-3 right-3 rounded bg-black/65 px-2.5 py-1.5 text-[10px] font-medium text-white/90 hover:bg-black/80"
+            >
+              {college.photoIllustrative ? 'Illustrative · ' : ''}Photo: {college.photoCredit} · {college.photoLicense ?? 'Wikimedia Commons'}
+            </a>
+          )}
         </div>
       )}
 

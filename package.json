@@ -32,7 +32,9 @@
     "e2e": "playwright test",
     "db:migrate": "prisma migrate deploy",
     "ingest:dte": "tsx scripts/ingest/run-official.ts",
-    "ingest:seats": "tsx scripts/ingest/seatmatrix.ts"
+    "ingest:seats": "tsx scripts/ingest/seatmatrix.ts",
+    "enrich:photos": "tsx scripts/enrich-photos.ts",
+    "photos:illustrative": "tsx scripts/assign-illustrative-photos.ts"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

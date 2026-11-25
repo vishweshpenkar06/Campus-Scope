@@ -194,6 +194,10 @@ Every published cutoff, trend, seat-matrix, and placement row carries its own pr
 The committed ingestion fixture is synthetic and labelled `fixture` — it tests the parser and
 95% match rate, and must never be published. Real ingestion requires the current official URL.
 
+### Real College Photos
+
+Cards and profiles use real Wikimedia Commons campus photographs. Direct matches carry the author and licence in a badge; colleges without a direct match use a real Maharashtra campus image clearly labelled “Illustrative”. Google Places photos are used only when a key is configured.
+
 ### A 3D Data Constellation
 
 The home page includes a lazy-loaded Three.js data globe. It pauses when offscreen, disposes its
@@ -439,7 +443,7 @@ An **editorial research-desk direction**, built on CSS custom properties:
 | `CAMPUSLM_MODEL` / `CAMPUSLM_API_KEY` | Optional CampusLM model/auth |
 | `SENTRY_DSN` | Optional Sentry error/performance capture (package installed) |
 
-Graceful degradation is built in: no Places key hides photos/landmarks; no Maps key hides commute times; no Google OAuth hides the sign-in button while keeping every other feature usable.
+Graceful degradation is built in: no Places key falls back to Wikimedia campus photos; no Maps key hides commute times; no Google OAuth hides the sign-in button while keeping every other feature usable.
 
 ---
 
@@ -515,6 +519,8 @@ pnpm verify       # tsc + selfcheck + Vitest (required before every commit)
 pnpm lint         # ESLint 9 flat config
 pnpm ingest:dte   # official DTE cutoffs 2023–2026 (needs pdftotext + pdfinfo)
 pnpm ingest:seats # official 2026 seat matrix (~2,262 branch rows)
+pnpm enrich:photos --limit=80 # Commons campus photos with attribution
+pnpm photos:illustrative # labelled fallback photos for the rest
 pnpm ingest:dte --source 2026-cap3-mh --dry-run
 pnpm build        # production build
 pnpm ingest --source fixture-2025 --file scripts/ingest/fixtures/dte-2025.json --dry-run
