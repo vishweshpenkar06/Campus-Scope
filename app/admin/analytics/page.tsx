@@ -88,6 +88,12 @@ export default async function AdminAnalyticsPage() {
   return (
     <main className="mx-auto max-w-6xl px-5 py-10 pb-28">
       <p className="eyebrow">Admin · live telemetry</p>
+      <div className="mt-2 flex gap-4 text-sm font-semibold">
+        <Link href="/admin/data" className="text-primary hover:underline">Data operations →</Link>
+        <Link href="/admin/ingest" className="text-primary hover:underline">Ingestion →</Link>
+        <Link href="/admin/leads" className="text-primary hover:underline">Leads →</Link>
+        <Link href="/admin/feedback" className="text-primary hover:underline">Feedback →</Link>
+      </div>
       <h1 className="mt-2 text-4xl font-bold tracking-tight">Analytics Dashboard</h1>
 
       <div className="mt-8 grid gap-5 lg:grid-cols-2">

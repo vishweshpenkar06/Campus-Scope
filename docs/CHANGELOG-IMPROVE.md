@@ -182,6 +182,11 @@ Replaced the seeded demo cutoffs with a real DTE Maharashtra pipeline:
 - Review fixes: dynamic college id in a11y tests, stable remount on route change, deduplicated Google
   Places fetching, and an SSRF host guard in the photo localizer.
 
+## Data operations
+
+- Added `/admin/data` with live source-document registry, coverage by year/category, freshness, duplicate groups, correction backlog, and photo coverage.
+- Linked all admin tools from the analytics dashboard.
+
 ## Localization
 
 - Added English/Marathi core UI toggle for navigation, hero, predictor, and Ask labels.
