@@ -8,7 +8,7 @@ Updated 18 Nov 2026.
 - 402 institutes with campus photos (16 source-verified Commons matches, 386 explicitly labelled illustrative); 61,123 derived trend rows; 2,262 seat-matrix rows.
 - Official institute-code matching; no fuzzy college matching in the main pipeline.
 - 0 rows missing source/out of range; 252 duplicate groups.
-- 63 automated tests + 9 Playwright specs, all green.
+- 63 automated tests + 10 Playwright specs, all green.
 - Production build + `next start` verified against a real PostgreSQL database.
 - Predictor, Ask, option form, compare, shortlist, correction queue, admin review, methodology,
   privacy/terms/about, sitemap/robots/OG image.

@@ -10,6 +10,8 @@ import { AuthButton } from './auth-button'
 import { NotificationBell } from './notification-bell'
 import { FeedbackButton } from './feedback/FeedbackButton'
 import { OfflineBadge } from './pwa/OfflineBadge'
+import { LanguageToggle } from './i18n/LanguageToggle'
+import { useLanguage } from './i18n/use-language'
 
 const MOBILE_LINKS = [
   { href: '/explore', label: 'Explore colleges' },
@@ -23,6 +25,7 @@ const MOBILE_LINKS = [
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false)
+  const { t } = useLanguage()
 
   useEffect(() => {
     if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
@@ -58,35 +61,36 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </Link>
             <nav aria-label="Primary navigation" className="hidden items-center gap-1 text-sm xl:flex">
               <Link href="/explore" className="px-3 py-2 text-muted-foreground transition hover:text-foreground">
-                Explore
+                {t('explore')}
               </Link>
               <Link href="/predictor" className="px-3 py-2 text-muted-foreground transition hover:text-foreground">
-                Predictor
+                {t('predictor')}
               </Link>
               <Link href="/simulator" className="px-3 py-2 text-muted-foreground transition hover:text-foreground">
-                Simulator
+                {t('simulator')}
               </Link>
               <Link href="/documents" className="px-3 py-2 text-muted-foreground transition hover:text-foreground">
-                Documents
+                {t('documents')}
               </Link>
               <Link href="/spot-rounds" className="px-3 py-2 text-muted-foreground transition hover:text-foreground">
-                Spot Rounds
+                {t('spotRounds')}
               </Link>
               <Link href="/shortlist" className="px-3 py-2 text-muted-foreground transition hover:text-foreground">
-                My Shortlist
+                {t('shortlist')}
               </Link>
               <Link href="/counsellors" className="px-3 py-2 text-muted-foreground transition hover:text-foreground">
-                Counsellors
+                {t('counsellors')}
               </Link>
               <Link
                 href="/compare"
                 className="ml-2 inline-flex items-center gap-2 border border-foreground/15 px-3 py-2 font-semibold transition hover:border-primary hover:text-primary"
               >
-                <GitCompareArrows className="size-4" /> Compare{' '}
+                <GitCompareArrows className="size-4" /> {t('compare')}{' '}
                 <ArrowUpRight className="size-3.5 text-muted-foreground" />
               </Link>
             </nav>
             <div className="flex items-center gap-2">
+              <LanguageToggle />
               <NotificationBell />
               <AuthButton />
               <CompareMobileNav />

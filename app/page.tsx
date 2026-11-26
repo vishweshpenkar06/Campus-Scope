@@ -13,6 +13,7 @@ import { AutoAllotment } from '@/components/auto-allotment'
 import { DeadlineBanner } from '@/components/deadline-banner'
 import { AskBox } from '@/components/ask/AskBox'
 import { StatsStrip } from '@/components/stats-strip'
+import { useLanguage } from '@/components/i18n/use-language'
 import type { OnboardingState } from '@/lib/types'
 
 const DataOrb = dynamic(() => import('@/components/data-orb').then((module) => module.DataOrb), {
@@ -23,6 +24,7 @@ const DataOrb = dynamic(() => import('@/components/data-orb').then((module) => m
 })
 
 export default function Page() {
+  const { t } = useLanguage()
   const [onboarding, setOnboarding] = useState<OnboardingState | null>(null)
   const [showModal, setShowModal] = useState(false)
 
@@ -64,25 +66,24 @@ export default function Page() {
             <div>
               <p className="eyebrow">A research desk for your next decision</p>
               <h1 className="mt-5 max-w-4xl font-serif text-6xl font-semibold leading-[.98] tracking-[-.04em] sm:text-8xl">
-                Choose a college with your eyes open.
+                {t('heroTitle')}
               </h1>
               <p className="mt-7 max-w-2xl text-lg leading-8 text-muted-foreground">
-                CampusScope turns official Maharashtra CAP cutoff PDFs into a cited shortlist, an
-                explainable predictor, and a practice option form—one calm place to do your research.
+                {t('heroText')}
               </p>
               <div className="mt-9 flex flex-wrap gap-3">
                 <Link
                   href={hasResults ? '#recommendations' : '#explore'}
                   className="inline-flex items-center gap-2 bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground"
                 >
-                  {hasResults ? 'See your matches' : 'Browse the directory'}{' '}
+                  {hasResults ? t('explore') : t('browseDirectory')}{' '}
                   <ArrowDown className="size-4" />
                 </Link>
                 <Link
                   href="#predictor"
                   className="inline-flex items-center gap-2 border border-foreground/15 px-5 py-3 text-sm font-semibold transition hover:border-primary hover:text-primary"
                 >
-                  See your starting point <ArrowRight className="size-4" />
+                  {t('startingPoint')} <ArrowRight className="size-4" />
                 </Link>
               </div>
             </div>

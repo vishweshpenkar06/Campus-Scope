@@ -5,9 +5,11 @@ import Link from 'next/link'
 import { ArrowRight, CircleHelp, RotateCcw, Shield, Target, TrendingUp } from 'lucide-react'
 import type { PredictorResult } from '@/lib/types'
 import { SourceBadge } from '@/components/data/SourceBadge'
+import { useLanguage } from '@/components/i18n/use-language'
 import { BRANCHES } from '@/lib/branches'
 
 export function Predictor({ defaultExam }: { defaultExam?: 'JEE' | 'CET' }) {
+  const { t } = useLanguage()
   const [percentile, setPercentile] = useState('')
   const [category, setCategory] = useState('OPEN')
   const [branch, setBranch] = useState('Computer Engineering')
@@ -51,7 +53,7 @@ export function Predictor({ defaultExam }: { defaultExam?: 'JEE' | 'CET' }) {
       <form onSubmit={submit} className="grid gap-4">
         <div className="grid gap-4 sm:grid-cols-2">
           <label className="grid gap-2 text-sm font-semibold">
-            Entrance Exam
+            {t('exam')}
             <select
               value={exam}
               onChange={(e) => setExam(e.target.value as 'JEE' | 'CET')}
@@ -62,7 +64,7 @@ export function Predictor({ defaultExam }: { defaultExam?: 'JEE' | 'CET' }) {
             </select>
           </label>
           <label className="grid gap-2 text-sm font-semibold">
-            Category
+            {t('category')}
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
@@ -78,7 +80,7 @@ export function Predictor({ defaultExam }: { defaultExam?: 'JEE' | 'CET' }) {
         </div>
 
         <label className="grid gap-2 text-sm font-semibold">
-          Your Percentile
+          {t('percentile')}
           <input
             required
             value={percentile}
@@ -93,7 +95,7 @@ export function Predictor({ defaultExam }: { defaultExam?: 'JEE' | 'CET' }) {
         </label>
 
         <label className="grid gap-2 text-sm font-semibold">
-          Preferred Branch
+          {t('branch')}
           <select
             value={branch}
             onChange={(e) => setBranch(e.target.value)}
@@ -132,7 +134,7 @@ export function Predictor({ defaultExam }: { defaultExam?: 'JEE' | 'CET' }) {
           disabled={loading}
           className="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-primary px-5 text-sm font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-60 sm:w-fit"
         >
-          {loading ? 'Calculating…' : 'Find my colleges'}
+          {loading ? 'Calculating…' : t('findMatches')}
           <ArrowRight className="size-4" />
         </button>
 
@@ -145,7 +147,7 @@ export function Predictor({ defaultExam }: { defaultExam?: 'JEE' | 'CET' }) {
 
       <div className="rounded-xl border border-border bg-card p-6">
         <div className="flex items-center justify-between text-sm font-semibold">
-          <span>Your Readout</span>
+          <span>{t('readout')}</span>
           <CircleHelp className="size-4 opacity-70" />
         </div>
 

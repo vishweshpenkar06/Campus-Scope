@@ -7,6 +7,7 @@ import type { AdmissionQuery } from '@/lib/ai/query'
 import type { Citation } from '@/lib/data/provenance'
 import { UnderstoodChips } from './UnderstoodChips'
 import { CitationCard } from './CitationCard'
+import { useLanguage } from '@/components/i18n/use-language'
 
 type ResultRow = {
   collegeId?: number
@@ -44,6 +45,7 @@ const EXAMPLES = [
 ]
 
 export function AskBox({ compact = false }: { compact?: boolean }) {
+  const { t } = useLanguage()
   const [query, setQuery] = useState('')
   const [result, setResult] = useState<AskResponse | null>(null)
   const [loading, setLoading] = useState(false)
@@ -91,7 +93,7 @@ export function AskBox({ compact = false }: { compact?: boolean }) {
       >
         <label htmlFor="ask-input" className="flex items-center gap-2 text-sm font-semibold">
           <Sparkles className="size-4 text-primary" />
-          Ask the admissions desk
+          {t('ask')}
         </label>
         <div className="flex flex-col gap-2 sm:flex-row">
           <input
@@ -107,7 +109,7 @@ export function AskBox({ compact = false }: { compact?: boolean }) {
             className="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-primary px-5 text-sm font-semibold text-primary-foreground hover:opacity-90 disabled:opacity-50"
           >
             {loading ? <Loader2 className="size-4 animate-spin" /> : <ArrowRight className="size-4" />}
-            Ask
+            {t('askButton')}
           </button>
         </div>
       </form>

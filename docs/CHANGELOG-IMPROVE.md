@@ -182,6 +182,12 @@ Replaced the seeded demo cutoffs with a real DTE Maharashtra pipeline:
 - Review fixes: dynamic college id in a11y tests, stable remount on route change, deduplicated Google
   Places fetching, and an SSRF host guard in the photo localizer.
 
+## Localization
+
+- Added English/Marathi core UI toggle for navigation, hero, predictor, and Ask labels.
+- Language choice persists in localStorage and updates the document language attribute.
+- Added `e2e/i18n.spec.ts`.
+
 ## AI model card and eval
 
 - Added a versioned public model card with the logistic formula, assumptions, and limitations.
