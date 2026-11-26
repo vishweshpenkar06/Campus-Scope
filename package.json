@@ -36,7 +36,8 @@
     "enrich:photos": "tsx scripts/enrich-photos.ts",
     "photos:illustrative": "tsx scripts/assign-illustrative-photos.ts",
     "photos:localize": "tsx scripts/localize-photos.ts",
-    "qa:a11y": "playwright test e2e/a11y.spec.ts"
+    "qa:a11y": "playwright test e2e/a11y.spec.ts",
+    "preflight": "tsx scripts/preflight.ts"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

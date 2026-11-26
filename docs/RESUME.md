@@ -35,7 +35,7 @@ of deterministic, cited rows.
 - 402 DTE institutes
 - 28 official source PDFs
 - 4 admission years / 4 CAP rounds
-- 63 automated tests + 11 Playwright specs
+- 66 automated tests + 11 Playwright specs
 - Brier 0.0817 · log loss 0.2813 · carry-forward MAE 11.89 percentile points
 
 ## What not to claim

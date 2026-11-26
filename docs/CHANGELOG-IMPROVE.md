@@ -182,6 +182,12 @@ Replaced the seeded demo cutoffs with a real DTE Maharashtra pipeline:
 - Review fixes: dynamic college id in a11y tests, stable remount on route change, deduplicated Google
   Places fetching, and an SSRF host guard in the photo localizer.
 
+## Final production readiness
+
+- Added optional client-side Sentry instrumentation via `NEXT_PUBLIC_SENTRY_DSN`.
+- Alert digest now sends real email through Resend when configured, with a queue-safe fallback and tests.
+- Added `pnpm preflight` to report environment and database readiness; CI runs it after seed.
+
 ## Data operations
 
 - Added `/admin/data` with live source-document registry, coverage by year/category, freshness, duplicate groups, correction backlog, and photo coverage.

@@ -286,7 +286,7 @@ All four are covered by `pnpm check` — assert-based suites, no test framework 
 ✅ Admin Analytics Dashboard (CSS Bars, No Chart Lib)
 ✅ Demo-Dataset Fallback Tagged `preview-demo`
 ✅ Global + Route Error Boundaries With Digests
-✅ 4 Self-Check Suites Via `pnpm check` + 63 Vitest assertions
+✅ 4 Self-Check Suites Via `pnpm check` + 66 Vitest assertions
 ✅ Provenance Fields + Verified/Unverified Badges + Freshness Warnings
 ✅ Staging Ingestion Pipeline With Admin Approve/Reject
 ✅ Deterministic Cron Sync (No Random Drift)
@@ -529,6 +529,7 @@ pnpm backtest     # fixture calibration report
 pnpm backtest --db
 pnpm eval:ask     # 100-query slot/citation eval
 pnpm e2e          # Playwright (needs a seeded DATABASE_URL)
+pnpm preflight    # environment + database readiness report
 ```
 
 Four assert-based suites cover the pure logic layer — no framework, no fixtures:

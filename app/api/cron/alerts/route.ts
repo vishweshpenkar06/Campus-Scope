@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma'
 import { logEvent } from '@/lib/telemetry'
+import { sendAlertEmail } from '@/lib/notifications/email'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
@@ -13,7 +14,7 @@ export async function GET(request: Request) {
 
   try {
     const [prefs, deadlines, recentCutoffs] = await Promise.all([
-      prisma.alertPreference.findMany({ where: { active: true }, select: { id: true, channel: true } }),
+      prisma.alertPreference.findMany({ where: { active: true }, select: { id: true, channel: true, identifier: true } }),
       prisma.admissionDeadline.count({ where: { eventDate: { gte: new Date() } } }),
       prisma.cutoff.count({ where: { verifiedAt: { gte: new Date(Date.now() - 86_400_000) } } }),
     ])
@@ -22,14 +23,29 @@ export async function GET(request: Request) {
       return Response.json({ data: { sent: 0, reasons: 0, ranAt: new Date().toISOString() } })
     }
 
-    const emailCount = prefs.filter((pref) => pref.channel === 'email').length
-    const whatsappCount = prefs.length - emailCount
-    logEvent('alerts', 'digest', prefs.length)
+    const emailPrefs = prefs.filter((pref) => pref.channel === 'email')
+    const whatsappCount = prefs.length - emailPrefs.length
+    const lines = [
+      `${deadlines} upcoming admission deadline(s) on record.`,
+      `${recentCutoffs} cutoff row(s) verified in the last 24 hours.`,
+      'Open CampusScope to check your shortlist and the official CET Cell portal.',
+    ]
+    const results = await Promise.all(
+      emailPrefs.map((pref) =>
+        sendAlertEmail(pref.identifier, 'CampusScope admissions update', lines)
+      )
+    )
+    const sent = results.filter((result) => result === 'sent').length
+    const failed = results.filter((result) => result === 'failed').length
+    const queued = results.filter((result) => result === 'queued').length + whatsappCount
+    logEvent('alerts', 'digest', sent + queued)
+
     return Response.json({
       data: {
         recipients: prefs.length,
-        emailCount,
-        whatsappCount,
+        sent,
+        queued,
+        failed,
         deadlines,
         recentCutoffs,
         ranAt: new Date().toISOString(),
