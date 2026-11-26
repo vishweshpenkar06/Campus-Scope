@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-11-25T17:44:56.514Z",
-  "queries": 100,
+  "generatedAt": "2026-11-26T09:15:43.953Z",
+  "queries": 120,
   "slotAccuracy": 1,
   "exactMatch": 1,
-  "expectedSlots": 408,
-  "correctSlots": 408,
+  "expectedSlots": 515,
+  "correctSlots": 515,
   "extraSlots": 2,
   "citationValidity": 1,
   "refusalRate": 1,
@@ -16,9 +16,9 @@
   },
   "byTag": {
     "predict": {
-      "cases": 60,
-      "expected": 331,
-      "correct": 331,
+      "cases": 80,
+      "expected": 438,
+      "correct": 438,
       "accuracy": 1
     },
     "deadline": {
@@ -49,6 +49,12 @@
       "cases": 6,
       "expected": 6,
       "correct": 6,
+      "accuracy": 1
+    },
+    "jee": {
+      "cases": 20,
+      "expected": 107,
+      "correct": 107,
       "accuracy": 1
     }
   },

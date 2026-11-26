@@ -36,6 +36,11 @@ export default function Page() {
         <div className="mt-12 grid gap-6 lg:grid-cols-2">
           <AlertPreferences />
           <ReferralCard />
+          <div className="rounded-xl border border-border bg-card p-5">
+            <h2 className="font-serif text-xl font-semibold">Curious how the chance is computed?</h2>
+            <p className="mt-2 text-xs leading-5 text-muted-foreground">Versioned, deterministic, and explicit about what it cannot predict.</p>
+            <Link href="/model" className="mt-3 inline-block text-sm font-semibold text-primary underline-offset-4 hover:underline">Read the model card →</Link>
+          </div>
         </div>
       </main>
     </AppShell>

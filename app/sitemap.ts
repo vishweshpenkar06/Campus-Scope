@@ -17,6 +17,8 @@ const STATIC_PATHS = [
   '/shortlist',
   '/counsellors',
   '/alerts',
+  '/guides',
+  '/model',
   '/methodology',
   '/about',
   '/privacy',

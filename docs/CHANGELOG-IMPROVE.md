@@ -182,6 +182,12 @@ Replaced the seeded demo cutoffs with a real DTE Maharashtra pipeline:
 - Review fixes: dynamic college id in a11y tests, stable remount on route change, deduplicated Google
   Places fetching, and an SSRF host guard in the photo localizer.
 
+## AI model card and eval
+
+- Added a versioned public model card with the logistic formula, assumptions, and limitations.
+- Expanded the committed Ask eval to 120 queries, including a JEE slice; slot accuracy remains 100%.
+- Added `e2e/model.spec.ts`.
+
 ## PWA foundation
 
 - Replaced the corrupted static manifest with a Next.js manifest route and added metadata links.

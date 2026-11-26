@@ -98,3 +98,23 @@
 {"query": "who won the cricket match", "expected": {"intent": "unknown"}, "tags": ["unknown"]}
 {"query": "tell me a joke", "expected": {"intent": "unknown"}, "tags": ["unknown"]}
 {"query": "good morning", "expected": {"intent": "unknown"}, "tags": ["unknown"]}
+{"query": "JEE Main 95 percentile Computer Engineering Pune", "expected": {"intent": "predict", "exam": "JEE", "percentile": 95, "branch": "Computer Engineering", "city": "Pune"}, "tags": ["predict", "jee"]}
+{"query": "95 percentile JEE OBC CSE Mumbai", "expected": {"intent": "predict", "exam": "JEE", "percentile": 95, "category": "OBC", "branch": "Computer Engineering", "city": "Mumbai"}, "tags": ["predict", "jee"]}
+{"query": "JEE 90.5 percentile EWS IT Nagpur", "expected": {"intent": "predict", "exam": "JEE", "percentile": 90.5, "category": "EWS", "branch": "Information Technology", "city": "Nagpur"}, "tags": ["predict", "jee"]}
+{"query": "What chance do I have with JEE 97 percentile OPEN CSE?", "expected": {"intent": "predict", "exam": "JEE", "percentile": 97, "category": "OPEN", "branch": "Computer Engineering"}, "tags": ["predict", "jee"]}
+{"query": "JEE 88 percentile AI Pune", "expected": {"intent": "predict", "exam": "JEE", "percentile": 88, "branch": "Artificial Intelligence & Data Science", "city": "Pune"}, "tags": ["predict", "jee"]}
+{"query": "JEE Main 92% OBC mechanical Nagpur", "expected": {"intent": "predict", "exam": "JEE", "percentile": 92, "category": "OBC", "branch": "Mechanical Engineering", "city": "Nagpur"}, "tags": ["predict", "jee"]}
+{"query": "jee 89 percentile sc Mumbai", "expected": {"intent": "predict", "exam": "JEE", "percentile": 89, "category": "SC", "city": "Mumbai"}, "tags": ["predict", "jee"]}
+{"query": "JEE 94 percentile general computer", "expected": {"intent": "predict", "exam": "JEE", "percentile": 94, "category": "OPEN", "branch": "Computer Engineering"}, "tags": ["predict", "jee"]}
+{"query": "JEE 85 percentile VJ/NT Pune", "expected": {"intent": "predict", "exam": "JEE", "percentile": 85, "category": "VJ/NT", "city": "Pune"}, "tags": ["predict", "jee"]}
+{"query": "JEE 96 percentile TFWS CS Mumbai", "expected": {"intent": "predict", "exam": "JEE", "percentile": 96, "category": "TFWS", "branch": "Computer Engineering", "city": "Mumbai"}, "tags": ["predict", "jee"]}
+{"query": "JEE 91 percentile EWS EXTC Thane", "expected": {"intent": "predict", "exam": "JEE", "percentile": 91, "category": "EWS", "branch": "Electronics & Telecommunication", "city": "Thane"}, "tags": ["predict", "jee"]}
+{"query": "JEE 87 percentile DEF mechanical Pune", "expected": {"intent": "predict", "exam": "JEE", "percentile": 87, "category": "DEF", "branch": "Mechanical Engineering", "city": "Pune"}, "tags": ["predict", "jee"]}
+{"query": "JEE 93 percentile OBC CSE Navi Mumbai", "expected": {"intent": "predict", "exam": "JEE", "percentile": 93, "category": "OBC", "branch": "Computer Engineering", "city": "Navi Mumbai"}, "tags": ["predict", "jee"]}
+{"query": "JEE 99 percentile IIT aspirant", "expected": {"intent": "predict", "exam": "JEE", "percentile": 99}, "tags": ["predict", "jee"]}
+{"query": "JEE 86 percentile AI data science Pune", "expected": {"intent": "predict", "exam": "JEE", "percentile": 86, "branch": "Artificial Intelligence & Data Science", "city": "Pune"}, "tags": ["predict", "jee"]}
+{"query": "JEE 90 percentile SC computer engineering", "expected": {"intent": "predict", "exam": "JEE", "percentile": 90, "category": "SC", "branch": "Computer Engineering"}, "tags": ["predict", "jee"]}
+{"query": "JEE 88.25 percentile ST civil Nagpur", "expected": {"intent": "predict", "exam": "JEE", "percentile": 88.25, "category": "ST", "branch": "Civil Engineering", "city": "Nagpur"}, "tags": ["predict", "jee"]}
+{"query": "JEE 95 percentile open electronics and telecommunication Mumbai", "expected": {"intent": "predict", "exam": "JEE", "percentile": 95, "category": "OPEN", "branch": "Electronics & Telecommunication", "city": "Mumbai"}, "tags": ["predict", "jee"]}
+{"query": "JEE Main 80 percentile OBC Pune", "expected": {"intent": "predict", "exam": "JEE", "percentile": 80, "category": "OBC", "city": "Pune"}, "tags": ["predict", "jee"]}
+{"query": "JEE 97.5 percentile CSE Ahmednagar", "expected": {"intent": "predict", "exam": "JEE", "percentile": 97.5, "branch": "Computer Engineering", "city": "Ahmednagar"}, "tags": ["predict", "jee"]}
