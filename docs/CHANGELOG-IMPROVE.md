@@ -182,6 +182,12 @@ Replaced the seeded demo cutoffs with a real DTE Maharashtra pipeline:
 - Review fixes: dynamic college id in a11y tests, stable remount on route change, deduplicated Google
   Places fetching, and an SSRF host guard in the photo localizer.
 
+## PWA foundation
+
+- Replaced the corrupted static manifest with a Next.js manifest route and added metadata links.
+- Added a versioned service worker that caches the app shell and static assets, keeps API/admin responses uncached, and serves cached pages offline.
+- Added an offline status badge and `e2e/pwa.spec.ts`.
+
 ## SEO and content
 
 - Added five educational guides: CAP rounds, option forms, home-university quota, cutoffs, and categories/documents.

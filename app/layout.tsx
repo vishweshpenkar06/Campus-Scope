@@ -8,6 +8,8 @@ const newsreader = Newsreader({ subsets: ['latin'], variable: '--font-newsreader
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://campusscope.vercel.app'),
   title: 'CampusScope — Make a better college shortlist',
+  manifest: '/manifest.webmanifest',
+  appleWebApp: { capable: true, title: 'CampusScope', statusBarStyle: 'default' },
   description: 'Research Indian engineering colleges with clear fees, programs, placements, reviews, comparison, and an explainable shortlist predictor.',
   openGraph: {
     type: 'website',

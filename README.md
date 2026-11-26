@@ -294,7 +294,7 @@ All four are covered by `pnpm check` — assert-based suites, no test framework 
 ✅ Lazy-Loaded 3D Data Constellation (Three.js, Reduced-Motion Safe)
 ✅ Natural-Language Ask Endpoint With Citations + Rules Fallback
 ✅ Counsellor Directory + Lead Pipeline + Chance-Card PNG
-✅ Educational Guides + FAQ Schema + Sitemap/Robots/Programmatic Pages
+✅ Installable PWA + Offline Cached Shell + Educational Guides + FAQ Schema
 ✅ CI Workflow + Playwright Smoke Specs
 ✅ Feedback Capture For The Pilot
 

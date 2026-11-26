@@ -9,6 +9,7 @@ import { CompareTray } from './compare-tray'
 import { AuthButton } from './auth-button'
 import { NotificationBell } from './notification-bell'
 import { FeedbackButton } from './feedback/FeedbackButton'
+import { OfflineBadge } from './pwa/OfflineBadge'
 
 const MOBILE_LINKS = [
   { href: '/explore', label: 'Explore colleges' },
@@ -22,6 +23,12 @@ const MOBILE_LINKS = [
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false)
+
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(() => {})
+    }
+  }, [])
 
   useEffect(() => {
     if (!mobileOpen) return
@@ -161,6 +168,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </footer>
         <CompareTray />
         <FeedbackButton />
+        <OfflineBadge />
       </SessionProvider>
     </CompareProvider>
   )
