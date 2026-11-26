@@ -1,4 +1,5 @@
 import { AppShell } from '@/components/app-shell'
+import Link from 'next/link'
 import type { Metadata } from 'next'
 import { Predictor } from '@/components/predictor'
 import { AskBox } from '@/components/ask/AskBox'
@@ -22,7 +23,10 @@ export default function Page() {
           </h1>
           <p className="mt-3 max-w-xl text-muted-foreground">
             Enter your rank and budget to see how your starting point lines up with the catalog.
-            The result is directional—use it to begin research, never as an admissions guarantee.
+            The result is directional—use it to begin research, never as an admissions guarantee.{' '}
+            <Link href="/guides/how-cap-rounds-work" className="font-semibold text-primary underline-offset-4 hover:underline">
+              Learn how CAP rounds work →
+            </Link>
           </p>
         </div>
         <div className="mb-12">

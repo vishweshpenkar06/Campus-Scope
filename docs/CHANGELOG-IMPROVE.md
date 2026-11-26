@@ -182,6 +182,12 @@ Replaced the seeded demo cutoffs with a real DTE Maharashtra pipeline:
 - Review fixes: dynamic college id in a11y tests, stable remount on route change, deduplicated Google
   Places fetching, and an SSRF host guard in the photo localizer.
 
+## SEO and content
+
+- Added five educational guides: CAP rounds, option forms, home-university quota, cutoffs, and categories/documents.
+- Added FAQPage + Article JSON-LD, metadata/canonical URLs, guide index, sitemap entries, and internal links from predictor/footer.
+- Added `e2e/seo.spec.ts` for structured data and sitemap coverage.
+
 ## Growth loop
 
 - Added an anonymous local shortlist: students can save colleges without an account and sign in later to sync.

@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma'
 import { demoColleges } from '@/lib/demo-data'
 import { SITE_URL, collegeSlug } from '@/lib/seo'
 import { BRANCHES } from '@/lib/branches'
+import { GUIDES } from '@/lib/content/guides'
 
 const STATIC_PATHS = [
   '',
@@ -43,6 +44,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const now = new Date()
   return [
+    ...GUIDES.map((guide) => ({
+      url: `${SITE_URL}/guides/${guide.slug}`,
+      lastModified: new Date(guide.updated),
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
+    })),
     ...STATIC_PATHS.map((path) => ({
       url: `${SITE_URL}${path}`,
       lastModified: now,

@@ -15,6 +15,7 @@ CampusScope turns official DTE / State CET Cell CAP cutoff PDFs into:
 - a **cited predictor** that returns a balanced Safe / Target / Reach shortlist;
 - a **cited Ask** interface with editable slots and deterministic calculations;
 - a **practice option form** with CSV export;
+- five educational guides with FAQ structured data and internal links to the tools;
 - a **data trust center** with source documents, page citations, correction reports, and coverage metrics;
 - a **chance card** PNG and a counsellor lead path;
 - a lazy-loaded **Three.js data constellation** that pauses offscreen and respects reduced motion.
