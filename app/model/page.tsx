@@ -2,7 +2,15 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { AppShell } from '@/components/app-shell'
 import { PROBABILITY_MODEL_VERSION, PROBABILITY_SPREAD, OTHER_THAN_HOME_PENALTY } from '@/lib/probability'
-import backtest from '@/docs/backtest.json'
+import backtestData from '@/docs/backtest.json'
+
+type BacktestReport = {
+  brier: number
+  logLoss: number
+  forecast?: { mae?: number; coverage?: number } | null
+}
+
+const backtest = backtestData as unknown as BacktestReport
 
 export const metadata: Metadata = {
   title: 'Probability model card — CampusScope',
