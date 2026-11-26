@@ -224,7 +224,12 @@ export function CollegeDetail({
           <div className="mt-5 print:hidden">
             <ShareActions college={college} />
             <div className="mt-2">
-              <SaveCollegeButton collegeId={college.id} branches={college.courses.map((c) => c.name)} />
+              <SaveCollegeButton
+                collegeId={college.id}
+                collegeName={college.name}
+                location={college.location}
+                branches={college.courses.map((c) => c.name)}
+              />
             </div>
           </div>
         </div>

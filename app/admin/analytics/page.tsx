@@ -62,11 +62,13 @@ export default async function AdminAnalyticsPage() {
     )
   }
 
-  const [topBranches, topShortlist, users, docs] = await Promise.all([
+  const [topBranches, topShortlist, users, docs, referrals, alerts] = await Promise.all([
     prisma.analyticsEvent.groupBy({ by: ['label'], where: { type: 'search' }, _count: { _all: true }, orderBy: { _count: { label: 'desc' } }, take: 8 }),
     prisma.savedCollege.groupBy({ by: ['collegeId'], _count: { _all: true }, orderBy: { _count: { collegeId: 'desc' } }, take: 8 }),
     prisma.user.findMany({ where: { percentile: { not: null } }, select: { percentile: true } }),
     prisma.analyticsEvent.groupBy({ by: ['label'], where: { type: 'docs' }, _avg: { value: true }, _count: { _all: true } }),
+    prisma.analyticsEvent.groupBy({ by: ['label'], where: { type: 'referral' }, _count: { _all: true }, orderBy: { _count: { label: 'desc' } }, take: 8 }),
+    prisma.alertPreference.count({ where: { active: true } }),
   ])
 
   const shortlistNames = await prisma.college.findMany({
@@ -105,6 +107,14 @@ export default async function AdminAnalyticsPage() {
 
         <Card title="Document readiness by category (avg % complete)">
           <Bars rows={docs.map((r) => ({ label: r.label, value: Math.round(r._avg.value ?? 0), suffix: '%' }))} />
+        </Card>
+
+        <Card title="Top referral sources">
+          <Bars rows={referrals.map((r) => ({ label: r.label, value: r._count._all }))} />
+        </Card>
+
+        <Card title="Alert opt-ins">
+          <Bars rows={[{ label: 'Active', value: alerts }]} />
         </Card>
       </div>
 

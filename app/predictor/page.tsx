@@ -2,6 +2,8 @@ import { AppShell } from '@/components/app-shell'
 import type { Metadata } from 'next'
 import { Predictor } from '@/components/predictor'
 import { AskBox } from '@/components/ask/AskBox'
+import { AlertPreferences } from '@/components/alerts/AlertPreferences'
+import { ReferralCard } from '@/components/referral/ReferralCard'
 
 export const metadata: Metadata = {
   title: 'College predictor — CampusScope',
@@ -27,6 +29,10 @@ export default function Page() {
           <AskBox />
         </div>
         <Predictor />
+        <div className="mt-12 grid gap-6 lg:grid-cols-2">
+          <AlertPreferences />
+          <ReferralCard />
+        </div>
       </main>
     </AppShell>
   )

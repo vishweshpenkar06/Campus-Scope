@@ -278,6 +278,7 @@ All four are covered by `pnpm check` — assert-based suites, no test framework 
 ✅ Per-College Q&A Forum With Upvotes + Verified Badges
 ✅ Google OAuth via Auth.js v5 + Saved Shortlist Portal
 ✅ Notification Bell With Idempotent Alert Generation
+✅ Anonymous Local Shortlist + Alert Opt-ins + Referral Tracking
 ✅ Bearer-Gated Cron Pipeline Logging Run Telemetry
 ✅ IP Rate Limiting on Public Write/Heavy Endpoints
 ✅ API Key Proxying — Photos Never Expose Keys
@@ -545,7 +546,7 @@ fails if `Math.random` appears in `lib/cron-sync.ts` or `lib/data/**`.
 
 Integration verification runs the full stack against Postgres: route guards (401/403), admin review,
 cron gates, rate-limiter bursts, and seeded-data smoke tests. CI starts a Postgres service, applies
-`prisma db push`, seeds, and runs the four Playwright specs.
+`prisma db push`, seeds, and runs the six Playwright specs.
 
 ---
 

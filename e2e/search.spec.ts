@@ -8,7 +8,7 @@ test('search -> college profile -> predictor -> auth-gated shortlist', async ({ 
 
   await expect(page.getByRole('heading', { level: 1, name: /COEP/i })).toBeVisible()
   await page.getByRole('button', { name: /Save to shortlist/i }).click()
-  await expect(page.getByText(/Sign in first/i)).toBeVisible()
+  await expect(page.getByText(/Saved on this device/i)).toBeVisible()
 
   await page.goto('/predictor')
   await page.getByLabel('Your Percentile').fill('92')

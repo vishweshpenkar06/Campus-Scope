@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Download, Share2 } from 'lucide-react'
 import { clearChance } from '@/lib/probability'
 import { getOnboardingState } from '@/components/onboarding-modal'
+import { getReferralCode } from '@/lib/referral'
 import type { CutoffRecord } from '@/lib/types'
 
 export function ChanceCard({
@@ -18,9 +19,11 @@ export function ChanceCard({
   const [percentile, setPercentile] = useState('')
   const [category, setCategory] = useState('OPEN')
   const [branch, setBranch] = useState('')
+  const [refCode, setRefCode] = useState('')
 
   useEffect(() => {
     /* eslint-disable react-hooks/set-state-in-effect -- prefill from the saved onboarding state */
+    setRefCode(getReferralCode())
     const state = getOnboardingState()
     if (state?.percentile) setPercentile(String(state.percentile))
     if (state?.category) setCategory(state.category)
@@ -55,7 +58,8 @@ export function ChanceCard({
   const origin =
     process.env.NEXT_PUBLIC_SITE_URL ??
     (typeof window !== 'undefined' ? window.location.origin : '')
-  const whatsapp = `https://wa.me/?text=${encodeURIComponent(`${shareText} ${origin}/college/${collegeId}`)}`
+  const appLink = `${origin}/college/${collegeId}${refCode ? `?ref=${refCode}` : ''}`
+  const whatsapp = `https://wa.me/?text=${encodeURIComponent(`${shareText} ${appLink}`)}`
 
   return (
     <section className="mt-8 rounded-xl border border-border bg-card p-5">

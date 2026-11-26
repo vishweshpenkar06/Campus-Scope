@@ -89,6 +89,7 @@ model User {
   forumVotes        ForumVote[]
   counsellorProfile CounsellorProfile?
   leads             Lead[]
+  alerts            AlertPreference[]
 }
 
 model Account {
@@ -539,6 +540,19 @@ model Lead {
 
   @@index([status, createdAt])
   @@index([counsellorId, createdAt])
+}
+
+model AlertPreference {
+  id         Int      @id @default(autoincrement())
+  userId     String?
+  identifier String   @unique
+  channel    String   @default("email")
+  types      String   @default("deadline,cutoff,spot")
+  active     Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([active, channel])
 }
 
 model Feedback {

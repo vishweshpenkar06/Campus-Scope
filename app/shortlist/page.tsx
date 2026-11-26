@@ -6,6 +6,7 @@ import { AppShell } from '@/components/app-shell'
 import { AuthButton } from '@/components/auth-button'
 import { formatINR, formatPackage, formatRating } from '@/lib/format'
 import { BookmarkCheck, Loader2, Trash2 } from 'lucide-react'
+import { getLocalShortlist, removeLocalCollege, setLocalCollegeStatus, type LocalSavedCollege } from '@/lib/local-shortlist'
 
 type SavedItem = {
   id: number
@@ -30,6 +31,7 @@ const statuses = ['Researching', 'Applying', 'Applied', 'Allotted'] as const
 export default function ShortlistPage() {
   const [items, setItems] = useState<SavedItem[] | null>(null)
   const [unauthorized, setUnauthorized] = useState(false)
+  const [localItems, setLocalItems] = useState<LocalSavedCollege[]>([])
   const [error, setError] = useState('')
 
   const load = useCallback(() => {
@@ -41,14 +43,21 @@ export default function ShortlistPage() {
       })
       .then((body) => setItems(body.data))
       .catch((e) => {
-        if (e.message === 'unauthorized') setUnauthorized(true)
-        else setError('Could not load your shortlist.')
+        if (e.message === 'unauthorized') {
+          setUnauthorized(true)
+          setLocalItems(getLocalShortlist())
+        } else setError('Could not load your shortlist.')
       })
   }, [])
 
   useEffect(load, [load])
 
   async function updateStatus(id: number, status: string) {
+    if (unauthorized) {
+      setLocalCollegeStatus(id, status)
+      setLocalItems(getLocalShortlist())
+      return
+    }
     const res = await fetch(`/api/user/shortlist/${id}`, {
       method: 'PATCH',
       headers: { 'content-type': 'application/json' },
@@ -58,6 +67,11 @@ export default function ShortlistPage() {
   }
 
   async function remove(id: number) {
+    if (unauthorized) {
+      removeLocalCollege(id)
+      setLocalItems(getLocalShortlist())
+      return
+    }
     const res = await fetch(`/api/user/shortlist/${id}`, { method: 'DELETE' })
     if (res.ok) setItems((cur) => cur?.filter((i) => i.id !== id) ?? cur)
   }
@@ -69,12 +83,49 @@ export default function ShortlistPage() {
         <h1 className="mt-2 text-4xl font-bold tracking-tight">My Shortlist</h1>
 
         {unauthorized ? (
-          <div className="mt-8 rounded-xl border border-dashed border-border p-12 text-center">
-            <p className="font-semibold">Sign in to build your shortlist</p>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Save target colleges, track branches and application status in one place.
-            </p>
-            <div className="mt-5 flex justify-center"><AuthButton /></div>
+          <div className="mt-8 grid gap-5">
+            <div className="rounded-xl border border-amber-200 bg-amber-50 p-5">
+              <p className="font-semibold text-amber-900">Saved on this device</p>
+              <p className="mt-1 text-sm leading-6 text-amber-800">
+                You can research and shortlist without an account. Sign in to sync across devices
+                and keep your application status.
+              </p>
+              <div className="mt-3"><AuthButton /></div>
+            </div>
+            {localItems.length === 0 ? (
+              <div className="rounded-xl border border-dashed border-border p-12 text-center">
+                <BookmarkCheck className="mx-auto size-8 text-muted-foreground/40" />
+                <p className="mt-3 font-semibold">No saved colleges yet</p>
+                <Link href="/explore" className="mt-3 inline-block text-sm font-semibold text-primary underline-offset-4 hover:underline">
+                  Browse the directory →
+                </Link>
+              </div>
+            ) : (
+              <div className="grid gap-3">
+                {localItems.map((item) => (
+                  <article key={item.id} className="flex flex-wrap items-center gap-4 rounded-xl border border-border bg-card p-4">
+                    <div className="min-w-0 flex-1">
+                      <Link href={`/college/${item.id}`} className="font-serif text-lg font-semibold hover:text-primary">
+                        {item.name}
+                      </Link>
+                      <p className="mt-0.5 text-sm text-muted-foreground">{item.location} · {item.branch} · {item.category}</p>
+                      <p className="mt-1 text-[11px] font-semibold uppercase tracking-wider text-amber-700">Local · this device only</p>
+                    </div>
+                    <select
+                      value={item.status}
+                      onChange={(event) => updateStatus(item.id, event.target.value)}
+                      aria-label={`Application status for ${item.name}`}
+                      className="h-10 rounded-lg border border-input bg-background px-3 text-sm"
+                    >
+                      {statuses.map((status) => <option key={status}>{status}</option>)}
+                    </select>
+                    <button onClick={() => remove(item.id)} aria-label={`Remove ${item.name}`} className="rounded-lg border border-border p-2 text-muted-foreground transition hover:border-destructive hover:text-destructive">
+                      <Trash2 className="size-4" />
+                    </button>
+                  </article>
+                ))}
+              </div>
+            )}
           </div>
         ) : error ? (
           <p role="alert" className="mt-8 rounded-xl border border-destructive/20 bg-destructive/5 p-6 text-center text-sm">{error}</p>

@@ -182,6 +182,14 @@ Replaced the seeded demo cutoffs with a real DTE Maharashtra pipeline:
 - Review fixes: dynamic college id in a11y tests, stable remount on route change, deduplicated Google
   Places fetching, and an SSRF host guard in the photo localizer.
 
+## Growth loop
+
+- Added an anonymous local shortlist: students can save colleges without an account and sign in later to sync.
+- Added free alert opt-ins for deadlines, cutoffs, and spot rounds via email or WhatsApp, with explicit consent and unsubscribe.
+- Added a daily authenticated alert-digest cron and aggregate analytics for opt-ins/referrals.
+- Added referral codes in share-card WhatsApp links and `e2e/growth.spec.ts`.
+- Added `/admin/feedback` inbox and alert/referral panels in admin analytics.
+
 ## Deployment readiness
 
 Verified against a real local PostgreSQL 16 instance (podman), not just fixtures:

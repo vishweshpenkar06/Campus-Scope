@@ -139,6 +139,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 <Link href="/counsellors" className="hover:text-primary">Counsellors</Link>
                 <Link href="/documents" className="hover:text-primary">Documents</Link>
                 <Link href="/methodology" className="hover:text-primary">Methodology</Link>
+                <Link href="/alerts" className="hover:text-primary">Alerts</Link>
                 <Link href="/about" className="hover:text-primary">About</Link>
                 <Link href="/privacy" className="hover:text-primary">Privacy</Link>
                 <Link href="/terms" className="hover:text-primary">Terms</Link>

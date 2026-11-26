@@ -15,6 +15,7 @@ const STATIC_PATHS = [
   '/spot-rounds',
   '/shortlist',
   '/counsellors',
+  '/alerts',
   '/methodology',
   '/about',
   '/privacy',
