@@ -70,6 +70,7 @@ College matching uses official DTE institute codes instead of fuzzy names.
 | Duplicate groups | 252 (301 extra rows) |
 | Unit/integration tests | 63 |
 | Playwright specs | 4 |
+| Lighthouse college profile | 91 performance / 98 accessibility |
 | Brier score (official dataset) | 0.0817 |
 | Log loss | 0.2813 |
 | Year-over-year carry-forward MAE | 11.89 percentile points |

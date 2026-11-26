@@ -1,6 +1,6 @@
 # Probability backtest
 
-Generated 2026-11-18 · model `logistic-1.1.0`
+Generated 2026-11-25 · model `logistic-1.1.0`
 
 > Run against production `CapRoundTrend` rows.
 

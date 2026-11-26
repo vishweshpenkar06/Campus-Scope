@@ -38,6 +38,7 @@ export function CollegeCard({ college }: { college: College }) {
             fill
             sizes="(max-width: 768px) 100vw, 33vw"
             quality={70}
+            unoptimized={Boolean(college.photoUrl?.startsWith('http'))}
             className="object-cover"
             onError={(event) => {
               event.currentTarget.style.display = 'none'
@@ -150,9 +151,9 @@ export function CollegeCard({ college }: { college: College }) {
                 ? 'border-primary bg-primary text-primary-foreground'
                 : 'border-foreground/15 hover:border-primary hover:text-primary'
             }`}
-            aria-label={`${selected ? 'Remove' : 'Add'} ${college.name} ${selected ? 'from' : 'to'} comparison`}
           >
             <GitCompareArrows className="size-3" />
+            <span className="sr-only">{college.name}</span>
             {selected ? 'Added' : 'Compare'}
           </button>
         </div>

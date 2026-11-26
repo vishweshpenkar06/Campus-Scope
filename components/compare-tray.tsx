@@ -15,8 +15,9 @@ export function CompareTray() {
           {items.map((item) => (
             <span key={item.id} className="flex shrink-0 items-center gap-2 rounded-full bg-muted px-3 py-1.5 text-sm">
               {item.name}
-              <button aria-label={`Remove ${item.name}`} onClick={() => remove(item.id)}>
-                <X className="size-3.5" />
+              <button onClick={() => remove(item.id)}>
+                <X className="size-3.5" aria-hidden="true" />
+                <span className="sr-only">Remove {item.name}</span>
               </button>
             </span>
           ))}

@@ -22,7 +22,7 @@
 
 <br>
 
-**[Get Started](#-getting-started)** · **[Architecture](#-architecture)** · **[Features](#-features)** · **[API](#-api-endpoints)** · **[Deploy](#-deploy)** · **[Case Study](docs/CASE-STUDY.md)** · **[Resume Copy](docs/RESUME.md)** · **[Data Methodology](docs/OFFICIAL-DATA.md)** · **[Launch Status](docs/LAUNCH-STATUS.md)** · **[Contributing](docs/CONTRIBUTING.md)** · **[Security](docs/SECURITY.md)** · **[Issues](https://github.com/vishweshpenkar06/Campus-Scope/issues)**
+**[Get Started](#-getting-started)** · **[Architecture](#-architecture)** · **[Features](#-features)** · **[API](#-api-endpoints)** · **[Deploy](#-deploy)** · **[Case Study](docs/CASE-STUDY.md)** · **[Resume Copy](docs/RESUME.md)** · **[Data Methodology](docs/OFFICIAL-DATA.md)** · **[Launch Status](docs/LAUNCH-STATUS.md)** · **[QA](docs/QA.md)** · **[Contributing](docs/CONTRIBUTING.md)** · **[Security](docs/SECURITY.md)** · **[Issues](https://github.com/vishweshpenkar06/Campus-Scope/issues)**
 
 </div>
 

@@ -119,7 +119,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </nav>
           </div>
         )}
-        <div id="main-content" tabIndex={-1}>
+        <div id="main-content" tabIndex={-1} className="min-h-[60vh]">
           {children}
         </div>
         <footer className="border-t border-foreground/10 bg-background">

@@ -34,7 +34,9 @@
     "ingest:dte": "tsx scripts/ingest/run-official.ts",
     "ingest:seats": "tsx scripts/ingest/seatmatrix.ts",
     "enrich:photos": "tsx scripts/enrich-photos.ts",
-    "photos:illustrative": "tsx scripts/assign-illustrative-photos.ts"
+    "photos:illustrative": "tsx scripts/assign-illustrative-photos.ts",
+    "photos:localize": "tsx scripts/localize-photos.ts",
+    "qa:a11y": "playwright test e2e/a11y.spec.ts"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -54,18 +56,18 @@
     "clsx": "^2.1.1",
     "framer-motion": "^13.1.1",
     "lucide-react": "^1.16.0",
-    "next": "16.3.0",
+    "next": "16.4.6",
     "next-auth": "5.0.0-beta.32",
     "prisma": "^6.19.3",
     "react": "^19",
     "react-dom": "^19",
-    "shadcn": "^4.8.0",
     "tailwind-merge": "^3.3.1",
     "three": "^0.187.0",
     "unpdf": "^2.1.0",
-    "zod": "^4.4.3"
+    "zod": "^4.6.7"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.14.1",
     "@commitlint/cli": "^21.2.2",
     "@commitlint/config-conventional": "^21.2.2",
     "@playwright/test": "^1.62.1",
@@ -74,13 +76,16 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/three": "^0.187.0",
-    "eslint-config-next": "16.3.3",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "16.4.6",
     "husky": "^9.1.7",
+    "lighthouse": "^13.6.0",
     "lint-staged": "^17.4.1",
     "playwright": "^1.62.1",
     "postcss": "^8.5",
     "prettier": "^3.9.6",
     "prettier-plugin-tailwindcss": "^0.8.1",
+    "shadcn": "^4.23.1",
     "tailwindcss": "^4.3.3",
     "tsx": "^4.23.12",
     "typescript": "5.7.3",

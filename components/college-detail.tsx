@@ -19,12 +19,27 @@ import { FreshnessWarning } from './data/FreshnessWarning'
 import { ChanceCard } from './share/ChanceCard'
 import type { CollegeDetail as Detail, GooglePlaceData } from '@/lib/types'
 
-export function CollegeDetail({ id }: { id: string }) {
-  const [college, setCollege] = useState<Detail | null>(null)
+export function CollegeDetail({
+  id,
+  initialCollege = null,
+}: {
+  id: string
+  initialCollege?: Detail | null
+}) {
+  const [college, setCollege] = useState<Detail | null>(initialCollege)
   const [error, setError] = useState(false)
   const [tab, setTab] = useState('overview')
   const [googleData, setGoogleData] = useState<GooglePlaceData | null>(null)
   const { items, toggle } = useCompare()
+
+  const fetchGoogle = useCallback((name: string, location: string) => {
+    fetch(`/api/google-places?name=${encodeURIComponent(name)}&location=${encodeURIComponent(location)}`)
+      .then((r) => r.json())
+      .then((body) => {
+        if (body.data) setGoogleData(body.data)
+      })
+      .catch(() => {})
+  }, [])
 
   const load = useCallback(
     () =>
@@ -36,20 +51,19 @@ export function CollegeDetail({ id }: { id: string }) {
       })
       .then((data) => {
         setCollege(data)
-        fetch(`/api/google-places?name=${encodeURIComponent(data.name)}&location=${encodeURIComponent(data.location)}`)
-          .then((r) => r.json())
-          .then((body) => {
-            if (body.data) setGoogleData(body.data)
-          })
-          .catch(() => {})
+        fetchGoogle(data.name, data.location)
       })
       .catch(() => setError(true)),
-    [id]
+    [id, fetchGoogle]
   )
 
   useEffect(() => {
+    if (initialCollege) {
+      fetchGoogle(initialCollege.name, initialCollege.location)
+      return
+    }
     load()
-  }, [load])
+  }, [load, initialCollege, fetchGoogle])
 
   if (error)
     return (
@@ -108,6 +122,7 @@ export function CollegeDetail({ id }: { id: string }) {
             priority
             sizes="(max-width: 768px) 100vw, 1200px"
             quality={72}
+            unoptimized={Boolean(college.photoUrl?.startsWith('http'))}
             className="object-cover"
             onError={(e) => {
               e.currentTarget.style.display = 'none'

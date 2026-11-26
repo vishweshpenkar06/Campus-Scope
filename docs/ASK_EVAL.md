@@ -1,6 +1,6 @@
 # Ask slot evaluation
 
-Generated 2026-11-01 · rules fallback (no API key)
+Generated 2026-11-25 · rules fallback (no API key)
 
 > The committed eval scores the deterministic rules parser. Provider-backed
 > extraction uses the same slot schema and is expected to meet or beat these

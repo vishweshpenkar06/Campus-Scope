@@ -171,6 +171,17 @@ Replaced the seeded demo cutoffs with a real DTE Maharashtra pipeline:
 - Rebuilt the backtest against the official dataset; added a year-over-year cutoff carry-forward
   metric (MAE/RMSE/bias/coverage) alongside Brier/log-loss calibration.
 
+## QA and CI hardening
+
+- Added axe-core E2E scans for six key pages; fixed low-contrast text and accessible-name mismatches.
+- Server-rendered college profile data and localized Wikimedia thumbnails; Lighthouse college profile
+  reached 91 performance / 98 accessibility / 100 best practices / 100 SEO (CLS 0).
+- Added live college photos with attribution and clearly labelled illustrative fallbacks.
+- Fixed CI: made `eslint` a direct dependency, moved unused `shadcn` CLI to devDependencies, bumped
+  Next.js to 16.4.6 and Zod to 4.6.7 to clear critical advisories, and moved Actions to Node 22.
+- Review fixes: dynamic college id in a11y tests, stable remount on route change, deduplicated Google
+  Places fetching, and an SSRF host guard in the photo localizer.
+
 ## Deployment readiness
 
 Verified against a real local PostgreSQL 16 instance (podman), not just fixtures:

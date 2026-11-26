@@ -63,5 +63,6 @@ seeded deployment and record the result below.
 
 | Page | Performance | LCP | CLS | Notes |
 |---|---:|---:|---:|---|
-| `/college/[id]` | pending | pending | pending | |
-| `/predictor` | pending | pending | pending | |
+| `/college/[id]` | 91 | 3.3s | 0 | mobile Lighthouse |
+| `/` | 89 | 2.4s | 0 | mobile Lighthouse |
+| `/explore` | 100 | 0.8s | 0 | mobile Lighthouse |
